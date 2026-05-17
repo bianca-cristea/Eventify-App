@@ -8,14 +8,23 @@ import lombok.*;
 import org.springframework.security.core.parameters.P;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email"), @UniqueConstraint(columnNames="username")})
+@Table(
+        name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "email"),
+                @UniqueConstraint(columnNames = "username")
+        }
+)
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -26,7 +35,6 @@ public class User {
     private String username;
 
     @NotBlank
-    @Size(min = 4)
     @Email
     private String email;
 
@@ -34,14 +42,11 @@ public class User {
     @Size(min = 4)
     private String password;
 
-
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
     }
-
-
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -50,4 +55,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "organizer")
+    private List<Event> events;
 }

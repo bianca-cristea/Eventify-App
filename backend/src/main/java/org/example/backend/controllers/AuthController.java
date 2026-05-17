@@ -60,13 +60,6 @@ public class AuthController {
     }
 
 
-    @GetMapping("/organizers")
-    public ResponseEntity<?> getAllOrganizers(
-            @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber) {
 
-        Sort sortByAndOrder = Sort.by(AppConstants.SORT_USERS_BY).descending();
-        Pageable pageDetails = PageRequest.of(pageNumber,Integer.parseInt(AppConstants.PAGE_SIZE),sortByAndOrder);
-        return ResponseEntity.ok(authService.getAllOrganizers(pageDetails));
-    }
 
 }

@@ -163,21 +163,5 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
-    @Override
-    public UserResponse getAllOrganizers(Pageable pageDetails) {
-        Page<User> allOrganizers = userRepository.findByRoleName(AppRole.ROLE_ORGANIZER, pageDetails);
-        List<UserDTO> userDTOS = allOrganizers.getContent()
-                .stream()
-                .map(u -> modelMapper.map(u, UserDTO.class)).toList();
 
-        UserResponse response = new UserResponse();
-        response.setContent(userDTOS);
-        response.setPageNumber(allOrganizers.getNumber());
-        response.setPageSize(allOrganizers.getSize());
-        response.setTotalElements(allOrganizers.getTotalElements());
-        response.setTotalPages(allOrganizers.getTotalPages());
-        response.setLastPage(allOrganizers.isLast());
-        return response;
-
-    }
 }
