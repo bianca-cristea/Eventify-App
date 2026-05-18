@@ -15,7 +15,7 @@ public interface EventRepository extends JpaRepository<Event,Long> {
 
     Page<Event> findEventsByCategory(Category categoryFromDb, Pageable pageDetails);
 
-    Page<Event> findEventsByUserId(Long userId, Pageable pageDetails);
+    Page<Event> findByOrganizerUserId(Long userId, Pageable pageDetails);
 
-    Page<Event> findByEventNameLikeIgnoreCase(String s, Pageable pageDetails);
+    Page<Event> findByTitleLikeIgnoreCase(String s, Pageable pageDetails);
 }

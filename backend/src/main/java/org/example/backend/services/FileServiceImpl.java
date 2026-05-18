@@ -17,7 +17,7 @@ public class FileServiceImpl implements FileService{
 
         String originalFileName = image.getOriginalFilename();
         String randomId = UUID.randomUUID().toString();
-        String fileName = randomId + File.separator + originalFileName.substring(originalFileName.lastIndexOf('.'));
+        String fileName = randomId + originalFileName.substring(originalFileName.lastIndexOf('.'));
         String filePath = path + File.separator + fileName;
 
         File folder = new File(path);

@@ -103,11 +103,11 @@ public class EventServiceImpl implements EventService{
                 : Sort.by(sortBy).descending();
 
         Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
-        Page<Event> pageEvents = eventRepository.findByEventNameLikeIgnoreCase('%' + keyword + '%', pageDetails);
+        Page<Event> pageEvents = eventRepository.findByTitleLikeIgnoreCase('%' + keyword + '%', pageDetails);
 
         List<Event> events = pageEvents.getContent();
         List<EventDTO> eventDTOs = events.stream()
-                .map(product -> modelMapper.map(product, EventDTO.class))
+                .map(event -> modelMapper.map(event, EventDTO.class))
                 .toList();
 
         if(events.isEmpty()){
@@ -185,7 +185,7 @@ public class EventServiceImpl implements EventService{
                 Sort.by(sortBy).descending();
 
         Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
-        Page<Event> myEvents = eventRepository.findEventsByUserId(userId,pageDetails);
+        Page<Event> myEvents = eventRepository.findByOrganizerUserId(userId,pageDetails);
 
         List<EventDTO> eventDTOs = myEvents.stream().map(event -> modelMapper.map(event, EventDTO.class)).toList();
 
