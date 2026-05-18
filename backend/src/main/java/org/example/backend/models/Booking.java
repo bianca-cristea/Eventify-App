@@ -14,10 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "bookings")
 public class Booking {
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "booking_id")
+    private Long bookingId;
 
     private LocalDateTime bookingDate;
 
@@ -27,14 +27,13 @@ public class Booking {
     private Double totalAmount;
     private String qrCode;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "booking_id")
-    private Long bookingId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @OneToMany(mappedBy = "booking", cascade = {CascadeType.MERGE,CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(mappedBy = "booking", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     private List<BookingItem> bookingItemList;
 
-    @OneToOne(mappedBy = "booking" , cascade = {CascadeType.MERGE,CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToOne(mappedBy = "booking", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     private Payment payment;
 }
