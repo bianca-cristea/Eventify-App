@@ -44,8 +44,19 @@ public class EventController {
     }
 
     @GetMapping("/categories/{categoryId}/events")
-    public ResponseEntity<EventResponse> getEventsByCategory(@PathVariable Long categoryId) {
-        return new ResponseEntity<>(eventService.getEventsByCategory(categoryId),HttpStatus.OK);
+    public ResponseEntity<EventResponse> getEventsByCategory(@PathVariable Long categoryId,@RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+                                                             @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+                                                             @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_EVENTS_BY, required = false) String sortBy,
+                                                             @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_DIR, required = false) String sortOrder) {
+        return new ResponseEntity<>(eventService.getEventsByCategory(categoryId,pageNumber,pageSize,sortBy,sortOrder),HttpStatus.OK);
+    }
+
+    @GetMapping("/events/keyword/{keyword}")
+    public ResponseEntity<EventResponse> getEventsBKeyword(@PathVariable String keyword,@RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+                                                             @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+                                                             @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_EVENTS_BY, required = false) String sortBy,
+                                                             @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_DIR, required = false) String sortOrder) {
+        return new ResponseEntity<>(eventService.getEventsByKeyword(keyword,pageNumber,pageSize,sortBy,sortOrder),HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ORGANIZER')")
@@ -68,9 +79,11 @@ public class EventController {
 
     @PreAuthorize("hasRole('ORGANIZER')")
     @GetMapping("/events/me/events")
-    public ResponseEntity<EventResponse> getMyEvents() {
-        Long userId = authUtils.loggedInUserId();
-        return new ResponseEntity<>(eventService.getMyEvents(userId),HttpStatus.OK);
+    public ResponseEntity<EventResponse> getMyEvents(@RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+                                                     @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+                                                     @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_EVENTS_BY, required = false) String sortBy,
+                                                     @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_DIR, required = false) String sortOrder) {
+        return new ResponseEntity<>(eventService.getMyEvents(pageNumber,pageSize,sortBy,sortOrder),HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ORGANIZER')")

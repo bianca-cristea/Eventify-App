@@ -10,16 +10,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventDTO {
+    private Long eventId;
     private String title;
-
     private String description;
     private String image;
     private String location;
-
     private LocalDateTime eventDate;
     private LocalDateTime endDate;
-
     private Integer capacity;
     private Double price;
     private String status;
+    private Long categoryId;
+    private String organizerName;
 }
