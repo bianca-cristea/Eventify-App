@@ -21,9 +21,8 @@ public class Ticket {
     @Column(name = "ticket_id")
     private Long ticketId;
 
-    @ToString.Exclude
-    @Enumerated(EnumType.STRING)
-    private TicketType ticketType;
+
+    private String ticketType;
 
     private Double price;
 

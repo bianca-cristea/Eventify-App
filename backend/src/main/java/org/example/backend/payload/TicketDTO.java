@@ -15,7 +15,7 @@ public class TicketDTO {
 
 
     private Long ticketId;
-    private TicketType ticketType;
+    private String ticketType;
     private Long eventId;
     private Double price;
     private Integer capacity;
