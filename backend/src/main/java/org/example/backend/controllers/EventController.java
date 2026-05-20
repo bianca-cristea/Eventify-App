@@ -3,6 +3,7 @@ package org.example.backend.controllers;
 import jakarta.validation.Valid;
 import org.example.backend.config.AppConstants;
 import org.example.backend.models.Category;
+import org.example.backend.models.Event;
 import org.example.backend.models.User;
 import org.example.backend.payload.EventDTO;
 import org.example.backend.payload.EventResponse;
@@ -73,6 +74,12 @@ public class EventController {
     }
 
     @PreAuthorize("hasRole('ORGANIZER')")
+    @PostMapping("/events/{eventId}/publish")
+    public ResponseEntity<EventDTO> publishEvent(@PathVariable Long eventId){
+        return new ResponseEntity<>(eventService.publishEvent(eventId), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ORGANIZER')")
     @PutMapping("/events/{eventId}")
     public ResponseEntity<EventDTO> updateEvent(@PathVariable Long eventId, @Valid @RequestBody EventDTO eventDTO) {
         return new ResponseEntity<>(eventService.updateEvent(eventId,eventDTO), HttpStatus.OK);
@@ -81,7 +88,7 @@ public class EventController {
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     @DeleteMapping("/events/{eventId}")
     public ResponseEntity<EventDTO> deleteEvent(@PathVariable Long eventId) {
-        return new ResponseEntity<>(eventService.deleteEvent(eventId),HttpStatus.OK);
+        return new ResponseEntity<>(eventService.cancelEvent(eventId),HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ORGANIZER')")

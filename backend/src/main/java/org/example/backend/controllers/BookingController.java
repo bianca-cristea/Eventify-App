@@ -28,8 +28,8 @@ public class BookingController {
 
     @PreAuthorize("hasRole('PARTICIPANT')")
     @GetMapping("/bookings/my")
-    public ResponseEntity<List<BookingDTO>> showMyBookings(){
-        return new ResponseEntity<>(bookingService.showBookings(), HttpStatus.OK);
+    public ResponseEntity<BookingDTO> showMyBookings(){
+        return new ResponseEntity<>(bookingService.showMyBooking(), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('PARTICIPANT')")
@@ -39,7 +39,7 @@ public class BookingController {
     }
 
     @PreAuthorize("hasRole('PARTICIPANT')")
-    @DeleteMapping("/bookings/{bookingId}")
+    @PutMapping("/bookings/{bookingId}")
     public ResponseEntity<BookingDTO> cancelBooking(@PathVariable Long bookingId){
         return new ResponseEntity<>(bookingService.cancelBooking(bookingId), HttpStatus.OK);
     }

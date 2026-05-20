@@ -15,14 +15,17 @@ public interface EventService {
     EventResponse getEventsByCategory(Long categoryId,Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
     EventDTO createEvent(@Valid EventDTO eventDTO);
+    EventDTO publishEvent(Long eventId);
 
     EventDTO updateEvent(Long eventId, @Valid EventDTO eventDTO);
 
-    EventDTO deleteEvent(Long eventId);
+    EventDTO cancelEvent(Long eventId);
 
     EventResponse getMyEvents(Integer pageNumber,Integer pageSize,String sortBy,String sortOrder);
 
     EventDTO updateEventImage(Long eventId, MultipartFile image) throws IOException;
 
     EventResponse getEventsByKeyword(String keyword, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
+
+
 }

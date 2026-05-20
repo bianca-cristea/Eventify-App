@@ -67,4 +67,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "event_id")
     )
     private Set<Event> staffEvents = new HashSet<>();
+
+
 }

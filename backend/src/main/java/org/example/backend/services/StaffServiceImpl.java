@@ -1,7 +1,6 @@
 package org.example.backend.services;
 
 import org.example.backend.payload.BookingDTO;
-import org.example.backend.payload.TicketDTO;
 import org.example.backend.payload.UserDTO;
 import org.springframework.stereotype.Service;
 

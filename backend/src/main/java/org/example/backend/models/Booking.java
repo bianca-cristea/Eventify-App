@@ -31,6 +31,9 @@ public class Booking {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Enumerated(EnumType.STRING)
+    private RefundStatus refundStatus;
+
     @OneToMany(mappedBy = "booking", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     private List<BookingItem> bookingItemList;
 

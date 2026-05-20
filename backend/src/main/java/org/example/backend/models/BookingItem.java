@@ -24,6 +24,9 @@ public class BookingItem {
 
     private Double priceAtBooking;
 
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status;
+
     @ManyToOne
     @JoinColumn(name = "booking_id")
     private Booking booking;
