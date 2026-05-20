@@ -12,7 +12,7 @@ public interface StaffService {
 
     UserDTO eliminateStaffFromEvent(Long eventId, Long userId);
 
-    List<UserDTO> getStaffFromEvent(Long eventId);
+    UserDTO getStaffFromEvent(Long eventId);
 
-    BookingDTO checkTicket(Long bookingId);
+    BookingDTO checkTicket(String qrCode);
 }

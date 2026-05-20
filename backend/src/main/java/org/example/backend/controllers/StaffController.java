@@ -37,15 +37,15 @@ public class StaffController {
 
     @PreAuthorize("hasRole('ORGANIZER')")
     @GetMapping("/events/{eventId}/staff")
-    public ResponseEntity<List<UserDTO>> getStaffFromEvent(@PathVariable Long eventId){
+    public ResponseEntity<UserDTO> getStaffFromEvent(@PathVariable Long eventId){
         return new ResponseEntity<>(staffService.getStaffFromEvent(eventId), HttpStatus.OK);
     }
 
 
     @PreAuthorize("hasRole('STAFF') or hasRole('ORGANIZER')")
     @PostMapping("/bookings/{bookingId}/checkin")
-    public ResponseEntity<BookingDTO> checkTicket(@PathVariable Long bookingId){
-        return new ResponseEntity<>(staffService.checkTicket(bookingId), HttpStatus.OK);
+    public ResponseEntity<BookingDTO> checkTicket(@RequestParam String qrCode){
+        return new ResponseEntity<>(staffService.checkTicket(qrCode), HttpStatus.OK);
     }
 
 }

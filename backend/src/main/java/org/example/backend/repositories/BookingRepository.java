@@ -6,8 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.List;
+import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking,Long> {
     Booking findByUserUserId(Long userId);
@@ -18,4 +17,6 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
             "JOIN t.event e "+
             "WHERE e.eventId = :eventId")
     Page<Booking> getBookingsByEventId(@Param("eventId")  Long eventId, Pageable pageDetails);
+
+    Optional<Booking> findByQrCode(String qrCode);
 }

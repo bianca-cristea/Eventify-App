@@ -90,6 +90,8 @@ public class BookingServiceImpl implements BookingService {
         Booking savedBooking = bookingRepository.save(booking);
         return modelMapper.map(savedBooking, BookingDTO.class);
     }
+
+
     @Override
     public BookingDTO showMyBooking() {
         User loggedInUser = authUtil.loggedInUser();

@@ -47,8 +47,8 @@ public class Event {
     private User organizer;
 
 
-    @ManyToMany(mappedBy = "staffEvents")
-    private Set<User> staffMembers = new HashSet<>();
+    @OneToOne(mappedBy = "event")
+    private User staff;
 
 
     @OneToMany(mappedBy = "event", cascade = {CascadeType.MERGE,CascadeType.PERSIST}, orphanRemoval = true)

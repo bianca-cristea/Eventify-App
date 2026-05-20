@@ -60,13 +60,9 @@ public class User {
     private List<Event> events;
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "event_staff",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id")
-    )
-    private Set<Event> staffEvents = new HashSet<>();
+    @OneToOne
+    @JoinColumn(name = "staff_id")
+    private Event event;
 
 
 }
