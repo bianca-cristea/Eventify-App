@@ -17,9 +17,12 @@ public class PaymentDTO {
 
     private Long paymentId;
 
+
     private PaymentMethod paymentMethod;
 
     private LocalDate paymentDate;
 
     private PaymentStatus status;
+
+
 }

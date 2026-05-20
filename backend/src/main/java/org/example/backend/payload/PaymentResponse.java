@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PaymentResponse {
 
-    private List<EventDTO> content;
+    private List<PaymentDTO> content;
     private Integer pageNumber;
     private Integer pageSize;
     private Long totalElements;

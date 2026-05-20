@@ -25,6 +25,7 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
+
     private LocalDate paymentDate;
 
     @Enumerated(EnumType.STRING)
