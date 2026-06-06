@@ -1,7 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit'
+import { eventReducer } from './eventReducer';
+import {errorReducer} from './errorReducer'
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    events: eventReducer,
+    errors: errorReducer,
+  },
   preloadedState: {}
 });
 

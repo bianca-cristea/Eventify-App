@@ -1,45 +1,27 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import EventCard from '../shared/EventCard';
 import {FaExclamationTriangle} from 'react-icons/fa'
+import {useSelector, useDispatch} from 'react-redux'
+import { fetchEvents } from '../../store/actions/actions';
+import Filter from '../Filter';
 
 
 const Events = () => {
-  const isLoading = false;
-  const errorMessage = ""
-  const events = [
-  {
-        eventId:1,
-        eventName:"Coldplay",
-        image:"https://placehold.co/600x400",
-        description:"Coldplay concert is full of lights.",
-        quantity:0,
-        price:1450.0,
-        discount: 10.0,
-        specialPrice: 1305.0
-      },
-      {
-        eventId:2,
-        eventName:"Zara Larsson",
-        image:"https://placehold.co/600x400",
-        description:"Zara Larsson is a new artist full of color and sparkle.",
-        quantity:1,
-        price:2550.0,
-        discount: 20.0,
-        //specialPrice: 2040.0
-      },
-       {
-        eventId:3,
-        eventName:"Beyonce",
-        image:"https://placehold.co/600x400",
-        description:"Beyonce - full of energy and dancing queen",
-        quantity:2,
-        price:3000.0,
-        discount: 10.0,
-        specialPrice: 2800.0
-      },
-]
+  
+  const {isLoading, errorMessage} = useSelector((state) => state.errors)
+
+  const { events } = useSelector((state) => state.events);
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+      dispatch(fetchEvents())
+  }, [dispatch])
+   
+  console.log()
+
   return (
     <div className='lg:px-14 sm:px-8 px-4 py-14 2xl:w-[90%] 2xl:mx-auto'>
+        <Filter/>
         {
           isLoading ? (
             <p>It's loading...</p>
@@ -53,7 +35,9 @@ const Events = () => {
                 <div className='pb-6 pt-14 grid 2xl:grid-cols-4 lg:grid-cols-3 sm: grid-cols-2 gap-y-6 gap-x-6'>
                   {events && 
                   events.map((event,idx) => <EventCard key={idx} {...event}/>)
-                  } 
+                 
+                  }  
+                  {console.log("events from store:", events)}
                 </div>
             </div>
           )
