@@ -48,6 +48,7 @@ const EventCard = ({
       border border-white/10
       rounded-2xl
       overflow-hidden
+      p-1
       shadow-xl
       transition
       duration-300
@@ -69,7 +70,7 @@ const EventCard = ({
         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition" />
       </div>
 
-      <div className="p-5 text-white">
+      <div className="m-2 text-white">
         <h2
           onClick={handleEventView}
           className="text-lg md:text-xl font-semibold
@@ -78,25 +79,25 @@ const EventCard = ({
                     group-hover:text-indigo-300
                       transition"
         >
-          {truncateText(title, 60)}
+          {truncateText(title, 30)}
         </h2>
 
         <p className="text-white/60 text-sm mt-2 min-h-16">
-          {truncateText(description, 90)}
+          {truncateText(description, 50)}
         </p>
 
-        <div className="flex items-center justify-between mt-5">
+        <div className="flex items-center justify-between">
           {specialPrice ? (
             <div className="flex flex-col">
-              <span className="text-white/40 line-through text-sm">
+              <span className="text-white/40 text-md md:text-xl line-through">
                 ${Number(price).toFixed(2)}
               </span>
-              <span className="text-indigo-300 text-lg font-bold">
+              <span className="text-indigo-300 text-md md:text-xl font-bold">
                 ${Number(specialPrice).toFixed(2)}
               </span>
             </div>
           ) : (
-            <span className="text-indigo-300 text-lg font-bold">
+            <span className="text-indigo-300 text-md md:text-xl font-bold">
               ${Number(price).toFixed(2)}
             </span>
           )}
@@ -106,9 +107,9 @@ const EventCard = ({
             onClick={handleEventView}
             className={`
             flex items-center gap-2
-            px-4 py-2
+            px-5 py-2
             rounded-lg
-            text-sm md:text-base
+            text-xs md:text-base
             font-medium
             transition
             backdrop-blur-md

@@ -1,25 +1,27 @@
- 
-import './App.css'
+import "./App.css";
 
-import Home from './components/home/Home'
-import Events from './components/events/Events'
-import { BrowserRouter as Router , Routes, Route} from 'react-router-dom'
-import Layout from './components/shared/Layout'
+import Home from "./components/home/Home";
+import Events from "./components/events/Events";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./components/shared/Layout";
+import Navbar from "./components/shared/Navbar";
+import About from "./components/About";
+import Contact from "./components/Contact";
 
-
-function App() { 
-
+function App() {
   return (
-      <Router>
-        <Routes>
-          <Route  element={<Layout />}>
-             <Route path='/events' element={<Events/>}/>
-             <Route path='/home' element={<Home/>}/> 
-          </Route>
-        </Routes>
-      </Router>
- 
-  )
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
