@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,25 +47,65 @@ public class EventServiceImpl implements EventService {
     @Value("${event.image}")
     private String path;
 
+    @Value("${image.base.url}")
+    private String imageBaseUrl;
+
     @Override
-    public EventResponse getAllEvents(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
-        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc") ?
-                Sort.by(sortBy).ascending() :
-                Sort.by(sortBy).descending();
+    public EventResponse getAllEvents(Integer pageNumber,
+                                      Integer pageSize,
+                                      String sortBy,
+                                      String sortOrder,
+                                      String keyword,
+                                      String category) {
 
-        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
-        Page<Event> events = eventRepository.findByStatusNot("CANCELLED", pageDetails);
+        Sort sort = sortOrder.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
 
-        List<EventDTO> eventDTOs = events.stream().map(event -> modelMapper.map(event, EventDTO.class)).toList();
-        EventResponse eventResponse = new EventResponse();
-        eventResponse.setContent(eventDTOs);
-        eventResponse.setPageNumber(events.getNumber());
-        eventResponse.setPageSize(events.getSize());
-        eventResponse.setTotalPages(events.getTotalPages());
-        eventResponse.setTotalElements(events.getTotalElements());
-        eventResponse.setIsLast(events.isLast());
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
-        return eventResponse;
+        Specification<Event> spec = (root, query, cb) ->
+                cb.notEqual(root.get("status"), "CANCELLED");
+
+        if (keyword != null && !keyword.isBlank()) {
+            spec = spec.and((root, query, cb) ->
+                    cb.like(
+                            cb.lower(root.get("title")),
+                            "%" + keyword.toLowerCase() + "%"
+                    ));
+        }
+
+        if (category != null && !category.isBlank()) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(
+                            cb.lower(root.get("category").get("categoryName")),
+                            category.toLowerCase()
+                    ));
+        }
+
+        Page<Event> eventsPage = eventRepository.findAll(spec, pageable);
+
+        List<EventDTO> eventDTOs = eventsPage.getContent()
+                .stream()
+                .map(event -> {
+                    EventDTO dto = modelMapper.map(event, EventDTO.class);
+                    dto.setImage(constructImageUrl(event.getImage()));
+                    return dto;
+                })
+                .toList();
+
+        EventResponse response = new EventResponse();
+        response.setContent(eventDTOs);
+        response.setPageNumber(eventsPage.getNumber());
+        response.setPageSize(eventsPage.getSize());
+        response.setTotalPages(eventsPage.getTotalPages());
+        response.setTotalElements(eventsPage.getTotalElements());
+        response.setIsLast(eventsPage.isLast());
+
+        return response;
+    }
+    private String constructImageUrl(String imageName){
+        return imageBaseUrl.endsWith("/") ? imageBaseUrl + imageName : imageBaseUrl + "/" + imageName;
     }
 
     @Override
@@ -134,6 +175,8 @@ public class EventServiceImpl implements EventService {
         newEvent.setEventDate(eventDTO.getEventDate());
         newEvent.setCapacity(eventDTO.getCapacity());
         newEvent.setImage(eventDTO.getImage());
+        newEvent.setPrice(eventDTO.getPrice());
+        newEvent.setSpecialPrice(eventDTO.getSpecialPrice());
         newEvent.setEndDate(eventDTO.getEndDate());
         newEvent.setLocation(eventDTO.getLocation());
         newEvent.setTitle(eventDTO.getTitle());
@@ -168,6 +211,8 @@ public class EventServiceImpl implements EventService {
 
         eventFromDB.setDescription(eventDTO.getDescription());
         eventFromDB.setEventDate(eventDTO.getEventDate());
+        eventFromDB.setPrice(eventDTO.getPrice());
+        eventFromDB.setSpecialPrice(eventDTO.getSpecialPrice());
         eventFromDB.setCapacity(eventDTO.getCapacity());
         eventFromDB.setImage(eventDTO.getImage());
         eventFromDB.setEndDate(eventDTO.getEndDate());

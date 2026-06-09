@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { IoTicketOutline } from "react-icons/io5";
-import EventViewModal from '../events/EventViewModal';
+import EventViewModal from "../shared/EventViewModal";
+import truncateText from "../../utils/truncateText";
 
 const EventCard = ({
   id: eventId,
@@ -41,42 +42,61 @@ const EventCard = ({
   };
 
   return (
-    <div className="bg-(--background-light-blue) border rounded-lg shadow-xl overflow-hidden transition-shadow duration-300">
- 
-      <div onClick={handleEventView} className="w-full overflow-hidden aspect-3/2">
+    <div
+      className="group
+      bg-linear-to-br from-black via-slate-950 to-indigo-950
+      border border-white/10
+      rounded-2xl
+      overflow-hidden
+      shadow-xl
+      transition
+      duration-300
+      hover:-translate-y-1
+      hover:shadow-2xl
+      hover:shadow-indigo-900/30"
+    >
+      <div
+        onClick={handleEventView}
+        className="relative w-full aspect-3/2 overflow-hidden cursor-pointer"
+      >
         <img
-          className="w-full h-full cursor-pointer transition-transform duration-300 transform hover:scale-105"
+          className=" w-full h-full object-cover
+          transition duration-500
+          group-hover:scale-110"
           src={image}
           alt={title}
         />
+        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition" />
       </div>
 
-       
-      <div className="p-4">
+      <div className="p-5 text-white">
         <h2
           onClick={handleEventView}
-          className="text-lg text-(--pink-color) font-semibold mb-2 cursor-pointer"
+          className="text-lg md:text-xl font-semibold
+                      cursor-pointer
+                    text-white
+                    group-hover:text-indigo-300
+                      transition"
         >
-          {title}
+          {truncateText(title, 60)}
         </h2>
 
-        <div className="min-h-20 max-h-20">
-          <p className="text-white text-sm">{description}</p>
-        </div>
+        <p className="text-white/60 text-sm mt-2 min-h-16">
+          {truncateText(description, 90)}
+        </p>
 
-    
-        <div className="flex items-center justify-between mt-3">
+        <div className="flex items-center justify-between mt-5">
           {specialPrice ? (
             <div className="flex flex-col">
-              <span className="text-gray-400 text-sm line-through">
+              <span className="text-white/40 line-through text-sm">
                 ${Number(price).toFixed(2)}
               </span>
-              <span className="text(--pink-color) text-sm md:text-xl font-bold">
+              <span className="text-indigo-300 text-lg font-bold">
                 ${Number(specialPrice).toFixed(2)}
               </span>
             </div>
           ) : (
-            <span className="text-(--pink-color) text-sm md:text-xl font-bold">
+            <span className="text-indigo-300 text-lg font-bold">
               ${Number(price).toFixed(2)}
             </span>
           )}
@@ -84,18 +104,28 @@ const EventCard = ({
           <button
             disabled={!isAvailable || btnLoader}
             onClick={handleEventView}
-            className={`bg-(--pink-color) text-white p-1 md:p-2 rounded-sm w-25 md:w-36 flex justify-center items-center transition-colors duration-300
-              ${isAvailable ? "opacity-100 cursor-pointer hover:bg-purple-600" : "opacity-70 cursor-not-allowed"}`}
+            className={`
+            flex items-center gap-2
+            px-4 py-2
+            rounded-lg
+            text-sm md:text-base
+            font-medium
+            transition
+            backdrop-blur-md
+            border border-white/10
+            ${
+              isAvailable
+                ? "bg-white/10 hover:bg-white/20 cursor-pointer"
+                : "bg-white/5 opacity-50 cursor-not-allowed"
+            }
+          `}
           >
-            <IoTicketOutline className="text-2xl mr-0 md:mr-2" />
-            <span className="text-sm md:text-lg">
-              {isAvailable ? "Book ticket" : "Out of stock"}
-            </span>
+            <IoTicketOutline className="text-xl" />
+            {isAvailable ? "Book Ticket" : "Sold Out"}
           </button>
         </div>
       </div>
 
-     
       <EventViewModal
         open={openEventViewModal}
         setOpen={setOpenEventViewModal}

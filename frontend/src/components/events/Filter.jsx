@@ -1,25 +1,12 @@
 import { FormControl, InputLabel, MenuItem , Select, Tooltip, Button} from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import {FiArrowUp, FiArrowDown, FiRefreshCcw, FiSearch} from "react-icons/fi"
+import { useDispatch } from 'react-redux';
 import {useSearchParams, useLocation, useNavigate} from 'react-router-dom';
 
-const Filter = () => {
+const Filter = ({categories}) => {
 
-  const categories = [
-    {
-      categoryId: 1,
-      categoryName:"Electronics"
-    },
-    {
-      categoryId: 2,
-      categoryName:"Clothing"
-    },
-     {
-      categoryId: 3,
-      categoryName:"Furniture"
-    }
-  ]
-
+   
   const [searchParams] = useSearchParams(); // da acces la param din url
   const params = new URLSearchParams(searchParams); // e o copie de search params pe care o poti modif , fara sa schimbi originalul
  

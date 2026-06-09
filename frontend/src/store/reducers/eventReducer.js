@@ -1,6 +1,6 @@
 const initialState = {
     events: null,
-    categories: null,
+    categories: [],
     pagination: {}
 }
 
@@ -19,7 +19,12 @@ export const eventReducer = (state = initialState, action) => {
                   lastPage: action.isLast
             }
         }
-         
+        
+        case "FETCH_CATEGORIES":
+        return {
+            ...state,
+            categories: action.payload,
+        }
       default:
         return state;
     }

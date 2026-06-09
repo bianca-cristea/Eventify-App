@@ -19,6 +19,7 @@ public class EventDTO {
     private LocalDateTime endDate;
     private Integer capacity;
     private Double price;
+    private Double specialPrice;
     private String status;
     private Long categoryId;
     private String organizerName;

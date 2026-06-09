@@ -30,12 +30,14 @@ public class EventController {
 
     @GetMapping("/events")
     public ResponseEntity<EventResponse> getAllEvents(
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "category", required = false) String category,
             @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
             @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_EVENTS_BY, required = false) String sortBy,
             @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_DIR, required = false) String sortOrder
     ) {
-        return new ResponseEntity<>(eventService.getAllEvents(pageNumber,pageSize,sortBy,sortOrder), HttpStatus.OK);
+        return new ResponseEntity<>(eventService.getAllEvents(pageNumber,pageSize,sortBy,sortOrder, keyword, category), HttpStatus.OK);
     }
 
 
@@ -60,7 +62,7 @@ public class EventController {
         return new ResponseEntity<>(eventService.getEventsByKeyword(keyword,pageNumber,pageSize,sortBy,sortOrder),HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ORGANIZER')")
+    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     @PutMapping("/events/{eventId}/image")
     public ResponseEntity<EventDTO> updateImage(@PathVariable Long eventId, @RequestParam(name = "image")MultipartFile image) throws IOException {
         EventDTO updatedEvent = eventService.updateEventImage(eventId,image);

@@ -1,8 +1,8 @@
 package org.example.backend.security;
 
-import org.example.backend.models.AppRole;
-import org.example.backend.models.Role;
-import org.example.backend.models.User;
+import org.example.backend.models.*;
+import org.example.backend.repositories.CategoryRepository;
+import org.example.backend.repositories.EventRepository;
 import org.example.backend.repositories.RoleRepository;
 import org.example.backend.repositories.UserRepository;
 import org.example.backend.security.jwt.AuthEntryPoint;
@@ -25,6 +25,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Configuration
@@ -35,6 +37,12 @@ public class WebSecurityConfig {
 
     @Autowired
     private AuthEntryPoint unauthorizedHandler;
+
+    @Autowired
+    private EventRepository eventRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -71,19 +79,22 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth
-                                .requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/v3/api-docs/**").permitAll()
-                                .requestMatchers("/swagger-ui/**").permitAll()
-                                .requestMatchers("/h2-console/**").permitAll()
-                                .requestMatchers("/images/**").permitAll()
-                                .requestMatchers("/api/public/**").permitAll()
-                                .requestMatchers("/api/test/**").permitAll()
-                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/api/organizer/**").hasAnyRole("ADMIN", "ORGANIZER")
-                                .requestMatchers("/api/staff/**").hasAnyRole("ADMIN", "STAFF")
-                                .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "STAFF", "ORGANIZER", "PARTICIPANT")
-                                .anyRequest().authenticated());
+                                auth
+                                        .requestMatchers("/api/auth/**").permitAll()
+                                        .requestMatchers("/v3/api-docs/**").permitAll()
+                                        .requestMatchers("/swagger-ui/**").permitAll()
+                                        .requestMatchers("/h2-console/**").permitAll()
+                                        .requestMatchers("/images/**").permitAll()
+
+                                        .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
+                                        .requestMatchers(HttpMethod.GET, "/api/categories/*/events").permitAll()
+                                        .requestMatchers("/api/public/**").permitAll()
+                                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                        .requestMatchers("/api/organizer/**").hasAnyRole("ADMIN", "ORGANIZER")
+                                        .requestMatchers("/api/staff/**").hasAnyRole("ADMIN", "STAFF")
+                                        .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "STAFF", "ORGANIZER", "PARTICIPANT")
+
+                                        .anyRequest().authenticated());
 
 
         http.authenticationProvider(authenticationProvider());
@@ -104,8 +115,6 @@ public class WebSecurityConfig {
                 "/swagger-ui.html",
                 "/webjars/**"));
     }
-
-
     @Bean
     public CommandLineRunner initData(RoleRepository roleRepository,
                                       UserRepository userRepository,
@@ -187,5 +196,6 @@ public class WebSecurityConfig {
             }
         };
     }
+
 
 }

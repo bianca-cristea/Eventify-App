@@ -36,6 +36,7 @@ public class Event {
 
     private Integer capacity;
     private Double price;
+    private Double specialPrice;
     private String status;
 
     @ManyToOne
