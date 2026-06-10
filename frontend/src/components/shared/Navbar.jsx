@@ -6,9 +6,13 @@ import { IconButton, Badge } from "@mui/material";
 import { BsTicketPerforated } from "react-icons/bs";
 import { IoIosLogIn, IoIosMenu } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
+import { useDispatch, useSelector } from "react-redux";
 const Navbar = () => {
   const path = useLocation().pathname;
   const [navbarOpen, setNavbarOpen] = useState(false);
+
+  const { cart } = useSelector((state) => state.carts);
+  const dispatch = useDispatch();
 
   return (
     <div className="h-18 sm:h-20 bg-slate-950 text-white z-50 items-center sticky top-0">
@@ -19,7 +23,7 @@ const Navbar = () => {
         </Link>
 
         <ul
-          className={`flex sm:gap-10 gap-4 sm:items-center  text-slate-800 sm:static absolute left-0 top-[75px] sm:shadow-none shadow-md ${
+          className={`flex sm:gap-10 gap-4 sm:items-center  text-slate-800 sm:static absolute left-0 top-[75] sm:shadow-none shadow-md ${
             navbarOpen ? "h-fit sm:pb-0 pb-5" : "h-0 overflow-hidden"
           }  transition-all duration-100 sm:h-fit bg-slate-950 bg-custom-gradient   text-white sm:w-fit w-full sm:flex-row flex-col px-4 sm:px-0`}
         >
@@ -80,7 +84,7 @@ const Navbar = () => {
                     "
               >
                 <Badge
-                  badgeContent={2}
+                  badgeContent={cart?.length || 0}
                   color="error"
                   className="text-white"
                   sx={{

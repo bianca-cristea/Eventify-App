@@ -76,3 +76,36 @@ export const addToCart =
 
     localStorage.setItem("cartItems", JSON.stringify(getState().carts.cart));
   };
+
+export const increaseCartQuantity =
+  (data, toast, currentQuantity, setCurrentQuantity) =>
+  (dispatch, getState) => {
+    const isQuantityExist = data.capacity >= currentQuantity + 1;
+
+    if (isQuantityExist) {
+      const newQuantity = currentQuantity + 1;
+      setCurrentQuantity(newQuantity);
+      dispatch({
+        type: "ADD_CART",
+        payload: { ...data, quantity: newQuantity },
+      });
+      localStorage.setItem("cartItems", JSON.stringify(getState().carts.cart));
+    } else {
+      toast.error("Quantity reached to limit.");
+    }
+  };
+
+export const decreaseCartQuantity =
+  (data, newQuantity) => (dispatch, getState) => {
+    dispatch({
+      type: "ADD_CART",
+      payload: { ...data, quantity: newQuantity },
+    });
+    localStorage.setItem("cartItems", JSON.stringify(getState().carts.cart));
+  };
+
+export const removeFromCart = (data, toast) => (dispatch, getState) => {
+  dispatch({ type: "REMOVE_CART", payload: data });
+  toast.success(`${data.title} concert has been removed from cart.`);
+  localStorage.setItem("cartItems", JSON.stringify(getState().carts.cart));
+};
