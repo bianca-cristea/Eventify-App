@@ -22,6 +22,8 @@ const ItemContent = ({
   specialPrice,
   quantity,
   cartId,
+  ticketType,
+  tickets,
 }) => {
   const [currentQuantity, setCurrentQuantity] = useState(quantity);
   const dispatch = useDispatch();
@@ -57,6 +59,11 @@ const ItemContent = ({
           <h3 className="text-sm md:text-[17px] m-auto font-semibold text-slate-50">
             {title}
           </h3>
+          {ticketType && (
+            <span className="text-xs text-indigo-300 font-medium">
+              {ticketType}
+            </span>
+          )}
         </div>
         <div className="md:w-36 sm:w-24 w-12">
           <img

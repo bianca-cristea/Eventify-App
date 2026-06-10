@@ -16,6 +16,7 @@ const EventCard = ({
   capacity,
   price,
   specialPrice,
+  tickets,
 }) => {
   const [openEventViewModal, setOpenEventViewModal] = useState(false);
   const [selectedViewEvent, setSelectedViewEvent] = useState(null);
@@ -23,6 +24,21 @@ const EventCard = ({
 
   const btnLoader = false;
   const isAvailable = Number(capacity) > 0;
+
+  const regularTicket = tickets?.find(
+    (ticket) => ticket.ticketType === "REGULAR",
+  );
+
+  const currentPrice = Number(
+    regularTicket?.specialPrice ??
+      regularTicket?.price ??
+      specialPrice ??
+      price,
+  );
+
+  const oldPrice = currentPrice + 70;
+
+  const hasTicketPricing = !!regularTicket;
 
   const eventData = {
     id: eventId,
@@ -35,16 +51,12 @@ const EventCard = ({
     capacity,
     price,
     specialPrice,
-    status,
+    tickets,
   };
 
   const handleEventView = () => {
     setSelectedViewEvent(eventData);
     setOpenEventViewModal(true);
-  };
-
-  const addToCartHandler = (cartItems) => {
-    dispatch(addToCart(cartItems, 1));
   };
 
   return (
@@ -67,9 +79,7 @@ const EventCard = ({
         className="relative w-full aspect-3/2 overflow-hidden cursor-pointer"
       >
         <img
-          className=" w-full h-full object-cover
-          transition duration-500
-          group-hover:scale-110"
+          className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
           src={image}
           alt={title}
         />
@@ -79,11 +89,7 @@ const EventCard = ({
       <div className="m-2 text-white">
         <h2
           onClick={handleEventView}
-          className="text-lg md:text-xl font-semibold
-                      cursor-pointer
-                    text-white
-                    group-hover:text-indigo-300
-                      transition"
+          className="text-lg md:text-xl font-semibold cursor-pointer text-white group-hover:text-indigo-300 transition"
         >
           {truncateText(title, 30)}
         </h2>
@@ -92,14 +98,15 @@ const EventCard = ({
           {truncateText(description, 50)}
         </p>
 
-        <div className="flex items-center justify-between">
-          {specialPrice ? (
+        <div className="flex items-center justify-between mt-3">
+          {hasTicketPricing ? (
             <div className="flex flex-col">
               <span className="text-white/40 text-md md:text-xl line-through">
-                ${Number(price).toFixed(2)}
+                ${oldPrice.toFixed(2)}
               </span>
+
               <span className="text-indigo-300 text-md md:text-xl font-bold">
-                ${Number(specialPrice).toFixed(2)}
+                ${currentPrice.toFixed(2)}
               </span>
             </div>
           ) : (
@@ -110,35 +117,8 @@ const EventCard = ({
 
           <button
             disabled={!isAvailable || btnLoader}
-            onClick={() =>
-              addToCartHandler({
-                id: eventId,
-                title,
-                description,
-                image,
-                location,
-                eventDate,
-                endDate,
-                capacity,
-                price,
-                specialPrice,
-              })
-            }
-            className={`
-            flex items-center gap-2
-            px-5 py-2
-            rounded-lg
-            text-xs md:text-base
-            font-medium
-            transition
-            backdrop-blur-md
-            border border-white/10
-            ${
-              isAvailable
-                ? "bg-white/10 hover:bg-white/20 cursor-pointer"
-                : "bg-white/5 opacity-50 cursor-not-allowed"
-            }
-          `}
+            onClick={handleEventView}
+            className="flex items-center gap-2 px-5 py-2 rounded-lg text-xs md:text-base font-medium transition backdrop-blur-md border border-white/10"
           >
             <IoTicketOutline className="text-xl" />
             {isAvailable ? "Buy Ticket" : "Sold Out"}

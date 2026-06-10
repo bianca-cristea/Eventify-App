@@ -69,6 +69,11 @@ export const addToCart =
       payload: {
         ...event,
         quantity: qty,
+        specialPrice: data.selectedTicket
+          ? data.selectedTicket.price
+          : event.specialPrice,
+        ticketType: data.selectedTicket?.ticketType || null,
+        ticketId: data.selectedTicket?.ticketId || null,
       },
     });
 

@@ -7,14 +7,14 @@ const Contact = () => {
       className="flex flex-col items-center justify-center min-h-screen py-12 bg-cover bg-center"
       style={{ backgroundImage: "url('')" }}
     >
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg">
-        <h1 className="text-black text-4xl font-bold text-center mb-6">
+      <div className="bg-indigo-950 shadow-2xl rounded-2xl p-10 w-full max-w-lg border border-white/10 backdrop-blur-xl">
+        <h1 className="text-white text-4xl font-bold text-center mb-4 tracking-tight">
           Contact us
         </h1>
-        <p className="text-gray-600 text-center mb-4">
+        <p className="text-white/60 text-center mb-8 text-sm md:text-base">
           Hello! Please fill out the form or contact us directly.
         </p>
-        <form className="space-y-4">
+        <form className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Name:
@@ -53,19 +53,19 @@ const Contact = () => {
           </button>
         </form>
         <div className="mt-8 text-center">
-          <h2 className="text-lg text-black">Contact information</h2>
+          <h2 className="text-lg text--slate-50">Contact information</h2>
           <div className="flex flex-col items-center space-y-2 mt-4">
             <div className="flex items-center">
               <FaPhone className="text-amber-400 mr-2" />
-              <span className="text-gray-600">+40 7123/456/789</span>
+              <span className="text-gray-50">+40 7123/456/789</span>
             </div>
             <div className="flex items-center">
               <FaEnvelope className="text-amber-400 mr-2" />
-              <span className="text-gray-600">info.eventify@gmail.com</span>
+              <span className="text-gray-50">info.eventify@gmail.com</span>
             </div>
             <div className="flex items-center">
               <FaMapMarkerAlt className="text-amber-400 mr-2" />
-              <span className="text-gray-600">
+              <span className="text-gray-50">
                 350 Market Street, Suite 2100 San Francisco, US
               </span>
             </div>

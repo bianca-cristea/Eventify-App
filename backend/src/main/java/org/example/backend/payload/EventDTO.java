@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +22,7 @@ public class EventDTO {
     private Double price;
     private Double specialPrice;
     private String status;
+    private List<TicketDTO> tickets;
     private Long categoryId;
     private String organizerName;
 }

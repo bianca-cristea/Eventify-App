@@ -5,11 +5,16 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../store/actions/actions";
 
 import Status from "./Status";
 import { MdClose, MdDone } from "react-icons/md";
 
 function EventViewModal({ open, setOpen, event, isAvailable }) {
+  const [selectedTicket, setSelectedTicket] = useState(null);
+  const dispatch = useDispatch();
   if (!event) return null;
 
   const {
@@ -21,8 +26,16 @@ function EventViewModal({ open, setOpen, event, isAvailable }) {
     price,
     discount,
     specialPrice,
+    tickets,
   } = event;
-
+  const handleAddToCart = () => {
+    if (tickets?.length > 0 && !selectedTicket) {
+      toast.error("Please select a ticket type");
+      return;
+    }
+    dispatch(addToCart({ ...event, selectedTicket }, 1));
+    setOpen(false);
+  };
   return (
     <Dialog
       open={open}
@@ -64,21 +77,6 @@ function EventViewModal({ open, setOpen, event, isAvailable }) {
             </DialogTitle>
 
             <div className="flex items-center justify-between mt-5">
-              {specialPrice ? (
-                <div className="flex flex-col">
-                  <span className="text-white/40 line-through text-sm">
-                    ${Number(price).toFixed(2)}
-                  </span>
-                  <span className="text-indigo-300 text-xl font-bold">
-                    ${Number(specialPrice).toFixed(2)}
-                  </span>
-                </div>
-              ) : (
-                <span className="text-indigo-300 text-xl font-bold">
-                  ${Number(price).toFixed(2)}
-                </span>
-              )}
-
               {isAvailable ? (
                 <Status
                   text="Available"
@@ -102,22 +100,46 @@ function EventViewModal({ open, setOpen, event, isAvailable }) {
               {description}
             </p>
 
-            <div className="flex justify-end mt-8">
+            {tickets?.length > 0 && (
+              <div className="mt-4 flex flex-col gap-2">
+                <p className="text-white/60 text-sm font-medium">
+                  Select ticket type:
+                </p>
+                {tickets.map((ticket) => (
+                  <button
+                    key={ticket.ticketId}
+                    onClick={() => setSelectedTicket(ticket)}
+                    className={`flex justify-between items-center px-4 py-2 rounded-lg border transition text-sm
+          ${
+            selectedTicket?.ticketId === ticket.ticketId
+              ? "border-indigo-500 bg-indigo-500/20 text-white"
+              : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
+          }`}
+                  >
+                    <span className="font-medium">{ticket.ticketType}</span>
+                    <span className="text-indigo-300 font-bold">
+                      ${ticket.price}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <div className="flex justify-end gap-3 mt-8">
               <button
                 onClick={() => setOpen(false)}
-                className="
-                px-5 py-2
-                rounded-full
-                bg-white/10
-                border border-white/10
-                text-white
-                hover:bg-white/20
-                transition
-                backdrop-blur-md
-              "
+                className="px-5 py-2 rounded-full bg-white/10 border border-white/10 text-white hover:bg-white/20 transition"
               >
                 Close
               </button>
+              {isAvailable && (
+                <button
+                  onClick={handleAddToCart}
+                  className="px-5 py-2 rounded-full bg-indigo-600 border border-indigo-500 text-white hover:bg-indigo-700 transition"
+                >
+                  Add to Cart
+                </button>
+              )}
             </div>
           </div>
         </DialogPanel>
