@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { IoTicketOutline } from "react-icons/io5";
 import EventViewModal from "../shared/EventViewModal";
 import truncateText from "../../utils/truncateText";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../store/actions/actions";
 
 const EventCard = ({
-  id: eventId,
+  eventId,
   title,
   description,
   image,
@@ -14,10 +16,10 @@ const EventCard = ({
   capacity,
   price,
   specialPrice,
-  status,
 }) => {
   const [openEventViewModal, setOpenEventViewModal] = useState(false);
   const [selectedViewEvent, setSelectedViewEvent] = useState(null);
+  const dispatch = useDispatch();
 
   const btnLoader = false;
   const isAvailable = Number(capacity) > 0;
@@ -39,6 +41,10 @@ const EventCard = ({
   const handleEventView = () => {
     setSelectedViewEvent(eventData);
     setOpenEventViewModal(true);
+  };
+
+  const addToCartHandler = (cartItems) => {
+    dispatch(addToCart(cartItems, 1));
   };
 
   return (
@@ -104,7 +110,20 @@ const EventCard = ({
 
           <button
             disabled={!isAvailable || btnLoader}
-            onClick={handleEventView}
+            onClick={() =>
+              addToCartHandler({
+                id: eventId,
+                title,
+                description,
+                image,
+                location,
+                eventDate,
+                endDate,
+                capacity,
+                price,
+                specialPrice,
+              })
+            }
             className={`
             flex items-center gap-2
             px-5 py-2
@@ -122,7 +141,7 @@ const EventCard = ({
           `}
           >
             <IoTicketOutline className="text-xl" />
-            {isAvailable ? "Book Ticket" : "Sold Out"}
+            {isAvailable ? "Buy Ticket" : "Sold Out"}
           </button>
         </div>
       </div>

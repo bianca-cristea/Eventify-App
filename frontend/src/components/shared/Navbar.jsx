@@ -101,7 +101,7 @@ const Navbar = () => {
             </Link>
           </li>
 
-          <li className="transition-all pt-3 duration-150">
+          <li className="transition-all pt-2 duration-150">
             <Link
               className={`${path === "/login" ? "text-white font-semibold" : "text-gray-200"}`}
               to="/login"

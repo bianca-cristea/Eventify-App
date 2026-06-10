@@ -1,5 +1,6 @@
 import "./App.css";
 
+import { ToastContainer } from "react-toastify";
 import Home from "./components/home/Home";
 import Events from "./components/events/Events";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -20,6 +21,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
         </Route>
       </Routes>
+      <ToastContainer />
     </Router>
   );
 }
