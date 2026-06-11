@@ -44,10 +44,10 @@ function EventViewModal({ open, setOpen, event, isAvailable }) {
     >
       <DialogBackdrop className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity" />
 
-      <div className="fixed inset-0 flex items-center justify-center p-4">
+      <div className="fixed inset-0 flex items-center justify-center p-3">
         <DialogPanel
           className="
-          w-full max-w-3xl
+          w-full max-w-4xl
           overflow-hidden
           rounded-2xl
           bg-linear-to-br from-black via-slate-950 to-indigo-950

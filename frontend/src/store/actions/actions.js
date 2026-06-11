@@ -1,5 +1,5 @@
 import api from "../../api/api";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 export const fetchEvents = (queryString) => async (dispatch) => {
   try {
@@ -113,4 +113,48 @@ export const removeFromCart = (data, toast) => (dispatch, getState) => {
   dispatch({ type: "REMOVE_CART", payload: data });
   toast.success(`${data.title} concert has been removed from cart.`);
   localStorage.setItem("cartItems", JSON.stringify(getState().carts.cart));
+};
+export const authenticateSignInUser =
+  (sendData, toast, reset, navigate, setLoader) => async (dispatch) => {
+    try {
+      setLoader(true);
+      const { data } = await api.post("/auth/login", sendData);
+      dispatch({ type: "LOGIN_USER", payload: data });
+      localStorage.setItem("auth", JSON.stringify(data));
+      reset();
+      toast.success("Login Success");
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message || "Internal Server Error");
+    } finally {
+      setLoader(false);
+    }
+  };
+
+export const registerNewUser =
+  (sendData, toast, reset, navigate, setLoader) => async (dispatch) => {
+    try {
+      setLoader(true);
+      const { data } = await api.post("/auth/signup", sendData);
+      reset();
+
+      toast.success(data?.message || "User Registered Successfully");
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        error?.response?.data?.message ||
+          error?.response?.data?.password ||
+          "Internal Server Error",
+      );
+    } finally {
+      setLoader(false);
+    }
+  };
+
+export const logOutUser = (navigate) => (dispatch) => {
+  dispatch({ type: "LOG_OUT" });
+  localStorage.removeItem("auth/signout");
+  navigate("/login");
 };

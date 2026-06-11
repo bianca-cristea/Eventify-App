@@ -7,11 +7,13 @@ import { BsTicketPerforated } from "react-icons/bs";
 import { IoIosLogIn, IoIosMenu } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
+import UserMenu from "../UserMenu";
 const Navbar = () => {
   const path = useLocation().pathname;
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   const { cart } = useSelector((state) => state.carts);
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   return (
@@ -23,9 +25,7 @@ const Navbar = () => {
         </Link>
 
         <ul
-          className={`flex sm:gap-10 gap-4 sm:items-center  text-slate-800 sm:static absolute left-0 top-[75] sm:shadow-none shadow-md ${
-            navbarOpen ? "h-fit sm:pb-0 pb-5" : "h-0 overflow-hidden"
-          }  transition-all duration-100 sm:h-fit bg-slate-950 bg-custom-gradient   text-white sm:w-fit w-full sm:flex-row flex-col px-4 sm:px-0`}
+          className={` flex sm:gap-10 gap-4 sm:items-center  text-white sm:static absolute left-0 top-[75] z-50 sm:shadow-none shadow-md ${navbarOpen ? "h-fit py-5 opacity-100" : "h-0 overflow-hidden opacity-0"} transition-all duration-300 sm:h-fit sm:opacity-100  bg-slate-950 sm:bg-transparent w-full sm:w-fit sm:flex-row flex-col px-4 sm:px-0`}
         >
           <li className="font-500 text-white/70 hover:text-white transition-all duration-300 border-b-2 border-transparent hover:border-amber-300">
             <Link
@@ -104,19 +104,24 @@ const Navbar = () => {
               </span>
             </Link>
           </li>
+          {user && user.id ? (
+            <li className="font-medium transition-all duration-150">
+              <UserMenu />
+            </li>
+          ) : (
+            <li className="transition-all pt-2 duration-150">
+              <Link
+                className={`${path === "/login" ? "text-white font-semibold" : "text-gray-200"}`}
+                to="/login"
+              >
+                <IoIosLogIn className="text-2xl text-amber-300 drop-shadow-[0_0_8px_rgba(255,180,0,0.6)]" />
 
-          <li className="transition-all pt-2 duration-150">
-            <Link
-              className={`${path === "/login" ? "text-white font-semibold" : "text-gray-200"}`}
-              to="/login"
-            >
-              <IoIosLogIn className="text-2xl text-amber-300 drop-shadow-[0_0_8px_rgba(255,180,0,0.6)]" />
-
-              <span className="text-xs text-center hover:text-amber-300">
-                Login
-              </span>
-            </Link>
-          </li>
+                <span className="text-xs text-center hover:text-amber-300">
+                  Login
+                </span>
+              </Link>
+            </li>
+          )}
         </ul>
         <button
           onClick={() => setNavbarOpen(!navbarOpen)}
