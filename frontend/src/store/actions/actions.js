@@ -158,3 +158,10 @@ export const logOutUser = (navigate) => (dispatch) => {
   localStorage.removeItem("auth/signout");
   navigate("/login");
 };
+
+export const addPaymentMethod = (method) => {
+  return {
+    type: "ADD_PAYMENT_METHOD",
+    payload: method,
+  };
+};

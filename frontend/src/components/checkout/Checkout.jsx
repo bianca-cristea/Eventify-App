@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import SkeletonCoponent from "../shared/SkeletonComponent";
 import ErrorPage from "../shared/ErrorPage";
 import OrderSummary from "./OrderSummary";
+import PaymentMethod from "./PaymentMethod";
 
 const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -65,7 +66,7 @@ const Checkout = () => {
         ) : (
           <div className="lg:w-[80%] mx-auto py-5">
             {activeStep === 0 && <OrderSummary handleNext={handleNext} />}
-            {activeStep === 1 && <div>Payment Method step</div>}
+            {activeStep === 1 && <PaymentMethod />}
             {activeStep === 2 && <div>Confirm & Pay step</div>}
             {activeStep === 3 && <div>Confirmation step</div>}
           </div>
