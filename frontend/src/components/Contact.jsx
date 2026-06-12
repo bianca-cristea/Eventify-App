@@ -3,8 +3,8 @@ import { FaEnvelope, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
 
 const Contact = () => {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-linear-to-br from-slate-950 via-indigo-950 to-slate-950 px-4 py-20">
-      <div className="absolute top-10 left-10 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl" />
+    <div className="relative min-h-screen overflow-hidden bg-slate-950 px-4 py-20">
+      <div className="absolute top-10 left-10 h-72 w-72 rounded-full bg-pink-500/20 blur-3xl" />
       <div className="absolute bottom-10 right-10 h-72 w-72 rounded-full bg-violet-500/10 blur-3xl" />
 
       <div className="relative mx-auto max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
@@ -66,7 +66,7 @@ const Contact = () => {
 
         <div
           className="
-            bg-white/5
+            bg-slate-950/5
             backdrop-blur-xl
             border
             border-white/10
