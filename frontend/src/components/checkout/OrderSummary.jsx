@@ -1,12 +1,32 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { createBooking } from "../../store/actions/actions";
 
 const OrderSummary = ({ handleNext }) => {
+  const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.carts);
+  const [loading, setLoading] = useState(false);
   const total = cart?.reduce(
     (acc, item) => acc + Number(item.specialPrice) * Number(item.quantity),
     0,
   );
+
+  const handleContinue = async () => {
+    if (!cart || cart.length === 0) {
+      toast.error("Your cart is empty");
+      return;
+    }
+    setLoading(true);
+    try {
+      await dispatch(createBooking(cart));
+      handleNext();
+    } catch (error) {
+      toast.error("Failed to create booking");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="mt-8 flex flex-col gap-4">
@@ -53,10 +73,11 @@ const OrderSummary = ({ handleNext }) => {
 
       <div className="flex justify-end mt-4">
         <button
-          onClick={handleNext}
-          className="px-8 py-2 rounded-full bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition"
+          onClick={handleContinue}
+          disabled={loading}
+          className="px-8 py-2 rounded-full bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition disabled:opacity-50"
         >
-          Next
+          {loading ? "Processing..." : "Next"}
         </button>
       </div>
     </div>

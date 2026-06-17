@@ -5,6 +5,8 @@ import SkeletonCoponent from "../shared/SkeletonComponent";
 import ErrorPage from "../shared/ErrorPage";
 import OrderSummary from "./OrderSummary";
 import PaymentMethod from "./PaymentMethod";
+import StripePayment from "./StripePayment";
+import PaypalPayment from "./PaypalPayment";
 
 const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -66,8 +68,31 @@ const Checkout = () => {
         ) : (
           <div className="lg:w-[80%] mx-auto py-5">
             {activeStep === 0 && <OrderSummary handleNext={handleNext} />}
-            {activeStep === 1 && <PaymentMethod />}
-            {activeStep === 2 && <div>Confirm & Pay step</div>}
+            {activeStep === 1 && (
+              <PaymentMethod
+                paymentMethod={paymentMethod}
+                setPaymentMethod={setPaymentMethod}
+                handleNext={handleNext}
+                handleBack={handleBack}
+              />
+            )}
+            {activeStep === 2 && (
+              <>
+                {paymentMethod === "Stripe" ? (
+                  <StripePayment
+                    paymentMethod={paymentMethod}
+                    handleBack={handleBack}
+                    handleNext={handleNext}
+                  />
+                ) : (
+                  <PaypalPayment
+                    paymentMethod={paymentMethod}
+                    handleBack={handleBack}
+                    handleNext={handleNext}
+                  />
+                )}
+              </>
+            )}
             {activeStep === 3 && <div>Confirmation step</div>}
           </div>
         )}

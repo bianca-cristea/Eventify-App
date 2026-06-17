@@ -6,6 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.awt.print.Book;
+import java.util.List;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking,Long> {
@@ -19,4 +22,10 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
     Page<Booking> getBookingsByEventId(@Param("eventId")  Long eventId, Pageable pageDetails);
 
     Optional<Booking> findByQrCode(String qrCode);
+
+    @Query("SELECT b FROM Booking b WHERE b.user.email = :email")
+    Booking findBookingByEmail(@Param("email") String email);
+
+
+
 }

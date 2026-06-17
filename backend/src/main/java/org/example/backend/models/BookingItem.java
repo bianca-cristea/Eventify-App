@@ -14,14 +14,12 @@ import java.util.List;
 @Table(name = "bookingItems")
 public class BookingItem {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "booking_item_id")
     private Long bookingItemId;
 
     private Integer quantity;
-
     private Double priceAtBooking;
 
     @Enumerated(EnumType.STRING)
@@ -34,7 +32,4 @@ public class BookingItem {
     @ManyToOne
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;
-
-
-
 }

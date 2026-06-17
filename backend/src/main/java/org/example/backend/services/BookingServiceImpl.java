@@ -1,10 +1,13 @@
 package org.example.backend.services;
 
+import jakarta.transaction.Transactional;
 import org.example.backend.exceptions.APIException;
 import org.example.backend.exceptions.ResourceNotFoundException;
 import org.example.backend.models.*;
 import org.example.backend.payload.BookingDTO;
+import org.example.backend.payload.BookingItemDTO;
 import org.example.backend.payload.BookingResponse;
+import org.example.backend.repositories.BookingItemRepository;
 import org.example.backend.repositories.BookingRepository;
 import org.example.backend.repositories.EventRepository;
 import org.example.backend.repositories.TicketRepository;
@@ -41,6 +44,8 @@ public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private EventRepository eventRepository;
+
+
 
 
     @Override
@@ -101,7 +106,7 @@ public class BookingServiceImpl implements BookingService {
         if (booking == null) throw new APIException("You have no bookings yet.");
 
 
-        return modelMapper.map(booking,BookingDTO.class);
+        return modelMapper.map(booking, BookingDTO.class);
     }
 
 
@@ -121,7 +126,8 @@ public class BookingServiceImpl implements BookingService {
         Booking bookingFromDB = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking", "bookingId", bookingId));
 
-        if (bookingFromDB.getBookingItemList() != null) bookingFromDB.getBookingItemList().forEach(item -> item.setStatus(BookingStatus.CANCELLED));
+        if (bookingFromDB.getBookingItemList() != null)
+            bookingFromDB.getBookingItemList().forEach(item -> item.setStatus(BookingStatus.CANCELLED));
         bookingFromDB.setRefundStatus(RefundStatus.PENDING);
         bookingFromDB.setStatus(BookingStatus.CANCELLED);
         bookingRepository.save(bookingFromDB);
@@ -162,14 +168,14 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponse allBookings(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
 
-        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")?
-                Sort.by(sortBy).ascending():
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc") ?
+                Sort.by(sortBy).ascending() :
                 Sort.by(sortBy).descending();
 
-        Pageable pageDetails = PageRequest.of(pageNumber,pageSize,sortByAndOrder);
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
         Page<Booking> bookings = bookingRepository.findAll(pageDetails);
 
-        List<BookingDTO> bookingDTOS = bookings.stream().map(booking -> modelMapper.map(booking,BookingDTO.class)).toList();
+        List<BookingDTO> bookingDTOS = bookings.stream().map(booking -> modelMapper.map(booking, BookingDTO.class)).toList();
 
         BookingResponse bookingResponse = new BookingResponse();
         bookingResponse.setContent(bookingDTOS);

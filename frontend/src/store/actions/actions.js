@@ -165,3 +165,68 @@ export const addPaymentMethod = (method) => {
     payload: method,
   };
 };
+export const createBooking = (cartItems) => async (dispatch) => {
+  try {
+    dispatch({ type: "IS_FETCHING" });
+    const { data } = await api.post("/bookings", {
+      bookingItems: cartItems,
+    });
+    dispatch({ type: "BOOKING_SUCCESS", payload: data });
+    localStorage.setItem("bookingId", data.bookingId);
+    dispatch({ type: "IS_SUCCESS" });
+  } catch (error) {
+    dispatch({
+      type: "IS_ERROR",
+      payload: error?.response?.data?.message || "Failed to create booking.",
+    });
+    throw error;
+  }
+};
+
+export const createStripePaymentSecret =
+  (totalPrice) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: "IS_FETCHING" });
+      const bookingId = localStorage.getItem("bookingId");
+      const { data } = await api.post("/bookings/stripe-client-secret", {
+        amount: Number(totalPrice) * 100,
+        currency: "usd",
+        bookingId: Number(bookingId),
+      });
+      dispatch({ type: "CLIENT_SECRET", payload: data });
+      localStorage.setItem("client-secret", JSON.stringify(data));
+      dispatch({ type: "IS_SUCCESS" });
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        error?.response?.data?.message || "Failed to create client secret.",
+      );
+    }
+  };
+
+export const stripePaymentConfirmation =
+  (sendData, setErrorMessage, setLoading, toast) =>
+  async (dispatch, getState) => {
+    try {
+      setLoading(true);
+      const { data } = await api.post(
+        "/booking/users/payments/online",
+        sendData,
+      );
+      if (data) {
+        localStorage.removeItem("cartItems");
+        localStorage.removeItem("client-secret");
+        localStorage.removeItem("bookingId");
+        dispatch({ type: "REMOVE_CLIENT_SECRET" });
+        dispatch({ type: "CLEAR_CART" });
+        toast.success("Order accepted");
+      } else {
+        setErrorMessage("Payment failed,please try again.");
+      }
+    } catch (error) {
+      console.log(error);
+      setErrorMessage("Payment failed,please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };

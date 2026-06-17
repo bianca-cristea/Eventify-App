@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.backend.models.BookingStatus;
+import org.example.backend.models.RefundStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,4 +23,5 @@ public class BookingDTO {
     private String qrCode;
     private List<BookingItemDTO> bookingItems;
     private Long userId;
+    private RefundStatus refundStatus; //
 }

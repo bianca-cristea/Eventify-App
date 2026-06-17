@@ -13,6 +13,7 @@ import LogIn from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import PrivateRoute from "./components/PrivateRoute";
 import Checkout from "./components/checkout/Checkout";
+import PaymentConfirmation from "./components/checkout/PaymentConfirmation";
 
 function App() {
   return (
@@ -25,7 +26,11 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
+
+          <Route path="/" element={<PrivateRoute />}>
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/booking-confirm" element={<PaymentConfirmation />} />
+          </Route>
 
           <Route path="/" element={<PrivateRoute publicPage />}>
             <Route path="/login" element={<LogIn />} />

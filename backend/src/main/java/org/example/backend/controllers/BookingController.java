@@ -1,10 +1,14 @@
 package org.example.backend.controllers;
 
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
 import jakarta.validation.Valid;
 import org.example.backend.config.AppConstants;
-import org.example.backend.payload.BookingDTO;
-import org.example.backend.payload.BookingResponse;
+import org.example.backend.models.PaymentMethod;
+import org.example.backend.payload.*;
 import org.example.backend.services.BookingService;
+import org.example.backend.services.PaymentService;
+import org.example.backend.services.StripeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +24,35 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
-    @PreAuthorize("hasRole('PARTICIPANT')")
+    @Autowired
+    private PaymentService paymentService;
+
+    @Autowired
+    private StripeService stripeService;
+
+
+    @PostMapping("/bookings/stripe-client-secret")
+    public ResponseEntity<String> createStripeClientSecret(@RequestBody StripePaymentDTO stripePaymentDTO) throws StripeException {
+        PaymentIntent paymentIntent = stripeService.paymentIntent(stripePaymentDTO);
+        return new ResponseEntity<>(paymentIntent.getClientSecret(),HttpStatus.CREATED);
+    }
+    @PostMapping("/booking/users/payments/online")
+    public ResponseEntity<PaymentDTO> confirmOnlinePayment(@RequestBody StripeConfirmationDTO confirmationDTO) throws StripeException {
+        PaymentDTO paymentDTO = paymentService.createPaymentForBooking(
+                confirmationDTO.getBookingId(),
+                PaymentMethod.STRIPE
+        );
+        return new ResponseEntity<>(paymentDTO, HttpStatus.OK);
+    }
+        @PreAuthorize("hasRole('PARTICIPANT') or hasRole('ADMIN')")
     @PostMapping("/bookings")
     public ResponseEntity<BookingDTO> bookTicket(@Valid @RequestBody BookingDTO bookingDTO){
         return new ResponseEntity<>(bookingService.bookTicket(bookingDTO), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('PARTICIPANT')")
+
+
+    @PreAuthorize("hasRole('PARTICIPANT') or hasRole('ADMIN')")
     @GetMapping("/bookings/my")
     public ResponseEntity<BookingDTO> showMyBookings(){
         return new ResponseEntity<>(bookingService.showMyBooking(), HttpStatus.OK);

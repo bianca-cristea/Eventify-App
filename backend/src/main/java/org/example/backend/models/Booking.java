@@ -27,6 +27,9 @@ public class Booking {
     private Double totalAmount;
     private String qrCode;
 
+    @Column(name = "stripe_payment_intent_id")
+    private String stripePaymentIntentId;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

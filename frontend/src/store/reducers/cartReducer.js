@@ -13,24 +13,25 @@ export const cartReducer = (state = initialState, action) => {
       );
 
       if (existingEvent) {
-        const updatedCart = state.cart.map((item) => {
-          if (item.eventId === eventToAdd.eventId) {
-            return eventToAdd;
-          } else {
-            return item;
-          }
-        });
-
-        return {
-          ...state,
-          cart: updatedCart,
-        };
+        const updatedCart = state.cart.map((item) =>
+          item.eventId === eventToAdd.eventId ? eventToAdd : item,
+        );
+        const newTotalPrice = updatedCart.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0,
+        );
+        localStorage.setItem("totalPrice", JSON.stringify(newTotalPrice));
+        localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+        return { ...state, cart: updatedCart, totalPrice: newTotalPrice };
       } else {
         const newCart = [...state.cart, eventToAdd];
-        return {
-          ...state,
-          cart: newCart,
-        };
+        const newTotalPrice = newCart.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0,
+        );
+        localStorage.setItem("totalPrice", JSON.stringify(newTotalPrice));
+        localStorage.setItem("cartItems", JSON.stringify(newCart));
+        return { ...state, cart: newCart, totalPrice: newTotalPrice };
       }
     case "REMOVE_CART":
       return {
@@ -43,7 +44,7 @@ export const cartReducer = (state = initialState, action) => {
       return {
         ...state,
         cart: action.payload,
-        totalPrice: action.totalPrice,
+        totalPrice: action.payload.totalPrice,
         cartId: action.cartId,
       };
     case "CLEAR_CART":

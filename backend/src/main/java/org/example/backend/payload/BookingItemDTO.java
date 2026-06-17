@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BookingItemDTO {
     private Long ticketId;
-    private Long bookingItemId;
     private Integer quantity;
     private Double priceAtBooking;
-    private String ticketType;
 }

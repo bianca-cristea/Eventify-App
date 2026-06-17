@@ -15,6 +15,9 @@ const Navbar = () => {
   const { cart } = useSelector((state) => state.carts);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const handleNavLinkClick = () => {
+    setNavbarOpen(false);
+  };
 
   return (
     <div className="h-18 sm:h-20 bg-slate-950 text-white z-50 items-center sticky top-0">
@@ -25,10 +28,16 @@ const Navbar = () => {
         </Link>
 
         <ul
-          className={` flex sm:gap-10 gap-4 sm:items-center  text-white sm:static absolute left-0 top-[75] z-50 sm:shadow-none shadow-md ${navbarOpen ? "h-fit py-5 opacity-100" : "h-0 overflow-hidden opacity-0"} transition-all duration-300 sm:h-fit sm:opacity-100  bg-slate-950 sm:bg-transparent w-full sm:w-fit sm:flex-row flex-col px-4 sm:px-0`}
+          className={`bg-slate-950 flex flex-col sm:flex-row sm:gap-10 gap-6 sm:items-center text-white 
+  sm:static absolute left-0 top-[72px] z-50 w-full sm:w-fit px-6 sm:px-0
+  sm:shadow-none shadow-xl
+  transition-all duration-300 ease-in-out
+  ${navbarOpen ? "py-6 opacity-100 pointer-events-auto" : "h-0 py-0 overflow-hidden opacity-0 pointer-events-none"}
+  sm:h-auto sm:opacity-100 sm:overflow-visible sm:pointer-events-auto`}
         >
           <li className="font-500 text-white/70 hover:text-white transition-all duration-300 border-b-2 border-transparent hover:border-amber-300">
             <Link
+              onClick={handleNavLinkClick}
               className={`${path === "/" ? "text-white font-semibold" : "text-gray-200"}`}
               to="/"
             >
@@ -38,6 +47,7 @@ const Navbar = () => {
 
           <li className="font-500  hover:text-white transition-all duration-300 border-b-2 border-transparent hover:border-amber-300">
             <Link
+              onClick={handleNavLinkClick}
               className={`${path === "/events" ? "text-white font-semibold" : "text-gray-200"}`}
               to="/events"
             >
@@ -47,6 +57,7 @@ const Navbar = () => {
 
           <li className="font-500 hover:text-white transition-all duration-300 border-b-2 border-transparent hover:border-amber-300">
             <Link
+              onClick={handleNavLinkClick}
               className={`${path === "/about" ? "text-white font-semibold" : "text-gray-200"}`}
               to="/about"
             >
@@ -56,6 +67,7 @@ const Navbar = () => {
 
           <li className="font-500 hover:text-white transition-all duration-300 border-b-2 border-transparent hover:border-amber-300">
             <Link
+              onClick={handleNavLinkClick}
               className={`${path === "/contact" ? "text-white font-semibold" : "text-gray-200"}`}
               to="/contact"
             >
@@ -65,6 +77,7 @@ const Navbar = () => {
 
           <li className="transition-all duration-150">
             <Link
+              onClick={handleNavLinkClick}
               className={`flex flex-col ${path === "/cart" ? "text-white font-semibold" : "text-gray-200"}`}
               to="/cart"
             >
@@ -111,6 +124,7 @@ const Navbar = () => {
           ) : (
             <li className="transition-all pt-2 duration-150">
               <Link
+                onClick={handleNavLinkClick}
                 className={`${path === "/login" ? "text-white font-semibold" : "text-gray-200"}`}
                 to="/login"
               >

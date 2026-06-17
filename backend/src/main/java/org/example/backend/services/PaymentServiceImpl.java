@@ -1,5 +1,8 @@
 package org.example.backend.services;
 
+import com.stripe.StripeClient;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
 import org.example.backend.exceptions.APIException;
 import org.example.backend.exceptions.ResourceNotFoundException;
 import org.example.backend.models.*;
@@ -10,6 +13,7 @@ import org.example.backend.repositories.PaymentRepository;
 import org.example.backend.util.AuthUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,27 +39,40 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
 
+    @Value("${stripe.secret.key}")
+    private String stripeApiKey;
 
 
     @Override
-    public PaymentDTO createPaymentForBooking(Long bookingId, PaymentMethod paymentMethod) {
+    public PaymentDTO createPaymentForBooking(Long bookingId, PaymentMethod paymentMethod) throws StripeException {
         Booking bookingFromDb = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking", "bookingId", bookingId));
 
+        if (bookingFromDb.getPayment() != null) throw new APIException("You have already payed.");
 
-        if(bookingFromDb.getPayment()!=null) throw new APIException("You have already payed.");
+        if (bookingFromDb.getStripePaymentIntentId() == null) {
+            throw new APIException("No payment intent associated with this booking.");
+        }
+
+        StripeClient client = new StripeClient(stripeApiKey);
+        PaymentIntent paymentIntent = client.v1().paymentIntents().retrieve(bookingFromDb.getStripePaymentIntentId());
+
+        if (!"succeeded".equals(paymentIntent.getStatus())) {
+            throw new APIException("Payment not completed yet.");
+        }
 
         Payment payment = new Payment();
         payment.setBooking(bookingFromDb);
         payment.setPaymentMethod(paymentMethod);
         payment.setPaymentDate(LocalDate.now());
-        bookingFromDb.setStatus(BookingStatus.CONFIRMED);
         payment.setStatus(PaymentStatus.COMPLETED);
+
+        bookingFromDb.setStatus(BookingStatus.CONFIRMED);
 
         paymentRepository.save(payment);
         bookingRepository.save(bookingFromDb);
 
-        return modelMapper.map(payment,PaymentDTO.class);
+        return modelMapper.map(payment, PaymentDTO.class);
     }
 
     @Override

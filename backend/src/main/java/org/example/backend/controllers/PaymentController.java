@@ -1,5 +1,6 @@
 package org.example.backend.controllers;
 
+import com.stripe.exception.StripeException;
 import org.example.backend.config.AppConstants;
 import org.example.backend.models.PaymentMethod;
 import org.example.backend.payload.PaymentDTO;
@@ -21,7 +22,7 @@ public class PaymentController {
 
         @PreAuthorize("hasRole('PARTICIPANT')")
         @PostMapping("/payments/bookings/{bookingId}")
-        public ResponseEntity<PaymentDTO> createPayment(@PathVariable Long bookingId, @RequestParam PaymentMethod paymentMethod) {
+        public ResponseEntity<PaymentDTO> createPayment(@PathVariable Long bookingId, @RequestParam PaymentMethod paymentMethod) throws StripeException {
 
             PaymentDTO response = paymentService.createPaymentForBooking(bookingId,paymentMethod);
 

@@ -13,9 +13,16 @@ const cartItems = localStorage.getItem("cartItems")
   ? JSON.parse(localStorage.getItem("cartItems"))
   : [];
 
+const totalPrice = localStorage.getItem("totalPrice")
+  ? JSON.parse(localStorage.getItem("totalPrice"))
+  : 0;
+
 const initialState = {
   auth: { user: user },
-  carts: { cart: cartItems },
+  carts: {
+    cart: cartItems,
+    totalPrice: totalPrice,
+  },
 };
 
 export const store = configureStore({
