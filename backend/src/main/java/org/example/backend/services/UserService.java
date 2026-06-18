@@ -1,6 +1,7 @@
 package org.example.backend.services;
 
 import org.example.backend.models.User;
+import org.example.backend.payload.ChangePasswordDTO;
 import org.example.backend.payload.UserDTO;
 import org.example.backend.payload.UserResponse;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,7 @@ public interface UserService {
     UserDTO updateUser(Long userId, UserDTO userDTO);
 
     UserDTO deleteUser(Long userId);
-
+    void changePassword(ChangePasswordDTO changePasswordDTO);
     UserDTO getMyProfile();
     UserDTO updateMyProfile(UserDTO userDTO);
 

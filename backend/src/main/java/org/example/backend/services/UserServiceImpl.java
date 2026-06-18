@@ -1,8 +1,10 @@
 package org.example.backend.services;
 
+import org.example.backend.exceptions.APIException;
 import org.example.backend.exceptions.ResourceNotFoundException;
 import org.example.backend.models.AppRole;
 import org.example.backend.models.User;
+import org.example.backend.payload.ChangePasswordDTO;
 import org.example.backend.payload.UserDTO;
 import org.example.backend.payload.UserResponse;
 import org.example.backend.repositories.UserRepository;
@@ -121,12 +123,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateMyProfile(UserDTO userDTO) {
         User userFromDb = authUtil.loggedInUser();
-
         userFromDb.setEmail(userDTO.getEmail());
-        userFromDb.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-
         User savedUser = userRepository.save(userFromDb);
-
         return modelMapper.map(savedUser, UserDTO.class);
+    }
+
+    @Override
+    public void changePassword(ChangePasswordDTO changePasswordDTO) {
+        User userFromDb = authUtil.loggedInUser();
+
+        if (!passwordEncoder.matches(changePasswordDTO.getOldPassword(), userFromDb.getPassword())) {
+            throw new APIException("Old password is incorrect.");
+        }
+
+        userFromDb.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+        userRepository.save(userFromDb);
     }
 }

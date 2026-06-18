@@ -57,7 +57,7 @@ const UserMenu = () => {
           },
         }}
       >
-        <Link to="/">
+        <Link to="/profile">
           <MenuItem className="flex gap-2" onClick={handleClose}>
             <CiUser className="text-xl" />
             <span className="text-[16] mt-1">{user?.username}</span>

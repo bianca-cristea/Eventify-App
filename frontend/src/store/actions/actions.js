@@ -112,6 +112,45 @@ export const fetchMyBookings = () => async (dispatch) => {
     });
   }
 };
+export const fetchMyProfile = () => async (dispatch) => {
+  try {
+    dispatch({ type: "IS_FETCHING" });
+    const { data } = await api.get("/users/me");
+    dispatch({ type: "FETCH_PROFILE", payload: data });
+    dispatch({ type: "IS_SUCCESS" });
+  } catch (error) {
+    dispatch({
+      type: "IS_ERROR",
+      payload: error?.response?.data?.message || "Failed to fetch profile.",
+    });
+  }
+};
+
+export const updateMyProfile = (userDTO, toast) => async (dispatch) => {
+  try {
+    dispatch({ type: "IS_FETCHING" });
+    const { data } = await api.put("/users/me", userDTO);
+    dispatch({ type: "FETCH_PROFILE", payload: data });
+    dispatch({ type: "IS_SUCCESS" });
+    toast.success("Profile updated successfully");
+  } catch (error) {
+    toast.error(error?.response?.data?.message || "Failed to update profile.");
+    throw error;
+  }
+};
+
+export const changePassword =
+  (changePasswordDTO, toast) => async (dispatch) => {
+    try {
+      await api.put("/users/me/password", changePasswordDTO);
+      toast.success("Password changed successfully");
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || "Failed to change password.",
+      );
+      throw error;
+    }
+  };
 export const decreaseCartQuantity =
   (data, newQuantity) => (dispatch, getState) => {
     dispatch({

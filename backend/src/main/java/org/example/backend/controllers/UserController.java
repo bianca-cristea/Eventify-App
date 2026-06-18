@@ -3,6 +3,8 @@ package org.example.backend.controllers;
 import jakarta.validation.Valid;
 import org.example.backend.config.AppConstants;
 import org.example.backend.models.User;
+import org.example.backend.payload.APIResponse;
+import org.example.backend.payload.ChangePasswordDTO;
 import org.example.backend.payload.UserDTO;
 import org.example.backend.payload.UserResponse;
 import org.example.backend.services.UserService;
@@ -81,4 +83,9 @@ public class UserController {
         return new ResponseEntity<>(userService.updateMyProfile(userDTO),HttpStatus.OK);
     }
 
+    @PutMapping("/users/me/password")
+    public ResponseEntity<APIResponse> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordDTO) {
+        userService.changePassword(changePasswordDTO);
+        return new ResponseEntity<>(new APIResponse("Password changed successfully.", true), HttpStatus.OK);
+    }
 }

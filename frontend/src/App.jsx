@@ -15,6 +15,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Checkout from "./components/checkout/Checkout";
 import PaymentConfirmation from "./components/checkout/PaymentConfirmation";
 import MyTickets from "./components/MyTickets";
+import Profile from "./components/Profile";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/booking-confirm" element={<PaymentConfirmation />} />
             <Route path="/my-tickets" element={<MyTickets />} />
+            <Route path="/profile" element={<Profile />} />
           </Route>
 
           <Route path="/" element={<PrivateRoute publicPage />}>
