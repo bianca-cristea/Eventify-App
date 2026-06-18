@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking,Long> {
-    Booking findByUserUserId(Long userId);
+    List<Booking> findByUserUserId(Long userId);
 
     @Query("SELECT b FROM Booking b "+
             "JOIN b.bookingItemList bi "+

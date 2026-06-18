@@ -3,7 +3,12 @@ package org.example.backend.services;
 import com.stripe.Stripe;
 import com.stripe.StripeClient;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Customer;
+import com.stripe.model.CustomerSearchResult;
 import com.stripe.model.PaymentIntent;
+import com.stripe.model.StripeSearchResult;
+import com.stripe.param.CustomerCreateParams;
+import com.stripe.param.CustomerSearchParams;
 import com.stripe.param.PaymentIntentCreateParams;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -30,25 +35,47 @@ public class StripeServiceImpl implements StripeService{
         Stripe.apiKey = stripeApiKey;
     }
 
-        @Override
-        public PaymentIntent paymentIntent(StripePaymentDTO stripePaymentDTO) throws StripeException {
+    @Override
+    public PaymentIntent paymentIntent(StripePaymentDTO stripePaymentDTO) throws StripeException {
 
-            Booking booking = bookingRepository.findById(stripePaymentDTO.getBookingId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Booking", "bookingId", stripePaymentDTO.getBookingId()));
+        Booking booking = bookingRepository.findById(stripePaymentDTO.getBookingId())
+                .orElseThrow(() -> new ResourceNotFoundException("Booking", "bookingId", stripePaymentDTO.getBookingId()));
 
-            StripeClient client = new StripeClient(stripeApiKey);
+        long amountInCents = Math.round(booking.getTotalAmount() * 100);
 
-            PaymentIntentCreateParams params =
-                    PaymentIntentCreateParams.builder()
-                            .setAmount(stripePaymentDTO.getAmount())
-                            .setCurrency(stripePaymentDTO.getCurrency())
+        Customer customer;
+        CustomerSearchParams searchParams =
+                CustomerSearchParams.builder()
+                        .setQuery("email:'" + stripePaymentDTO.getEmail() + "'")
+                        .build();
+        CustomerSearchResult customers = Customer.search(searchParams);
+
+        if (customers.getData().isEmpty()) {
+            CustomerCreateParams customerParams =
+                    CustomerCreateParams.builder()
+                            .setName(stripePaymentDTO.getName())
+                            .setEmail(stripePaymentDTO.getEmail())
                             .build();
-
-            PaymentIntent intent = client.v1().paymentIntents().create(params);
-
-            booking.setStripePaymentIntentId(intent.getId());
-            bookingRepository.save(booking);
-
-            return intent;
+            customer = Customer.create(customerParams);
+        } else {
+            customer = customers.getData().get(0);
         }
+
+        StripeClient client = new StripeClient(stripeApiKey);
+
+        PaymentIntentCreateParams params =
+                PaymentIntentCreateParams.builder()
+                        .setAmount(amountInCents)
+                        .setCurrency(stripePaymentDTO.getCurrency())
+                        .setCustomer(customer.getId())
+                        .setDescription(stripePaymentDTO.getDescription())
+                        .build();
+
+        PaymentIntent intent = client.v1().paymentIntents().create(params);
+
+        booking.setStripePaymentIntentId(intent.getId());
+        bookingRepository.save(booking);
+
+        return intent;
+    }
     }

@@ -184,12 +184,12 @@ export const createBooking = (cartItems) => async (dispatch) => {
 };
 
 export const createStripePaymentSecret =
-  (totalPrice) => async (dispatch, getState) => {
+  (sendData) => async (dispatch, getState) => {
     try {
       dispatch({ type: "IS_FETCHING" });
       const bookingId = localStorage.getItem("bookingId");
       const { data } = await api.post("/bookings/stripe-client-secret", {
-        amount: Number(totalPrice) * 100,
+        amount: Number(sendData.amount) * 100,
         currency: "usd",
         bookingId: Number(bookingId),
       });

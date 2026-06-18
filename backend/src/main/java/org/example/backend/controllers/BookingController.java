@@ -33,6 +33,7 @@ public class BookingController {
 
     @PostMapping("/bookings/stripe-client-secret")
     public ResponseEntity<String> createStripeClientSecret(@RequestBody StripePaymentDTO stripePaymentDTO) throws StripeException {
+        System.out.println("StripePaymentDTO received "+stripePaymentDTO);
         PaymentIntent paymentIntent = stripeService.paymentIntent(stripePaymentDTO);
         return new ResponseEntity<>(paymentIntent.getClientSecret(),HttpStatus.CREATED);
     }
@@ -54,7 +55,7 @@ public class BookingController {
 
     @PreAuthorize("hasRole('PARTICIPANT') or hasRole('ADMIN')")
     @GetMapping("/bookings/my")
-    public ResponseEntity<BookingDTO> showMyBookings(){
+    public ResponseEntity<List<BookingDTO>> showMyBookings(){
         return new ResponseEntity<>(bookingService.showMyBooking(), HttpStatus.OK);
     }
 
@@ -63,7 +64,11 @@ public class BookingController {
     public ResponseEntity<BookingDTO> showBookingDetails(@PathVariable Long bookingId){
         return new ResponseEntity<>(bookingService.showBookingDetails(bookingId), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
+    @PostMapping("/staff/validate-ticket")
+    public ResponseEntity<TicketValidationResponseDTO> validateTicket(@RequestBody TicketValidationDTO validationDTO) {
+        return new ResponseEntity<>(bookingService.validateTicket(validationDTO.getQrCode()), HttpStatus.OK);
+    }
     @PreAuthorize("hasRole('PARTICIPANT')")
     @PutMapping("/bookings/{bookingId}")
     public ResponseEntity<BookingDTO> cancelBooking(@PathVariable Long bookingId){

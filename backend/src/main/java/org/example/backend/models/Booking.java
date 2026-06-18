@@ -24,7 +24,14 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
+    @Column(name = "checked_in")
+    private Boolean checkedIn = false;
+
+    private LocalDateTime checkInTime;
+
     private Double totalAmount;
+
+    @Column(name = "qr_code")
     private String qrCode;
 
     @Column(name = "stripe_payment_intent_id")

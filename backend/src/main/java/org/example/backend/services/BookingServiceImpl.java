@@ -7,6 +7,7 @@ import org.example.backend.models.*;
 import org.example.backend.payload.BookingDTO;
 import org.example.backend.payload.BookingItemDTO;
 import org.example.backend.payload.BookingResponse;
+import org.example.backend.payload.TicketValidationResponseDTO;
 import org.example.backend.repositories.BookingItemRepository;
 import org.example.backend.repositories.BookingRepository;
 import org.example.backend.repositories.EventRepository;
@@ -26,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -98,15 +100,16 @@ public class BookingServiceImpl implements BookingService {
 
 
     @Override
-    public BookingDTO showMyBooking() {
+    public List<BookingDTO> showMyBooking() {
         User loggedInUser = authUtil.loggedInUser();
 
-        Booking booking = bookingRepository.findByUserUserId(loggedInUser.getUserId());
+        List<Booking> bookings = bookingRepository.findByUserUserId(loggedInUser.getUserId());
 
-        if (booking == null) throw new APIException("You have no bookings yet.");
+        if (bookings.isEmpty()) throw new APIException("You have no bookings yet.");
 
-
-        return modelMapper.map(booking, BookingDTO.class);
+        return bookings.stream()
+                .map(booking -> modelMapper.map(booking, BookingDTO.class))
+                .collect(Collectors.toList());
     }
 
 
@@ -118,7 +121,42 @@ public class BookingServiceImpl implements BookingService {
 
         return modelMapper.map(bookingFromDB, BookingDTO.class);
     }
+    @Override
+    public TicketValidationResponseDTO validateTicket(String qrCode) {
+        Booking booking = bookingRepository.findByQrCode(qrCode)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking", "qrCode", qrCode));
 
+        if (booking.getStatus() != BookingStatus.CONFIRMED) {
+            return new TicketValidationResponseDTO(
+                    false,
+                    "Booking is not confirmed (payment not completed).",
+                    null, null, booking.getBookingId()
+            );
+        }
+
+        if (Boolean.TRUE.equals(booking.getCheckedIn())) {
+            return new TicketValidationResponseDTO(
+                    false,
+                    "Ticket already used at " + booking.getCheckInTime(),
+                    null, null, booking.getBookingId()
+            );
+        }
+
+        booking.setCheckedIn(true);
+        booking.setCheckInTime(LocalDateTime.now());
+        bookingRepository.save(booking);
+
+        String eventTitle = booking.getBookingItemList().isEmpty() ? "Unknown" :
+                booking.getBookingItemList().get(0).getTicket().getEvent().getTitle();
+
+        return new TicketValidationResponseDTO(
+                true,
+                "Ticket validated successfully.",
+                eventTitle,
+                booking.getUser().getUsername(),
+                booking.getBookingId()
+        );
+    }
 
     @Override
     public BookingDTO cancelBooking(Long bookingId) {
