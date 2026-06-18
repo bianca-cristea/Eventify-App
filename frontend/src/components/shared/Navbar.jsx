@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { GiSparkles } from "react-icons/gi";
 import { Link, useLocation } from "react-router-dom";
-import { IoTicketOutline } from "react-icons/io5";
 import { IconButton, Badge } from "@mui/material";
-import { BsTicketPerforated } from "react-icons/bs";
 import { IoIosLogIn, IoIosMenu } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import UserMenu from "../UserMenu";
+import { FaOpencart } from "react-icons/fa";
+
 const Navbar = () => {
   const path = useLocation().pathname;
   const [navbarOpen, setNavbarOpen] = useState(false);
@@ -78,23 +78,12 @@ const Navbar = () => {
           <li className="transition-all duration-150">
             <Link
               onClick={handleNavLinkClick}
-              className={`flex flex-col ${path === "/cart" ? "text-white font-semibold" : "text-gray-200"}`}
+              className={`flex flex-col items-center ${path === "/cart" ? "text-white font-semibold" : "text-gray-200"}`}
               to="/cart"
             >
               <IconButton
-                aria-label="tickets"
-                className="
-                      relative
-                      text-white
-                      bg-white/5
-                      border border-white/10
-                      backdrop-blur-md
-                      hover:bg-white/10
-                      transition
-                      duration-300
-                      rounded-full
-                      p-3       
-                    "
+                aria-label="cart"
+                className="relative text-white bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition duration-300 rounded-full p-3"
               >
                 <Badge
                   badgeContent={cart?.length || 0}
@@ -109,14 +98,15 @@ const Navbar = () => {
                     },
                   }}
                 >
-                  <BsTicketPerforated className="text-xl text-amber-300 drop-shadow-[0_0_8px_rgba(255,180,0,0.6)]" />
+                  <FaOpencart className="text-xl text-amber-300 drop-shadow-[0_0_8px_rgba(255,180,0,0.6)]" />
                 </Badge>
               </IconButton>
               <span className="text-xs mt-0 text-center hover:text-amber-300">
-                Tickets
+                Cart
               </span>
             </Link>
           </li>
+
           {user && user.id ? (
             <li className="font-medium transition-all duration-150">
               <UserMenu />

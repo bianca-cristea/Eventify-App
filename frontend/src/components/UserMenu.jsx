@@ -6,7 +6,7 @@ import Fade from "@mui/material/Fade";
 import { Avatar } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { CiUser } from "react-icons/ci";
-import { CiShoppingCart } from "react-icons/ci";
+import { IoTicketOutline } from "react-icons/io5";
 import { CiLogout } from "react-icons/ci";
 import Backdrop from "./Backdrop";
 import { useDispatch, useSelector } from "react-redux";
@@ -63,10 +63,10 @@ const UserMenu = () => {
             <span className="text-[16] mt-1">{user?.username}</span>
           </MenuItem>
         </Link>
-        <Link to="/cart">
+        <Link to="/my-tickets">
           <MenuItem className="flex gap-2" onClick={handleClose}>
-            <CiShoppingCart className="text-xl" />
-            <span className="text-[16] mt-1">Order</span>
+            <IoTicketOutline className="text-xl" />
+            <span className="text-[16] mt-1">My Tickets</span>
           </MenuItem>
         </Link>
 

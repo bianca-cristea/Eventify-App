@@ -99,7 +99,19 @@ export const increaseCartQuantity =
       toast.error("Quantity reached to limit.");
     }
   };
-
+export const fetchMyBookings = () => async (dispatch) => {
+  try {
+    dispatch({ type: "IS_FETCHING" });
+    const { data } = await api.get("/bookings/my");
+    dispatch({ type: "FETCH_MY_BOOKINGS", payload: data });
+    dispatch({ type: "IS_SUCCESS" });
+  } catch (error) {
+    dispatch({
+      type: "IS_ERROR",
+      payload: error?.response?.data?.message || "Failed to fetch bookings.",
+    });
+  }
+};
 export const decreaseCartQuantity =
   (data, newQuantity) => (dispatch, getState) => {
     dispatch({

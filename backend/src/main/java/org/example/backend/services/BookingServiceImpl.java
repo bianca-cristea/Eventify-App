@@ -108,18 +108,39 @@ public class BookingServiceImpl implements BookingService {
         if (bookings.isEmpty()) throw new APIException("You have no bookings yet.");
 
         return bookings.stream()
-                .map(booking -> modelMapper.map(booking, BookingDTO.class))
+                .map(this::mapBookingToDTO)
                 .collect(Collectors.toList());
+    }
+
+    private BookingDTO mapBookingToDTO(Booking booking) {
+        BookingDTO dto = modelMapper.map(booking, BookingDTO.class);
+
+        List<BookingItemDTO> itemDTOs = booking.getBookingItemList().stream()
+                .map(item -> {
+                    BookingItemDTO itemDTO = new BookingItemDTO();
+                    itemDTO.setTicketId(item.getTicket().getTicketId());
+                    itemDTO.setQuantity(item.getQuantity());
+                    itemDTO.setPriceAtBooking(item.getPriceAtBooking());
+                    itemDTO.setTicketType(item.getTicket().getTicketType());
+                    itemDTO.setEventTitle(item.getTicket().getEvent().getTitle());
+                    itemDTO.setEventDate(item.getTicket().getEvent().getEventDate());
+                    itemDTO.setEventLocation(item.getTicket().getEvent().getLocation());
+                    itemDTO.setEventImage(item.getTicket().getEvent().getImage());
+                    return itemDTO;
+                })
+                .collect(Collectors.toList());
+
+        dto.setBookingItems(itemDTOs);
+        return dto;
     }
 
 
     @Override
     public BookingDTO showBookingDetails(Long bookingId) {
-
         Booking bookingFromDB = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking", "bookingId", bookingId));
 
-        return modelMapper.map(bookingFromDB, BookingDTO.class);
+        return mapBookingToDTO(bookingFromDB);
     }
     @Override
     public TicketValidationResponseDTO validateTicket(String qrCode) {
