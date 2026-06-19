@@ -1,3 +1,4 @@
+import { FaBoxOpen, FaHome, FaStore, FaThList } from "react-icons/fa";
 import { bannerImageOne, bannerImageThree, bannerImageTwo } from "./constants";
 
 export const bannerList = [
@@ -25,4 +26,11 @@ export const bannerList = [
     description:
       "Get access to limited tickets, special performances, and exclusive nightlife experiences.",
   },
+];
+
+export const adminNavigation = [
+  { name: "Dashboard", href: "/admin", icon: FaHome, current: true },
+  { name: "Products", href: "/admin/products", icon: FaBoxOpen },
+  { name: "Categories", href: "/admin/categories", icon: FaThList },
+  { name: "Sellers", href: "/admin/sellers", icon: FaStore },
 ];

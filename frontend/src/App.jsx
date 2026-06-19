@@ -16,6 +16,11 @@ import Checkout from "./components/checkout/Checkout";
 import PaymentConfirmation from "./components/checkout/PaymentConfirmation";
 import MyTickets from "./components/MyTickets";
 import Profile from "./components/Profile";
+import AdminLayout from "./components/admin/AdminLayout";
+import Dashboard from "./components/admin/dashboard/Dashboard";
+import Categories from "./components/admin/categories/Categories";
+import Products from "./components/admin/products/AdminProducts";
+import Sellers from "./components/admin/sellers/Sellers";
 
 function App() {
   return (
@@ -39,6 +44,15 @@ function App() {
           <Route path="/" element={<PrivateRoute publicPage />}>
             <Route path="/login" element={<LogIn />} />
             <Route path="/register" element={<Register />} />
+          </Route>
+
+          <Route path="/admin" element={<PrivateRoute adminOnly />}>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="products" element={<Products />} />
+              <Route path="categories" element={<Categories />} />
+              <Route path="sellers" element={<Sellers />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

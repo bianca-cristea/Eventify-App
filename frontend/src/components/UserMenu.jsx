@@ -11,6 +11,7 @@ import { CiLogout } from "react-icons/ci";
 import Backdrop from "./Backdrop";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../store/actions/actions";
+import { stringToColor, getInitial } from "../utils/avatarUtils";
 
 const UserMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -35,7 +36,16 @@ const UserMenu = () => {
         className="  sm:border-slate-400 flex flex-row items-center gap-1 rounded-full cursor-pointer hover:shadow-md transition text-slate-700"
         onClick={handleClick}
       >
-        <Avatar src="/broken-image.jpg" alt="Menu" />
+        <Avatar
+          sx={{
+            bgcolor: stringToColor(user?.username || ""),
+            fontWeight: 600,
+            width: 40,
+            height: 40,
+          }}
+        >
+          {getInitial(user?.username)}
+        </Avatar>
       </Button>
       <Menu
         sx={{ width: "250px" }}
