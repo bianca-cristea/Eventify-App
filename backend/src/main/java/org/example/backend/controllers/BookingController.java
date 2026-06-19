@@ -96,4 +96,15 @@ public class BookingController {
         return new ResponseEntity<>(bookingService.allBookings(pageNumber,pageSize,sortBy,sortOrder), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/bookings")
+    public ResponseEntity<BookingResponse> getAllBookings(
+                                                          @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+                                                          @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+                                                          @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_BOOKINGS_BY, required = false) String sortBy,
+                                                          @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_DIR, required = false) String sortOrder){
+        BookingResponse bookingResponse = bookingService.getAllBookings(pageNumber, pageSize, sortBy,sortOrder);
+        return new ResponseEntity<>(bookingResponse,HttpStatus.OK);
+    }
+
 }

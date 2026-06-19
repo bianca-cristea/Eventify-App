@@ -20,8 +20,9 @@ public class BookingDTO {
     private LocalDateTime bookingDate;
     private BookingStatus status;
     private Double totalAmount;
+    private String email;
     private String qrCode;
     private List<BookingItemDTO> bookingItems;
     private Long userId;
-    private RefundStatus refundStatus; //
+    private RefundStatus refundStatus;
 }

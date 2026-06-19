@@ -27,5 +27,6 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
     Booking findBookingByEmail(@Param("email") String email);
 
 
-
+    @Query("SELECT COALESCE(SUM(b.totalAmount), 0) FROM Booking b")
+    Double getTotalRevenue();
 }

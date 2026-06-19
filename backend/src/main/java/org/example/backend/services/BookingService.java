@@ -13,7 +13,7 @@ public interface BookingService {
 
     List<BookingDTO> showMyBooking();
 
-    // interfață
+
     TicketValidationResponseDTO validateTicket(String qrCode);
     BookingDTO showBookingDetails(Long bookingId);
 
@@ -23,4 +23,5 @@ public interface BookingService {
 
     BookingResponse allBookings(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
+    BookingResponse getAllBookings(Integer pageNumber, Integer pageSize, String sortBy,String sortOrder);
     }

@@ -115,9 +115,12 @@ public class BookingServiceImpl implements BookingService {
     private BookingDTO mapBookingToDTO(Booking booking) {
         BookingDTO dto = modelMapper.map(booking, BookingDTO.class);
 
+        dto.setEmail(booking.getUser().getEmail());
+
         List<BookingItemDTO> itemDTOs = booking.getBookingItemList().stream()
                 .map(item -> {
                     BookingItemDTO itemDTO = new BookingItemDTO();
+
                     itemDTO.setTicketId(item.getTicket().getTicketId());
                     itemDTO.setQuantity(item.getQuantity());
                     itemDTO.setPriceAtBooking(item.getPriceAtBooking());
@@ -126,11 +129,13 @@ public class BookingServiceImpl implements BookingService {
                     itemDTO.setEventDate(item.getTicket().getEvent().getEventDate());
                     itemDTO.setEventLocation(item.getTicket().getEvent().getLocation());
                     itemDTO.setEventImage(item.getTicket().getEvent().getImage());
+
                     return itemDTO;
                 })
-                .collect(Collectors.toList());
+                .toList();
 
         dto.setBookingItems(itemDTOs);
+
         return dto;
     }
 
@@ -243,6 +248,32 @@ public class BookingServiceImpl implements BookingService {
         bookingResponse.setTotalPages(bookings.getTotalPages());
         bookingResponse.setTotalElements(bookings.getTotalElements());
         bookingResponse.setIsLast(bookings.isLast());
+
+        return bookingResponse;
+    }
+
+    @Override
+    public BookingResponse getAllBookings(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc") ?
+                Sort.by(sortBy).ascending() :
+                Sort.by(sortBy).descending();
+
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+        Page<Booking> bookingsPage = bookingRepository.findAll(pageDetails);
+
+        List<Booking> bookings = bookingsPage.getContent();
+
+        List<BookingDTO> bookingDTOS = bookings.stream()
+                .map(this::mapBookingToDTO)
+                .toList();
+
+        BookingResponse bookingResponse = new BookingResponse();
+        bookingResponse.setContent(bookingDTOS);
+        bookingResponse.setPageSize(bookingsPage.getSize());
+        bookingResponse.setPageNumber(bookingsPage.getNumber());
+        bookingResponse.setTotalElements(bookingsPage.getTotalElements());
+        bookingResponse.setTotalPages(bookingsPage.getTotalPages());
+        bookingResponse.setIsLast(bookingsPage.isLast());
 
         return bookingResponse;
     }

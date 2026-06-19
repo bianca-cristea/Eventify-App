@@ -19,8 +19,9 @@ import Profile from "./components/Profile";
 import AdminLayout from "./components/admin/AdminLayout";
 import Dashboard from "./components/admin/dashboard/Dashboard";
 import Categories from "./components/admin/categories/Categories";
-import Products from "./components/admin/products/AdminProducts";
+
 import Sellers from "./components/admin/sellers/Sellers";
+import Bookings from "./components/admin/bookings/Bookings";
 
 function App() {
   return (
@@ -47,9 +48,10 @@ function App() {
           </Route>
 
           <Route path="/admin" element={<PrivateRoute adminOnly />}>
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="products" element={<Products />} />
+            <Route element={<AdminLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="bookings" element={<Bookings />} />
+              <Route path="events" element={<Events />} />
               <Route path="categories" element={<Categories />} />
               <Route path="sellers" element={<Sellers />} />
             </Route>

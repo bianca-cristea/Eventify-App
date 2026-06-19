@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Sidebar from "../shared/Sidebar";
+import Sidebar from "./Sidebar";
 import { Outlet } from "react-router-dom";
 import {
   Description,
