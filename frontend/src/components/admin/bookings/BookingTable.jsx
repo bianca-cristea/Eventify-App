@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { FaEdit } from "react-icons/fa";
-import { useLocation, useSearchParams } from "react-router-dom";
+import Modal from "../../shared/Modal";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 const BookingTable = ({ adminBooking, pagination }) => {
+  const navigate = useNavigate();
+
   const [currentPage, setCurrentPage] = useState(
     pagination?.pageNumber + 1 || 1,
   );
@@ -11,6 +14,9 @@ const BookingTable = ({ adminBooking, pagination }) => {
   const [searchParams] = useSearchParams();
   const params = new URLSearchParams(searchParams);
   const pathname = useLocation().pathname;
+
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
 
   const columns = [
     {
@@ -92,7 +98,13 @@ const BookingTable = ({ adminBooking, pagination }) => {
       renderCell: (params) => {
         return (
           <div className="flex justify-center items-center space-x-2 h-full pt-2">
-            <button className="flex items-center bg-blue-500 text-white px-4 h-9 rounded-md">
+            <button
+              onClick={() => {
+                setSelectedBooking(params.row);
+                setOpenModal(true);
+              }}
+              className="flex items-center bg-blue-500 text-white px-4 h-9 rounded-md"
+            >
               <FaEdit className="mr-2" />
               Edit
             </button>
@@ -116,7 +128,7 @@ const BookingTable = ({ adminBooking, pagination }) => {
     const page = paginationModel.page + 1;
     setCurrentPage(page);
     params.set("page", page.toString());
-    NavigateEvent(`${pathname}?${params}`);
+    navigate(`${pathname}?${params}`);
   };
 
   return (
@@ -150,6 +162,14 @@ const BookingTable = ({ adminBooking, pagination }) => {
             hideNextButton: currentPage === pagination?.totalPages,
           }}
         />
+        <Modal open={openModal} setOpen={setOpenModal} title="Edit Booking">
+          {selectedBooking && (
+            <>
+              <p>ID: {selectedBooking.id}</p>
+              <p>Email: {selectedBooking.email}</p>
+            </>
+          )}
+        </Modal>
       </div>
     </div>
   );

@@ -5,32 +5,31 @@ import { fetchEvents } from "../store/actions/actions";
 
 const useEventFilter = () => {
   const [searchParams] = useSearchParams();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const params = new URLSearchParams();
 
-    const currentPage = searchParams.get("page") 
-                            ? Number(searchParams.get("page")) 
-                            : 1;
+    const currentPage = searchParams.get("page")
+      ? Number(searchParams.get("page"))
+      : 1;
 
-    params.set("pageNumber", currentPage - 1)                       
+    params.set("pageNumber", currentPage - 1);
 
-    const sortOrder = searchParams.get("sortOrder" || "asc")
-    const categoryParams = searchParams.get("category") || null
-    const keyword  = searchParams.get("keyword") || ""
-    params.set("sortBy","price")
-    params.set("sortOrder",sortOrder)
+    const sortOrder = searchParams.get("sortby" || "asc");
+    const categoryParams = searchParams.get("category") || null;
+    const keyword = searchParams.get("keyword") || "";
+    params.set("sortBy", "price");
+    params.set("sortOrder", sortOrder);
 
-    if(categoryParams) params.set("category", categoryParams)
+    if (categoryParams) params.set("category", categoryParams);
 
-    if(keyword) params.set("keyword", keyword)
+    if (keyword) params.set("keyword", keyword);
 
-    const queryString = params.toString()
-    console.log("Query string: " , queryString);
-    dispatch(fetchEvents(queryString))
-
-  }, [dispatch,searchParams])
-}
+    const queryString = params.toString();
+    console.log("Query string: ", queryString);
+    dispatch(fetchEvents(queryString));
+  }, [dispatch, searchParams]);
+};
 
 export default useEventFilter;
