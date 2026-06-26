@@ -3,6 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { FaEdit } from "react-icons/fa";
 import Modal from "../../shared/Modal";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import UpdateBookingform from "./UpdateBookingform";
 
 const BookingTable = ({ adminBooking, pagination }) => {
   const navigate = useNavigate();
@@ -14,9 +15,10 @@ const BookingTable = ({ adminBooking, pagination }) => {
   const [searchParams] = useSearchParams();
   const params = new URLSearchParams(searchParams);
   const pathname = useLocation().pathname;
-
+  const [loader, setLoader] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [selectedBooking, setSelectedBooking] = useState("");
+  const [updateOpenModal, setUpdateOpenModal] = useState(false);
 
   const columns = [
     {
@@ -163,12 +165,14 @@ const BookingTable = ({ adminBooking, pagination }) => {
           }}
         />
         <Modal open={openModal} setOpen={setOpenModal} title="Edit Booking">
-          {selectedBooking && (
-            <>
-              <p>ID: {selectedBooking.id}</p>
-              <p>Email: {selectedBooking.email}</p>
-            </>
-          )}
+          <UpdateBookingform
+            setOpen={setUpdateOpenModal}
+            open={updateOpenModal}
+            loader={loader}
+            setLoader={setLoader}
+            selectedId={selectedBooking.id}
+            selectedItem={selectedBooking}
+          />
         </Modal>
       </div>
     </div>

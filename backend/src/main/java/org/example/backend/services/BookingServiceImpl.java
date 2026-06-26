@@ -277,4 +277,12 @@ public class BookingServiceImpl implements BookingService {
 
         return bookingResponse;
     }
+
+    @Override
+    public BookingDTO updateBooking(Long bookingId, BookingStatus status) {
+         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: ", "bookingId", bookingId));
+         booking.setStatus(status);
+         bookingRepository.save(booking);
+         return modelMapper.map(booking,BookingDTO.class);
+    }
 }

@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.example.backend.config.AppConstants;
 import org.example.backend.models.PaymentMethod;
 import org.example.backend.payload.*;
+import org.example.backend.security.services.UserDetailsImpl;
 import org.example.backend.services.BookingService;
 import org.example.backend.services.PaymentService;
 import org.example.backend.services.StripeService;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -105,6 +107,13 @@ public class BookingController {
                                                           @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_DIR, required = false) String sortOrder){
         BookingResponse bookingResponse = bookingService.getAllBookings(pageNumber, pageSize, sortBy,sortOrder);
         return new ResponseEntity<>(bookingResponse,HttpStatus.OK);
+    }
+
+    @PutMapping("/admin/bookings/{bookingId}/status")
+    public ResponseEntity<BookingDTO> updateBookingStatus(@PathVariable Long bookingId, @RequestBody BookingStatusUpdateDTO bookingStatusUpdateDTO){
+
+                BookingDTO bookingDTO = bookingService.updateBooking(bookingId, bookingStatusUpdateDTO.getStatus());
+                return  new ResponseEntity<BookingDTO>(bookingDTO, HttpStatus.OK);
     }
 
 }

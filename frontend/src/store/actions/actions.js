@@ -1,5 +1,5 @@
 import api from "../../api/api";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 export const fetchEvents = (queryString) => async (dispatch) => {
   try {
@@ -321,3 +321,20 @@ export const getBookingsForDashboard = (queryString) => async (dispatch) => {
     });
   }
 };
+export const updateBookingStatusFromDashboard =
+  (bookingId, bookingStatus, toast, setLoader) =>
+  async (dispatch, getState) => {
+    try {
+      setLoader(true);
+      const { data } = await api.put(`/admin/bookings/${bookingId}/status`, {
+        status: bookingStatus,
+      });
+      toast.success(data.message || "Booking updated successfully");
+      await dispatch(getBookingsForDashboard());
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message || "Internal server error.");
+    } finally {
+      setLoader(false);
+    }
+  };

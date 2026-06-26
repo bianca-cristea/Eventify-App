@@ -1,6 +1,7 @@
 package org.example.backend.services;
 
 import jakarta.validation.Valid;
+import org.example.backend.models.BookingStatus;
 import org.example.backend.payload.BookingDTO;
 import org.example.backend.payload.BookingItemDTO;
 import org.example.backend.payload.BookingResponse;
@@ -24,4 +25,6 @@ public interface BookingService {
     BookingResponse allBookings(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
     BookingResponse getAllBookings(Integer pageNumber, Integer pageSize, String sortBy,String sortOrder);
-    }
+
+    BookingDTO updateBooking( Long bookingId, BookingStatus status);
+}
