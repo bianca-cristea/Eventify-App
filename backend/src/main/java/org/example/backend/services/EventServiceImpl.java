@@ -104,6 +104,44 @@ public class EventServiceImpl implements EventService {
 
         return response;
     }
+
+    @Override
+    public EventResponse getAllEventsForAdmin( Integer pageNumber,
+                                               Integer pageSize,
+                                               String sortBy,
+                                               String sortOrder
+                                               ) {
+        Sort sort = sortOrder.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+
+
+        Page<Event> eventsPage = eventRepository.findAll(pageable);
+
+        List<EventDTO> eventDTOs = eventsPage.getContent()
+                .stream()
+                .map(event -> {
+                    EventDTO dto = modelMapper.map(event, EventDTO.class);
+                    dto.setImage(constructImageUrl(event.getImage()));
+                    return dto;
+                })
+                .toList();
+
+        EventResponse response = new EventResponse();
+        response.setContent(eventDTOs);
+        response.setPageNumber(eventsPage.getNumber());
+        response.setPageSize(eventsPage.getSize());
+        response.setTotalPages(eventsPage.getTotalPages());
+        response.setTotalElements(eventsPage.getTotalElements());
+        response.setIsLast(eventsPage.isLast());
+
+        return response;
+    }
+
+
     private String constructImageUrl(String imageName){
         return imageBaseUrl.endsWith("/") ? imageBaseUrl + imageName : imageBaseUrl + "/" + imageName;
     }

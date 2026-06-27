@@ -22,6 +22,7 @@ import Categories from "./components/admin/categories/Categories";
 
 import Sellers from "./components/admin/sellers/Sellers";
 import Bookings from "./components/admin/bookings/Bookings";
+import AdminEvents from "./components/admin/events/AdminEvents";
 
 function App() {
   return (
@@ -51,7 +52,7 @@ function App() {
             <Route element={<AdminLayout />}>
               <Route index element={<Dashboard />} />
               <Route path="bookings" element={<Bookings />} />
-              <Route path="events" element={<Events />} />
+              <Route path="events" element={<AdminEvents />} />
               <Route path="categories" element={<Categories />} />
               <Route path="sellers" element={<Sellers />} />
             </Route>

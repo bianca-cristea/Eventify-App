@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public interface EventService {
     EventResponse getAllEvents(Integer pageNumber, Integer pageSize, String by, String order, String sortBy, String sortOrder);
+    EventResponse getAllEventsForAdmin(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
     EventDTO getEventById(Long eventId);
 
