@@ -81,14 +81,14 @@ public class EventController {
         return new ResponseEntity<>(eventService.publishEvent(eventId), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ORGANIZER')")
-    @PutMapping("/events/{eventId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('ORGANIZER')")
+    @PutMapping("/admin/events/{eventId}")
     public ResponseEntity<EventDTO> updateEvent(@PathVariable Long eventId, @Valid @RequestBody EventDTO eventDTO) {
         return new ResponseEntity<>(eventService.updateEvent(eventId,eventDTO), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
-    @DeleteMapping("/events/{eventId}")
+    @DeleteMapping("/admin/events/{eventId}")
     public ResponseEntity<EventDTO> deleteEvent(@PathVariable Long eventId) {
         return new ResponseEntity<>(eventService.cancelEvent(eventId),HttpStatus.OK);
     }

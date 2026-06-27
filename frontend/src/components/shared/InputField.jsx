@@ -10,31 +10,28 @@ const InputField = ({
   message,
   className,
   min,
-  value,
   placeholder,
 }) => {
   return (
-    <div className="flex flex-col gap-1 w-3/4 m-auto">
-      <label
-        htmlFor="id"
-        className={`${className ? className : ""} font-semibold text-sm text-slate-500`}
-      >
+    <div className="flex flex-col gap-1 w-full">
+      <label htmlFor={id} className="font-semibold text-sm text-slate-700">
         {label}
       </label>
+
       <input
         type={type}
         id={id}
         placeholder={placeholder}
-        className={`${className ? className : ""} px-2 py-2 border outline-none bg-transparent text-slate-50 rounded-md ${
+        className={`w-full px-3 py-2 border rounded-md outline-none bg-white text-slate-900 ${
           errors[id]?.message
-            ? "border-2 ring-2 ring-red-400"
-            : "border-slate-500"
-        }`}
+            ? "border-red-500 ring-2 ring-red-400"
+            : "border-slate-300"
+        } ${className || ""}`}
         {...register(id, {
-          required: { value: required, message },
+          required: required ? message : false,
           minLength: min
             ? { value: min, message: `Minimum ${min} characters is required.` }
-            : null,
+            : undefined,
           pattern:
             type === "email"
               ? {
@@ -43,15 +40,15 @@ const InputField = ({
                 }
               : type === "url"
                 ? {
-                    value:
-                      /(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})(\.[a-zA-Z0-9]{2,})?/,
+                    value: /(https?:\/\/)?[\w\-]+(\.[\w\-]+)+[/#?]?.*$/,
                     message: "Please enter valid url",
                   }
-                : null,
+                : undefined,
         })}
       />
+
       {errors[id]?.message && (
-        <p className="text-xs text-gray-400 m-0">{errors[id]?.message}</p>
+        <p className="text-xs text-red-500">{errors[id]?.message}</p>
       )}
     </div>
   );

@@ -1,22 +1,72 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import InputField from "../../shared/InputField";
 import Spinners from "../../shared/Spinners";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+
+import {
+  addNewEventFromDashboard,
+  updateEventsFromDashboard,
+} from "../../../store/actions/actions";
 
 const AddEventForm = ({ setOpen, event, update = false }) => {
+  const dispatch = useDispatch();
+  const [loader, setLoader] = useState(false);
+
   const {
     register,
     handleSubmit,
+    reset,
+    setValue,
     formState: { errors },
   } = useForm({
     mode: "onTouched",
   });
 
-  const [loader, setLoader] = useState(false);
+  const formatDateTimeLocal = (value) => {
+    if (!value) return "";
+
+    if (Array.isArray(value)) {
+      const [year, month, day, hour = 0, minute = 0] = value;
+      const pad = (n) => String(n).padStart(2, "0");
+      return `${year}-${pad(month)}-${pad(day)}T${pad(hour)}:${pad(minute)}`;
+    }
+
+    if (typeof value === "string") {
+      return value.slice(0, 16);
+    }
+
+    if (value instanceof Date) {
+      const pad = (n) => String(n).padStart(2, "0");
+      return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}`;
+    }
+
+    return "";
+  };
 
   const onSubmit = (data) => {
-    console.log(data);
+    const sendData = {
+      ...data,
+      id: update ? event?.id : undefined,
+    };
+
+    const action = update
+      ? updateEventsFromDashboard
+      : addNewEventFromDashboard;
+
+    dispatch(action(sendData, toast, reset, setLoader, setOpen));
   };
+
+  useEffect(() => {
+    if (!update || !event) return;
+    console.log("event.eventDate:", event.eventDate);
+    console.log("event:", event);
+    setValue("title", event.title || "");
+    setValue("price", event.price || "");
+    setValue("status", event.status || "");
+    setValue("date", formatDateTimeLocal(event.date));
+  }, [update, event, setValue]);
 
   return (
     <div className="flex flex-col h-[80vh]">
@@ -25,94 +75,75 @@ const AddEventForm = ({ setOpen, event, update = false }) => {
         className="flex flex-col gap-4 flex-1 overflow-y-auto py-5 px-1"
       >
         <InputField
-          className="w-full"
-          label="Event name"
-          required
-          id="eventName"
+          label="Event Name"
+          id="title"
           type="text"
           placeholder="Event name"
           register={register}
           errors={errors}
+          required={true}
+          message="Event name is required"
         />
 
-        <div className="flex md:flex-row flex-col gap-4 w-full">
-          <InputField
-            className="w-full"
-            label="Price"
-            required
-            id="price"
-            type="number"
-            placeholder="Event price"
-            register={register}
-            errors={errors}
-          />
-
-          <InputField
-            className="w-full"
-            label="Quantity"
-            required
-            id="quantity"
-            type="number"
-            placeholder="Event quantity"
-            register={register}
-            errors={errors}
-          />
-        </div>
-
-        <div className="flex md:flex-row flex-col gap-4 w-full">
-          <InputField
-            className="w-full"
-            label="Discount"
-            required
-            id="discount"
-            type="number"
-            placeholder="Event discount"
-            register={register}
-            errors={errors}
-          />
-
-          <InputField
-            className="w-full"
-            label="Special price"
-            required
-            id="specialPrice"
-            type="number"
-            placeholder="Event special price"
-            register={register}
-            errors={errors}
-          />
-        </div>
-
-        <textarea
-          placeholder="Description"
-          className={`w-full px-4 py-2 border rounded-md outline-none bg-transparent text-slate-50 ${
-            errors["description"]
-              ? "border-red-500 ring-2 ring-red-400"
-              : "border-slate-500"
-          }`}
-          {...register("description", {
-            required: "Description is required",
-          })}
+        <InputField
+          label="Price"
+          id="price"
+          type="number"
+          placeholder="Event price"
+          register={register}
+          errors={errors}
+          required={true}
+          message="Price is required"
         />
+
+        <InputField
+          label="Date"
+          id="date"
+          type="datetime-local"
+          placeholder="Event date"
+          register={register}
+          errors={errors}
+          required={true}
+          message="Date is required"
+        />
+
+        <InputField
+          label="Status"
+          id="status"
+          type="text"
+          placeholder="Event status"
+          register={register}
+          errors={errors}
+        />
+
+        <div className="h-20" />
       </form>
 
-      <div className="flex justify-between items-center border-t px-4 py-3 shrink-0">
+      <div className="flex justify-between items-center border-t border-slate-700 px-4 py-3 bg-white">
         <button
           type="button"
           onClick={() => setOpen(false)}
           disabled={loader}
-          className="px-4 py-2 text-sm font-medium border border-slate-500 text-blue-950 rounded-md hover:bg-slate-800"
+          className="px-4 py-2 text-sm font-medium border border-slate-400 text-slate-700 rounded-md hover:bg-slate-100"
         >
           Cancel
         </button>
 
         <button
           type="submit"
-          disabled={loader}
           onClick={handleSubmit(onSubmit)}
-          className="px-4 py-2 text-sm font-medium bg-blue-950 text-white rounded-md hover:bg-blue-900 flex items-center gap-2"
+          disabled={loader}
+          className="px-4 py-2 text-sm font-medium text-white rounded-md bg-blue-900 hover:bg-blue-700 flex items-center gap-2"
         >
-          {loader ? <Spinners /> : update ? "Update" : "Create"}
+          {loader ? (
+            <>
+              <Spinners /> Loading
+            </>
+          ) : update ? (
+            "Update"
+          ) : (
+            "Create"
+          )}
         </button>
       </div>
     </div>
