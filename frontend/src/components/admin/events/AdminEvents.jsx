@@ -9,6 +9,8 @@ import Modal from "../../shared/Modal";
 import AddEventForm from "./AddEventForm";
 import DeleteModal from "../../shared/DeleteModal";
 import ImageUploadForm from "./ImageUploadForm";
+import EventViewModal from "../../shared/EventViewModal";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 const AdminEvents = () => {
   const dispatch = useDispatch();
@@ -25,7 +27,14 @@ const AdminEvents = () => {
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openEventViewModal, setOpenEventViewModal] = useState(false);
   const [openImageUploadModal, setOpenImageUploadModal] = useState(false);
+
+  const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+  const params = new URLSearchParams(searchParams);
+  const pathname = useLocation().pathname;
 
   useDashboardEventFilter();
 
@@ -35,6 +44,7 @@ const AdminEvents = () => {
     price: item.price,
     status: item.status,
     date: item.eventDate,
+    image: item.image,
   }));
 
   const handleEdit = (event) => {
@@ -48,7 +58,8 @@ const AdminEvents = () => {
   };
 
   const handleView = (event) => {
-    console.log("VIEW", event);
+    setSelectedEvent(event);
+    setOpenEventViewModal(true);
   };
 
   const handleImage = (event) => {
@@ -60,6 +71,13 @@ const AdminEvents = () => {
     dispatchEvent(
       deleteEvent(setLoader, selectedEvent?.id, toast, setOpenDeleteModal),
     );
+  };
+
+  const handlePaginationChange = (paginationModel) => {
+    const page = paginationModel.page + 1;
+    setCurrentPage(page);
+    params.set("page", page.toString());
+    navigate(`${pathname}?${params}`);
   };
 
   const columns = [
@@ -171,6 +189,7 @@ const AdminEvents = () => {
             paginationMode="server"
             rowCount={pagination?.totalElements || 0}
             pageSizeOptions={[pagination?.pageSize || 5]}
+            onPaginationModelChange={handlePaginationChange}
             initialState={{
               pagination: {
                 paginationModel: {
@@ -213,7 +232,12 @@ const AdminEvents = () => {
         loader={loader}
         title="Are you sure you want to delete?"
         onDeleteHandler={onDeleteHandler}
-      ></DeleteModal>
+      />
+      <EventViewModal
+        open={openEventViewModal}
+        setOpen={setOpenEventViewModal}
+        event={selectedEvent}
+      />
     </div>
   );
 };

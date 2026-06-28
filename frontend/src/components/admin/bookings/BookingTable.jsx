@@ -125,7 +125,6 @@ const BookingTable = ({ adminBooking, pagination }) => {
       date: item.bookingDate,
     };
   });
-
   const handlePaginationChange = (paginationModel) => {
     const page = paginationModel.page + 1;
     setCurrentPage(page);
@@ -144,17 +143,17 @@ const BookingTable = ({ adminBooking, pagination }) => {
           rows={tableRecords}
           columns={columns}
           paginationMode="server"
+          onPaginationModelChange={handlePaginationChange}
           rowCount={pagination?.totalElements || 0}
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: pagination?.totalElements || 10,
+                pageSize: pagination?.pageSize || 10,
                 page: currentPage - 1,
               },
             },
           }}
-          onPaginationModelChange={handlePaginationChange}
-          disableRowSelectionOnCLick
+          disableRowSelectionOnClick
           disableColumnResize
           pageSizeOptions={[pagination.pageSize || 10]}
           pagination
