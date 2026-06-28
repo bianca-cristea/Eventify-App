@@ -2,17 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import InputField from "../../shared/InputField";
 import Spinners from "../../shared/Spinners";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-
 import {
   addNewEventFromDashboard,
+  fetchCategories,
   updateEventsFromDashboard,
 } from "../../../store/actions/actions";
+import SelectTextField from "../../shared/SelectTextField";
 
 const AddEventForm = ({ setOpen, event, update = false }) => {
   const dispatch = useDispatch();
   const [loader, setLoader] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const { categories } = useSelector((state) => state.events);
 
   const {
     register,
@@ -26,42 +29,46 @@ const AddEventForm = ({ setOpen, event, update = false }) => {
 
   const formatDateTimeLocal = (value) => {
     if (!value) return "";
-
     if (Array.isArray(value)) {
       const [year, month, day, hour = 0, minute = 0] = value;
       const pad = (n) => String(n).padStart(2, "0");
       return `${year}-${pad(month)}-${pad(day)}T${pad(hour)}:${pad(minute)}`;
     }
-
-    if (typeof value === "string") {
-      return value.slice(0, 16);
-    }
-
+    if (typeof value === "string") return value.slice(0, 16);
     if (value instanceof Date) {
       const pad = (n) => String(n).padStart(2, "0");
       return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}`;
     }
-
     return "";
   };
 
-  const onSubmit = (data) => {
+  const saveEventHandler = (data) => {
     const sendData = {
       ...data,
+      eventDate: data.date,
+      date: undefined,
       id: update ? event?.id : undefined,
+      categoryId: !update ? selectedCategory?.categoryId : undefined,
     };
 
     const action = update
       ? updateEventsFromDashboard
       : addNewEventFromDashboard;
-
     dispatch(action(sendData, toast, reset, setLoader, setOpen));
   };
 
   useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (categories?.length > 0) {
+      setSelectedCategory(categories[0]);
+    }
+  }, [categories]);
+
+  useEffect(() => {
     if (!update || !event) return;
-    console.log("event.eventDate:", event.eventDate);
-    console.log("event:", event);
     setValue("title", event.title || "");
     setValue("price", event.price || "");
     setValue("status", event.status || "");
@@ -71,19 +78,29 @@ const AddEventForm = ({ setOpen, event, update = false }) => {
   return (
     <div className="flex flex-col h-[80vh]">
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(saveEventHandler)}
         className="flex flex-col gap-4 flex-1 overflow-y-auto py-5 px-1"
       >
-        <InputField
-          label="Event Name"
-          id="title"
-          type="text"
-          placeholder="Event name"
-          register={register}
-          errors={errors}
-          required={true}
-          message="Event name is required"
-        />
+        <div className="flex md:flex-row flex-col gap-4 w-full">
+          <InputField
+            label="Event Name"
+            id="title"
+            type="text"
+            placeholder="Event name"
+            register={register}
+            errors={errors}
+            required={true}
+            message="Event name is required"
+          />
+          {!update && (
+            <SelectTextField
+              label="Select categories"
+              select={selectedCategory}
+              setSelect={setSelectedCategory}
+              lists={categories}
+            />
+          )}
+        </div>
 
         <InputField
           label="Price"
@@ -100,7 +117,6 @@ const AddEventForm = ({ setOpen, event, update = false }) => {
           label="Date"
           id="date"
           type="datetime-local"
-          placeholder="Event date"
           register={register}
           errors={errors}
           required={true}
@@ -131,7 +147,8 @@ const AddEventForm = ({ setOpen, event, update = false }) => {
 
         <button
           type="submit"
-          onClick={handleSubmit(onSubmit)}
+          form="event-form"
+          onClick={handleSubmit(saveEventHandler)}
           disabled={loader}
           className="px-4 py-2 text-sm font-medium text-white rounded-md bg-blue-900 hover:bg-blue-700 flex items-center gap-2"
         >

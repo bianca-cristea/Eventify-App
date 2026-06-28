@@ -37,7 +37,7 @@ export const fetchCategories = (queryString) => async (dispatch) => {
       totalPages: data.totalPages,
       lastPage: data.isLast,
     });
-    dispatch({ type: "IS_ERROR" });
+    dispatch({ type: "CATEGORY_SUCCESS" });
   } catch (error) {
     console.log(error);
     dispatch({
@@ -321,6 +321,7 @@ export const getBookingsForDashboard = (queryString) => async (dispatch) => {
     });
   }
 };
+
 export const updateBookingStatusFromDashboard =
   (bookingId, bookingStatus, toast, setLoader) =>
   async (dispatch, getState) => {

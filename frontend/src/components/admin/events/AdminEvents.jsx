@@ -20,6 +20,7 @@ const AdminEvents = () => {
 
   const [selectedEvent, setSelectedEvent] = useState("");
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [openAddModal, setOpenAddModal] = useState(false);
 
   useDashboardEventFilter();
 
@@ -127,9 +128,12 @@ const AdminEvents = () => {
   return (
     <div>
       <div className="pt-6 pb-10 flex justify-end">
-        <button className="bg-blue-700 cursor-pointer hover:bg-blue-900 text-white font-semibold py-2 px-4 flex items-center gap-2 rounded-md shadow-md transition-colors hover:text-slate-300 duration-300">
+        <button
+          onClick={() => setOpenAddModal(true)}
+          className="bg-blue-700 cursor-pointer hover:bg-blue-900 text-white font-semibold py-2 px-4 flex items-center gap-2 rounded-md shadow-md transition-colors hover:text-slate-300 duration-300"
+        >
           <MdAddShoppingCart className="text-xl" />
-          Add product
+          Add event
         </button>
       </div>
 
@@ -168,12 +172,12 @@ const AdminEvents = () => {
       )}
 
       <Modal
-        open={openUpdateModal}
-        setOpen={setOpenUpdateModal}
-        title="Update event"
+        open={openUpdateModal || openAddModal}
+        setOpen={openUpdateModal ? setOpenUpdateModal : setOpenAddModal}
+        title={openUpdateModal ? "Update event" : "Add event"}
       >
         <AddEventForm
-          setOpen={setOpenUpdateModal}
+          setOpen={openUpdateModal ? setOpenUpdateModal : setOpenAddModal}
           event={selectedEvent}
           update={openUpdateModal}
         />
