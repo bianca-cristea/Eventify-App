@@ -43,12 +43,14 @@ const AddEventForm = ({ setOpen, event, update = false }) => {
   };
 
   const saveEventHandler = (data) => {
+    const { date, ...rest } = data;
+
     const sendData = {
-      ...data,
-      eventDate: data.date,
-      date: undefined,
-      id: update ? event?.id : undefined,
-      categoryId: !update ? selectedCategory?.categoryId : undefined,
+      ...rest,
+      eventDate: date,
+      ...(update
+        ? { id: event?.id }
+        : { categoryId: selectedCategory?.categoryId }),
     };
 
     const action = update

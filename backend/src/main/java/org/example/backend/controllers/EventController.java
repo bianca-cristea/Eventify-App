@@ -63,7 +63,7 @@ public class EventController {
     }
 
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
-    @PutMapping("/events/{eventId}/image")
+    @PutMapping("/admin/events/{eventId}/image")
     public ResponseEntity<EventDTO> updateImage(@PathVariable Long eventId, @RequestParam(name = "image")MultipartFile image) throws IOException {
         EventDTO updatedEvent = eventService.updateEventImage(eventId,image);
         return new ResponseEntity<>(updatedEvent,HttpStatus.OK);

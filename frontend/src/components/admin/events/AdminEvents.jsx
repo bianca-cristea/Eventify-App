@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { MdAddShoppingCart } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../shared/Loader";
 import { FaBoxOpen, FaImage, FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import { DataGrid } from "@mui/x-data-grid";
 import { useDashboardEventFilter } from "../../../hooks/useEventFilter";
 import Modal from "../../shared/Modal";
 import AddEventForm from "./AddEventForm";
+import DeleteModal from "../../shared/DeleteModal";
+import ImageUploadForm from "./ImageUploadForm";
 
 const AdminEvents = () => {
+  const dispatch = useDispatch();
   const { events, pagination } = useSelector((state) => state.events);
 
   const { isLoading, errorMessage } = useSelector((state) => state.errors);
@@ -17,10 +20,12 @@ const AdminEvents = () => {
   const [currentPage, setCurrentPage] = useState(
     pagination?.pageNumber + 1 || 1,
   );
-
+  const [loader, setLoader] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState("");
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openImageUploadModal, setOpenImageUploadModal] = useState(false);
 
   useDashboardEventFilter();
 
@@ -38,7 +43,8 @@ const AdminEvents = () => {
   };
 
   const handleDelete = (event) => {
-    console.log("DELETE", event);
+    setSelectedEvent(event);
+    setOpenDeleteModal(true);
   };
 
   const handleView = (event) => {
@@ -46,7 +52,14 @@ const AdminEvents = () => {
   };
 
   const handleImage = (event) => {
-    console.log("IMAGE", event);
+    setSelectedEvent(event);
+    setOpenImageUploadModal(true);
+  };
+
+  const onDeleteHandler = () => {
+    dispatchEvent(
+      deleteEvent(setLoader, selectedEvent?.id, toast, setOpenDeleteModal),
+    );
   };
 
   const columns = [
@@ -182,6 +195,25 @@ const AdminEvents = () => {
           update={openUpdateModal}
         />
       </Modal>
+
+      <Modal
+        open={openImageUploadModal}
+        setOpen={setOpenImageUploadModal}
+        title="Add event image"
+      >
+        <ImageUploadForm
+          setOpen={setOpenImageUploadModal}
+          event={selectedEvent}
+        />
+      </Modal>
+
+      <DeleteModal
+        open={openDeleteModal}
+        setOpen={setOpenDeleteModal}
+        loader={loader}
+        title="Are you sure you want to delete?"
+        onDeleteHandler={onDeleteHandler}
+      ></DeleteModal>
     </div>
   );
 };
