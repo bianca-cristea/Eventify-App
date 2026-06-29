@@ -4,11 +4,10 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
 import { Avatar } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
-import { CiUser } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
+import { CiUser, CiLogout } from "react-icons/ci";
 import { IoTicketOutline } from "react-icons/io5";
-import { CiLogout } from "react-icons/ci";
-import Backdrop from "./Backdrop";
+import { FaUserShield } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../store/actions/actions";
 import { stringToColor, getInitial } from "../utils/avatarUtils";
@@ -23,17 +22,28 @@ const UserMenu = () => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleNavigate = (path) => {
+    setAnchorEl(null);
+    navigate(path);
+  };
+
   const logoutHandler = () => {
+    setAnchorEl(null);
     dispatch(logOutUser(navigate));
   };
 
+  const isAdmin = user?.roles.includes("ROLE_ADMIN");
+  const isOrganizer = user?.roles.includes("ROLE_ORGANIZER");
+
   return (
-    <div className="relative z-30">
+    <div className="relative z-[100]">
       <Button
-        className="  sm:border-slate-400 flex flex-row items-center gap-1 rounded-full cursor-pointer hover:shadow-md transition text-slate-700"
+        className="sm:border-slate-400 flex flex-row items-center gap-1 rounded-full cursor-pointer hover:shadow-md transition text-slate-700"
         onClick={handleClick}
       >
         <Avatar
@@ -47,47 +57,55 @@ const UserMenu = () => {
           {getInitial(user?.username)}
         </Avatar>
       </Button>
+
       <Menu
-        sx={{ width: "250px" }}
         id="fade-menu"
         slotProps={{
-          list: {
-            "aria-labelledby": "fade-button",
-          },
+          list: { "aria-labelledby": "fade-button" },
+          paper: { sx: { width: 160 } },
         }}
         slots={{ transition: Fade }}
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        slotProps={{
-          paper: {
-            sx: {
-              width: 160,
-            },
-          },
-        }}
       >
-        <Link to="/profile">
-          <MenuItem className="flex gap-2" onClick={handleClose}>
-            <CiUser className="text-xl" />
-            <span className="text-[16] mt-1">{user?.username}</span>
+        <MenuItem
+          className="flex gap-2"
+          onClick={() => handleNavigate("/profile")}
+        >
+          <CiUser className="text-xl" />
+          <span className="text-sm mt-1">{user?.username}</span>
+        </MenuItem>
+
+        <MenuItem
+          className="flex gap-2"
+          onClick={() => handleNavigate("/my-tickets")}
+        >
+          <IoTicketOutline className="text-xl" />
+          <span className="text-sm mt-1">My Tickets</span>
+        </MenuItem>
+
+        {(isAdmin || isOrganizer) && (
+          <MenuItem
+            className="flex gap-2"
+            onClick={() =>
+              handleNavigate(isAdmin ? "/admin" : "/admin/bookings")
+            }
+          >
+            <FaUserShield className="text-sm" />
+            <span className="text-sm mt-1">
+              {isAdmin ? "Admin panel" : "Organizer panel"}
+            </span>
           </MenuItem>
-        </Link>
-        <Link to="/my-tickets">
-          <MenuItem className="flex gap-2" onClick={handleClose}>
-            <IoTicketOutline className="text-xl" />
-            <span className="text-[16] mt-1">My Tickets</span>
-          </MenuItem>
-        </Link>
+        )}
 
         <MenuItem className="flex gap-2" onClick={logoutHandler}>
           <div className="font-semibold w-full flex gap-2 items-center bg-blue-950 px-4 py-1 text-white rounded-sm">
             <CiLogout className="text-xl" />
-            <span className="text-[16] mt-1">Logout</span>
+            <span className="text-sm mt-1">Logout</span>
           </div>
         </MenuItem>
       </Menu>
-      {open && <Backdrop />}
     </div>
   );
 };

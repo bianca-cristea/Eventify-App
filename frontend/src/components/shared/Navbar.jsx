@@ -7,20 +7,38 @@ import { RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import UserMenu from "../UserMenu";
 import { FaOpencart } from "react-icons/fa";
+import { useRef, useEffect } from "react";
 
 const Navbar = () => {
   const path = useLocation().pathname;
   const [navbarOpen, setNavbarOpen] = useState(false);
-
+  const navRef = useRef(null);
   const { cart } = useSelector((state) => state.carts);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const handleNavLinkClick = () => {
     setNavbarOpen(false);
   };
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        e.target.closest(".MuiMenu-root") ||
+        e.target.closest(".MuiBackdrop-root")
+      )
+        return;
+      if (navRef.current && !navRef.current.contains(e.target)) {
+        setNavbarOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <div className="h-18 sm:h-20 bg-slate-950 text-white z-50 items-center sticky top-0">
+    <div
+      ref={navRef}
+      className="h-18 sm:h-20 bg-slate-950 text-white z-50 items-center sticky top-0"
+    >
       <div className="lg:px-4 sm:px-8 w-full flex justify-between h-full items-center">
         <Link to="/" className="flex items-center text-2xl font-bold">
           <GiSparkles className="text-amber-400 mr-1 text-3xl" />

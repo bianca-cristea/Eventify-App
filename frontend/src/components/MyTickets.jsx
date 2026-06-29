@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { QRCodeSVG } from "qrcode.react";
 import { fetchMyBookings } from "../store/actions/actions";
-
+import { FaBoxOpen } from "react-icons/fa";
 const MyTickets = () => {
   const dispatch = useDispatch();
   const { myBookings } = useSelector((state) => state.bookings);
@@ -18,6 +18,17 @@ const MyTickets = () => {
   return (
     <div className="min-h-screen p-8 flex flex-col gap-6 items-center">
       <h1 className="text-2xl font-bold text-white mb-4">My Tickets</h1>
+      {myBookings.length === 0 && (
+        <div className="flex flex-col items-center justify-center mt-20 gap-3">
+          <FaBoxOpen size={50} className="text-slate-300" />
+          <h1 className="text-slate-400 text-xl font-medium">
+            No tickets yet...
+          </h1>
+          <p className="text-slate-300 text-sm">
+            You haven't made any tickets yet.
+          </p>
+        </div>
+      )}
 
       {myBookings?.map((booking) => (
         <div
