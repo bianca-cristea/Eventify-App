@@ -1,5 +1,6 @@
 package org.example.backend.services;
 
+import jakarta.transaction.Transactional;
 import org.example.backend.models.AppRole;
 import org.example.backend.models.Role;
 import org.example.backend.models.User;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 public class AuthServiceImpl implements AuthService {
 
     @Autowired
@@ -162,6 +164,21 @@ public class AuthServiceImpl implements AuthService {
         return jwtUtils.getCleanJwtCookie();
     }
 
+    @Override
+    public UserResponse getAllOrganizers(Pageable pageable) {
+        Page<User> allUsers = userRepository.findByRoleName(AppRole.ROLE_ORGANIZER,pageable);
+        List<UserDTO> userDTOS = allUsers.getContent().stream().map(p -> modelMapper.map(p,UserDTO.class)).toList();
+
+        UserResponse response = new UserResponse();
+        response.setContent(userDTOS);
+        response.setPageNumber(allUsers.getNumber());
+        response.setPageSize(allUsers.getSize());
+        response.setTotalElements(allUsers.getTotalElements());
+        response.setTotalPages(allUsers.getTotalPages());
+        response.setLastPage(allUsers.isLast());
+
+        return response;
+    }
 
 
 }

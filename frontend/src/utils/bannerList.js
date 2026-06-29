@@ -34,5 +34,5 @@ export const adminNavigation = [
   { name: "Bookings", href: "/admin/bookings", icon: CiShoppingBasket },
   { name: "Events", href: "/admin/events", icon: FaBoxOpen },
   { name: "Categories", href: "/admin/categories", icon: FaThList },
-  { name: "Sellers", href: "/admin/sellers", icon: FaStore },
+  { name: "Organizers", href: "/admin/organizers", icon: FaStore },
 ];

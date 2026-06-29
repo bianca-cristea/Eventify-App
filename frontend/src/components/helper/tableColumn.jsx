@@ -1,7 +1,7 @@
 import { FaEdit, FaEye, FaImage, FaTrashAlt } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 
-export const adminEvenyTableColumn = (
+export const adminEventTableColumn = (
   handleEdit,
   handleDelete,
   handleImageUpload,
@@ -161,7 +161,6 @@ export const adminOrderTableColumn = (handleEdit) => [
     renderHeader: (params) => <span className="text-center">Order ID</span>,
   },
   {
-    // Column for customer email.
     disableColumnMenu: true,
     field: "email",
     headerName: "Email",
@@ -175,7 +174,6 @@ export const adminOrderTableColumn = (handleEdit) => [
     renderHeader: (params) => <span>Email</span>,
   },
   {
-    // Column for showing total amount of the order.
     disableColumnMenu: true,
     field: "totalAmount",
     headerName: "Total Amount",
@@ -189,7 +187,6 @@ export const adminOrderTableColumn = (handleEdit) => [
     renderHeader: (params) => <span>Total Amount</span>,
   },
   {
-    // Column to display order status (e.g., Pending, Shipped).
     disableColumnMenu: true,
     field: "status",
     headerName: "Status",
@@ -203,7 +200,6 @@ export const adminOrderTableColumn = (handleEdit) => [
     renderHeader: (params) => <span>Status</span>,
   },
   {
-    // Column for order creation date.
     disableColumnMenu: true,
     field: "date",
     headerName: "Order Date",
@@ -217,7 +213,6 @@ export const adminOrderTableColumn = (handleEdit) => [
     renderHeader: (params) => <span>Order Date</span>,
   },
   {
-    // Custom action column with an "Edit" button.
     field: "action",
     headerName: "Action",
     headerAlign: "center",
@@ -243,7 +238,6 @@ export const adminOrderTableColumn = (handleEdit) => [
   },
 ];
 
-//table column for categories in admin panel
 export const categoryTableColumns = (handleEdit, handleDelete) => [
   {
     sortable: false,
@@ -307,8 +301,7 @@ export const categoryTableColumns = (handleEdit, handleDelete) => [
   },
 ];
 
-//table column for seller in admin panel
-export const sellerTableColumns = [
+export const organizerTableColumns = [
   {
     disableColumnMenu: true,
     field: "id",
@@ -320,7 +313,7 @@ export const sellerTableColumns = [
 
     headerClassName: "text-black font-semibold border",
     cellClassName: "text-slate-700 font-normal border",
-    renderHeader: (params) => <span className="text-center">SellerID</span>,
+    renderHeader: (params) => <span className="text-center">OrganizerID</span>,
   },
   {
     disableColumnMenu: true,

@@ -6,6 +6,7 @@ import { authReducer } from "./authReducer";
 import { paymentMethodReducer } from "./paymentMethodReducer";
 import { bookingReducer } from "./bookingReducer";
 import { adminReducer } from "./adminReducer";
+import { organizerReducer } from "./organizerReducer";
 
 const user = localStorage.getItem("auth")
   ? JSON.parse(localStorage.getItem("auth"))
@@ -36,6 +37,7 @@ export const store = configureStore({
     admin: adminReducer,
     payment: paymentMethodReducer,
     bookings: bookingReducer,
+    organizers: organizerReducer,
   },
   preloadedState: initialState,
 });

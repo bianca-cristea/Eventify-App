@@ -21,4 +21,7 @@ public class UserDTO {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    private Set<Role> roles = new HashSet<>();
+    private BookingDTO booking;
+
 }

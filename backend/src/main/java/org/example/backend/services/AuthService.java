@@ -21,4 +21,5 @@ public interface AuthService {
 
     ResponseCookie logout();
 
+    UserResponse getAllOrganizers(Pageable pageable);
 }

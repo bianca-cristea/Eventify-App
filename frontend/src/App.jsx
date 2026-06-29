@@ -19,10 +19,9 @@ import Profile from "./components/Profile";
 import AdminLayout from "./components/admin/AdminLayout";
 import Dashboard from "./components/admin/dashboard/Dashboard";
 import Categories from "./components/admin/categories/Categories";
-
-import Sellers from "./components/admin/sellers/Sellers";
 import Bookings from "./components/admin/bookings/Bookings";
 import AdminEvents from "./components/admin/events/AdminEvents";
+import Organizers from "./components/admin/organizers/Organizers";
 
 function App() {
   return (
@@ -54,7 +53,7 @@ function App() {
               <Route path="bookings" element={<Bookings />} />
               <Route path="events" element={<AdminEvents />} />
               <Route path="categories" element={<Categories />} />
-              <Route path="sellers" element={<Sellers />} />
+              <Route path="organizers" element={<Organizers />} />
             </Route>
           </Route>
         </Route>
