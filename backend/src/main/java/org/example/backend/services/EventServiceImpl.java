@@ -230,7 +230,6 @@ public class EventServiceImpl implements EventService {
         return modelMapper.map(savedEvent, EventDTO.class);
 
     }
-
     @Override
     public EventDTO publishEvent(Long eventId) {
         Event eventFromDB = eventRepository.findById(eventId)

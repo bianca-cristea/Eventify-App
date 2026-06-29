@@ -48,10 +48,13 @@ public class Event {
     private User organizer;
 
 
+
     @OneToOne(mappedBy = "event")
     private User staff;
 
 
     @OneToMany(mappedBy = "event", cascade = {CascadeType.MERGE,CascadeType.PERSIST}, orphanRemoval = true)
     private List<Ticket> tickets;
+
+
 }

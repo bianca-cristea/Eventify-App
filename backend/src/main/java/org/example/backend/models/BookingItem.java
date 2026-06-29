@@ -29,6 +29,11 @@ public class BookingItem {
     @JoinColumn(name = "booking_id")
     private Booking booking;
 
+
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
+
     @ManyToOne
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;

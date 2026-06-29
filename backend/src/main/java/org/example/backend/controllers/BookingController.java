@@ -109,6 +109,17 @@ public class BookingController {
         return new ResponseEntity<>(bookingResponse,HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ORGANIZER')")
+    @GetMapping("/organizer/bookings")
+    public ResponseEntity<BookingResponse> getAllOrganizerBookings(
+            @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_BOOKINGS_BY, required = false) String sortBy,
+            @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_DIR, required = false) String sortOrder){
+        BookingResponse bookingResponse = bookingService.getAllOrganizerBookings(pageNumber, pageSize, sortBy,sortOrder);
+        return new ResponseEntity<>(bookingResponse,HttpStatus.OK);
+    }
+
     @PutMapping("/admin/bookings/{bookingId}/status")
     public ResponseEntity<BookingDTO> updateBookingStatus(@PathVariable Long bookingId, @RequestBody BookingStatusUpdateDTO bookingStatusUpdateDTO){
 

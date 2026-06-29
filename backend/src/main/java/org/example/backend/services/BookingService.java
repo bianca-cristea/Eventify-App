@@ -27,4 +27,6 @@ public interface BookingService {
     BookingResponse getAllBookings(Integer pageNumber, Integer pageSize, String sortBy,String sortOrder);
 
     BookingDTO updateBooking( Long bookingId, BookingStatus status);
+
+    BookingResponse getAllOrganizerBookings(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 }

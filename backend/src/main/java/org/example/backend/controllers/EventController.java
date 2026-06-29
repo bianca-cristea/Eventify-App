@@ -69,11 +69,12 @@ public class EventController {
         return new ResponseEntity<>(updatedEvent,HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ORGANIZER')")
+    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     @PostMapping("/admin/events")
     public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody EventDTO eventDTO) {
         return new ResponseEntity<>(eventService.createEvent(eventDTO),HttpStatus.CREATED);
     }
+
 
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     @PostMapping("/admin/events/{eventId}/publish")

@@ -36,3 +36,8 @@ export const adminNavigation = [
   { name: "Categories", href: "/admin/categories", icon: FaThList },
   { name: "Organizers", href: "/admin/organizers", icon: FaStore },
 ];
+
+export const organizerNavigation = [
+  { name: "Bookings", href: "/admin/bookings", icon: CiShoppingBasket },
+  { name: "Events", href: "/admin/events", icon: FaBoxOpen },
+];
