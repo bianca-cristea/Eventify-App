@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdAddShoppingCart } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../shared/Loader";
@@ -11,6 +11,7 @@ import DeleteModal from "../../shared/DeleteModal";
 import ImageUploadForm from "./ImageUploadForm";
 import EventViewModal from "../../shared/EventViewModal";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { dashboardEventsAction } from "../../../store/actions/actions";
 
 const AdminEvents = () => {
   const dispatch = useDispatch();
@@ -37,7 +38,15 @@ const AdminEvents = () => {
   const pathname = useLocation().pathname;
 
   useDashboardEventFilter();
-
+  useEffect(() => {
+    if (!openUpdateModal) {
+      dispatch(
+        dashboardEventsAction(
+          "pageNumber=0&pageSize=5&sortBy=eventId&sortOrder=asc",
+        ),
+      );
+    }
+  }, [openUpdateModal]);
   const tableRecords = events?.map((item) => ({
     id: item.eventId,
     title: item.title,

@@ -60,8 +60,10 @@ const AddEventForm = ({ setOpen, event, update = false }) => {
   };
 
   useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
+    if (!update) {
+      dispatch(fetchCategories());
+    }
+  }, [dispatch, update]);
 
   useEffect(() => {
     if (categories?.length > 0) {

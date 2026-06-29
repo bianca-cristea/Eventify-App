@@ -27,7 +27,7 @@ export const fetchEvents = (queryString) => async (dispatch) => {
 export const fetchCategories = (queryString) => async (dispatch) => {
   try {
     dispatch({ type: "CATEGORY_LOADER" });
-    const { data } = await api.get(`/public/categories`);
+    const { data } = await api.get(`/admin/categories`);
     dispatch({
       type: "FETCH_CATEGORIES",
       payload: data.content,
@@ -373,7 +373,7 @@ export const updateEventsFromDashboard =
       reset();
       setLoader(false);
       setOpen(false);
-      await dispatch(dashboardEventsAction());
+      // await dispatch(dashboardEventsAction());
     } catch (error) {
       toast.error(error?.response?.data?.description || "Event update failed.");
     } finally {
@@ -467,7 +467,7 @@ export const createCategoryDashboardAction =
       reset();
       toast.success("Category Created Successful");
       setOpen(false);
-      await dispatch(getAllCategoriesDashboard());
+      await dispatch(fetchCategories());
     } catch (err) {
       console.log(err);
       toast.error(
@@ -494,7 +494,7 @@ export const updateCategoryDashboardAction =
       reset();
       toast.success("Category Update Successful");
       setOpen(false);
-      await dispatch(getAllCategoriesDashboard());
+      await dispatch(fetchCategories());
     } catch (err) {
       console.log(err);
       toast.error(
@@ -519,7 +519,7 @@ export const deleteCategoryDashboardAction =
 
       toast.success("Category Delete Successful");
       setOpen(false);
-      await dispatch(getAllCategoriesDashboard());
+      await dispatch(fetchCategories());
     } catch (err) {
       console.log(err);
       toast.error(err?.response?.data?.message || "Failed to delete category");
