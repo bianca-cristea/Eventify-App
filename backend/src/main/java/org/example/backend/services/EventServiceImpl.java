@@ -245,20 +245,38 @@ public class EventServiceImpl implements EventService {
     public EventDTO updateEvent(Long eventId, EventDTO eventDTO) {
         Event eventFromDB = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event", "eventId", eventId));
-
-        eventFromDB.setDescription(eventDTO.getDescription());
-        eventFromDB.setEventDate(eventDTO.getEventDate());
-        eventFromDB.setPrice(eventDTO.getPrice());
-        eventFromDB.setSpecialPrice(eventDTO.getSpecialPrice());
-        eventFromDB.setCapacity(eventDTO.getCapacity());
-        eventFromDB.setImage(eventDTO.getImage());
-        eventFromDB.setEndDate(eventDTO.getEndDate());
-        eventFromDB.setLocation(eventDTO.getLocation());
-        eventFromDB.setTitle(eventDTO.getTitle());
-
+        if (eventDTO.getTitle() != null) {
+            eventFromDB.setTitle(eventDTO.getTitle());
+        }
+        if (eventDTO.getDescription() != null) {
+            eventFromDB.setDescription(eventDTO.getDescription());
+        }
+        if (eventDTO.getEventDate() != null) {
+            eventFromDB.setEventDate(eventDTO.getEventDate());
+        }
+        if (eventDTO.getEndDate() != null) {
+            eventFromDB.setEndDate(eventDTO.getEndDate());
+        }
+        if (eventDTO.getLocation() != null) {
+            eventFromDB.setLocation(eventDTO.getLocation());
+        }
+        if (eventDTO.getCapacity() != null) {
+            eventFromDB.setCapacity(eventDTO.getCapacity());
+        }
+        if (eventDTO.getPrice() != null) {
+            eventFromDB.setPrice(eventDTO.getPrice());
+        }
+        if (eventDTO.getSpecialPrice() != null) {
+            eventFromDB.setSpecialPrice(eventDTO.getSpecialPrice());
+        }
+        if (eventDTO.getImage() != null && !eventDTO.getImage().isBlank()) {
+            eventFromDB.setImage(eventDTO.getImage());
+        }
+        if (eventDTO.getStatus() != null && !eventDTO.getStatus().isBlank()) {
+            eventFromDB.setStatus(eventDTO.getStatus());
+        }
         Event savedEvent = eventRepository.save(eventFromDB);
         return modelMapper.map(savedEvent, EventDTO.class);
-
     }
 
     @Override
