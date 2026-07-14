@@ -92,7 +92,7 @@ const Filter = ({ categories }) => {
       </div>
 
       <div className="flex flex-col sm:flex-row items-center gap-4">
-        <FormControl variant="outlined" size="small" className="min-w-[160px]">
+        <FormControl variant="outlined" size="small" className="min-w-[160]">
           <InputLabel id="category-select-label" className="text-white/60">
             Category
           </InputLabel>

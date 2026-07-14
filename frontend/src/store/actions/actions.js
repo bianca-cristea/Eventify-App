@@ -53,13 +53,22 @@ export const addToCart =
     const { events } = getState().events;
 
     const event = events.find((item) => item.eventId === data.id);
-    console.log("EVENT OBJECT:", event);
+
     if (!event) {
       toast.error("Event not found");
       return;
     }
 
-    if (event.capacity < qty) {
+    const selectedTicket =
+      data.selectedTicket ||
+      event.tickets?.find((ticket) => ticket.ticketType === "REGULAR");
+
+    if (!selectedTicket) {
+      toast.error("No ticket available");
+      return;
+    }
+
+    if (Number(selectedTicket.capacity) < qty) {
       toast.error("Out of stock");
       return;
     }
@@ -69,15 +78,14 @@ export const addToCart =
       payload: {
         ...event,
         quantity: qty,
-        specialPrice: data.selectedTicket
-          ? data.selectedTicket.price
-          : event.specialPrice,
-        ticketType: data.selectedTicket?.ticketType || null,
-        ticketId: data.selectedTicket?.ticketId || null,
+        ticketId: selectedTicket.ticketId,
+        ticketType: selectedTicket.ticketType,
+        price: selectedTicket.price,
+        tickets: event.tickets,
       },
     });
 
-    toast.success(`${data.title} added to cart`);
+    toast.success(`${event.title} added to cart`);
 
     localStorage.setItem("cartItems", JSON.stringify(getState().carts.cart));
   };
@@ -85,15 +93,31 @@ export const addToCart =
 export const increaseCartQuantity =
   (data, toast, currentQuantity, setCurrentQuantity) =>
   (dispatch, getState) => {
-    const isQuantityExist = data.capacity >= currentQuantity + 1;
+    const selectedTicket = data.ticketId
+      ? data.tickets?.find((t) => t.ticketId === data.ticketId)
+      : data.tickets?.find((t) => t.ticketType === "REGULAR");
+
+    if (!selectedTicket) {
+      toast.error("Ticket not found");
+      return;
+    }
+
+    const isQuantityExist =
+      Number(selectedTicket.capacity) >= currentQuantity + 1;
 
     if (isQuantityExist) {
       const newQuantity = currentQuantity + 1;
+
       setCurrentQuantity(newQuantity);
+
       dispatch({
         type: "ADD_CART",
-        payload: { ...data, quantity: newQuantity },
+        payload: {
+          ...data,
+          quantity: newQuantity,
+        },
       });
+
       localStorage.setItem("cartItems", JSON.stringify(getState().carts.cart));
     } else {
       toast.error("Quantity reached to limit.");
@@ -404,14 +428,20 @@ export const deleteEvent =
   async (dispatch, getState) => {
     try {
       setLoader(true);
-      await api.delete(`/admin/event/${eventId}`);
+      await api.delete(`/admin/events/${eventId}`);
       toast.success("Event deleted successfully");
       setLoader(false);
       setOpenDeleteModal(false);
-      dispatch(dashboardEventsAction());
+      dispatch(
+        dashboardEventsAction(
+          "pageNumber=0&pageSize=5&sortBy=eventId&sortOrder=asc",
+        ),
+      );
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.message || "Some error occured.");
+    } finally {
+      setLoader(false);
     }
   };
 

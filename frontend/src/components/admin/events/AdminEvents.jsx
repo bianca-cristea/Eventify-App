@@ -11,7 +11,11 @@ import DeleteModal from "../../shared/DeleteModal";
 import ImageUploadForm from "./ImageUploadForm";
 import EventViewModal from "../../shared/EventViewModal";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { dashboardEventsAction } from "../../../store/actions/actions";
+import {
+  dashboardEventsAction,
+  deleteEvent,
+} from "../../../store/actions/actions";
+import toast from "react-hot-toast";
 
 const AdminEvents = () => {
   const dispatch = useDispatch();
@@ -48,12 +52,9 @@ const AdminEvents = () => {
     }
   }, [openUpdateModal]);
   const tableRecords = events?.map((item) => ({
+    ...item,
     id: item.eventId,
-    title: item.title,
-    price: item.price,
-    status: item.status,
     date: item.eventDate,
-    image: item.image,
   }));
 
   const handleEdit = (event) => {
@@ -77,7 +78,7 @@ const AdminEvents = () => {
   };
 
   const onDeleteHandler = () => {
-    dispatchEvent(
+    dispatch(
       deleteEvent(setLoader, selectedEvent?.id, toast, setOpenDeleteModal),
     );
   };

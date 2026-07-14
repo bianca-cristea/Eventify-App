@@ -8,7 +8,7 @@ import {
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../store/actions/actions";
-
+import { toast } from "react-hot-toast";
 import Status from "./Status";
 import { MdClose, MdDone } from "react-icons/md";
 
@@ -16,6 +16,7 @@ function EventViewModal({ open, setOpen, event, isAvailable }) {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const dispatch = useDispatch();
   if (!event) return null;
+  console.log("EVENT MODAL:", event);
 
   const {
     id,
@@ -44,7 +45,7 @@ function EventViewModal({ open, setOpen, event, isAvailable }) {
     >
       <DialogBackdrop className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity" />
 
-      <div className="fixed inset-0 flex items-center justify-center p-3">
+      <div className="fixed inset-0 overflow-y-auto flex items-center justify-center p-4">
         <DialogPanel
           className="
           w-full max-w-4xl
@@ -105,23 +106,44 @@ function EventViewModal({ open, setOpen, event, isAvailable }) {
                 <p className="text-white/60 text-sm font-medium">
                   Select ticket type:
                 </p>
-                {tickets.map((ticket) => (
-                  <button
-                    key={ticket.ticketId}
-                    onClick={() => setSelectedTicket(ticket)}
-                    className={`flex justify-between items-center px-4 py-2 rounded-lg border transition text-sm
-          ${
-            selectedTicket?.ticketId === ticket.ticketId
-              ? "border-indigo-500 bg-indigo-500/20 text-white"
-              : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
-          }`}
-                  >
-                    <span className="font-medium">{ticket.ticketType}</span>
-                    <span className="text-indigo-300 font-bold">
-                      ${ticket.price}
-                    </span>
-                  </button>
-                ))}
+                {tickets.map((ticket) => {
+                  const available = ticket.capacity > 0;
+                  return (
+                    <button
+                      key={ticket.ticketId}
+                      disabled={!available}
+                      onClick={() => setSelectedTicket(ticket)}
+                      className={`flex justify-between items-center px-4 py-3 rounded-lg border transition text-sm
+    ${
+      !available
+        ? "opacity-40 cursor-not-allowed"
+        : selectedTicket?.ticketId === ticket.ticketId
+          ? "border-indigo-500 bg-indigo-500/20 text-white"
+          : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
+    }`}
+                    >
+                      <div>
+                        <div className="font-semibold text-white">
+                          {ticket.ticketType}
+                        </div>
+
+                        <div className="text-xs text-white/50">
+                          {ticket.capacity > 100
+                            ? "Available"
+                            : ticket.capacity > 20
+                              ? "Limited availability"
+                              : ticket.capacity > 0
+                                ? "Only a few tickets left!"
+                                : "Sold Out"}
+                        </div>
+                      </div>
+
+                      <div className="text-indigo-300 font-bold text-lg">
+                        ${Number(ticket.price).toFixed(2)}
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             )}
 

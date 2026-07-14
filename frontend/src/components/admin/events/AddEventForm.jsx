@@ -43,27 +43,43 @@ const AddEventForm = ({ setOpen, event, update = false }) => {
   };
 
   const saveEventHandler = (data) => {
-    const { date, ...rest } = data;
-
     const sendData = {
-      ...rest,
-      eventDate: date,
+      ...data,
+      eventDate: data.date,
+      endDate: data.endDate,
       ...(update
-        ? { id: event?.id }
-        : { categoryId: selectedCategory?.categoryId }),
+        ? {
+            id: event.id,
+            image: event.image,
+            categoryId: event.categoryId,
+          }
+        : {
+            categoryId: selectedCategory.categoryId,
+          }),
     };
+
+    delete sendData.date;
 
     const action = update
       ? updateEventsFromDashboard
       : addNewEventFromDashboard;
+    console.log("EVENT:", event);
+    console.log("SEND DATA:", sendData);
     dispatch(action(sendData, toast, reset, setLoader, setOpen));
   };
 
   useEffect(() => {
-    if (!update) {
-      dispatch(fetchCategories());
-    }
-  }, [dispatch, update]);
+    if (!update || !event) return;
+
+    setValue("title", event.title || "");
+    setValue("description", event.description || "");
+    setValue("location", event.location || "");
+
+    setValue("status", event.status || "");
+
+    setValue("date", formatDateTimeLocal(event.date));
+    setValue("endDate", formatDateTimeLocal(event.endDate));
+  }, [update, event, setValue]);
 
   useEffect(() => {
     if (categories?.length > 0) {
@@ -72,12 +88,10 @@ const AddEventForm = ({ setOpen, event, update = false }) => {
   }, [categories]);
 
   useEffect(() => {
-    if (!update || !event) return;
-    setValue("title", event.title || "");
-    setValue("price", event.price || "");
-    setValue("status", event.status || "");
-    setValue("date", formatDateTimeLocal(event.date));
-  }, [update, event, setValue]);
+    if (!update) {
+      dispatch(fetchCategories());
+    }
+  }, [dispatch, update]);
 
   return (
     <div className="flex flex-col h-[80vh]">
@@ -107,16 +121,29 @@ const AddEventForm = ({ setOpen, event, update = false }) => {
         </div>
 
         <InputField
-          label="Price"
-          id="price"
-          type="number"
-          placeholder="Event price"
+          label="Description"
+          id="description"
+          type="text"
+          placeholder="Description"
           register={register}
           errors={errors}
-          required={true}
-          message="Price is required"
+        />
+        <InputField
+          label="Location"
+          id="location"
+          type="text"
+          placeholder="Location"
+          register={register}
+          errors={errors}
         />
 
+        <InputField
+          label="End Date"
+          id="endDate"
+          type="datetime-local"
+          register={register}
+          errors={errors}
+        />
         <InputField
           label="Date"
           id="date"

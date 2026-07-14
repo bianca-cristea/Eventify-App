@@ -12,7 +12,15 @@ const Cart = () => {
 
   const newCart = { ...cart };
   newCart.totalPrice = cart?.reduce(
-    (acc, curr) => acc + Number(curr?.specialPrice) * Number(curr?.quantity),
+    (acc, curr) =>
+      acc +
+      Number(
+        (newCart.totalPrice = cart?.reduce(
+          (acc, curr) => acc + Number(curr.price) * Number(curr.quantity),
+          0,
+        )),
+      ) *
+        Number(curr?.quantity),
     0,
   );
 

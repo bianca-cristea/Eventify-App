@@ -17,27 +17,26 @@ const ItemContent = ({
   location,
   eventDate,
   endDate,
-  capacity,
-  price,
-  specialPrice,
+
   quantity,
-  cartId,
   ticketType,
   tickets,
+  price,
 }) => {
   const [currentQuantity, setCurrentQuantity] = useState(quantity);
   const dispatch = useDispatch();
 
-  const handleQtyIncrease = (cartItems) => {
-    dispatch(
-      increaseCartQuantity(
-        cartItems,
-        toast,
-        currentQuantity,
-        setCurrentQuantity,
-      ),
-    );
-  };
+  handleQtyIncrease({
+    image,
+    title,
+    description,
+    eventId,
+    quantity,
+    ticketId,
+    ticketType,
+    tickets,
+    price,
+  });
 
   const handleQtyDecrease = (cartItems) => {
     if (currentQuantity > 1) {
@@ -79,9 +78,7 @@ const ItemContent = ({
                   image,
                   title,
                   description,
-                  specialPrice,
-                  price,
-                  capacity,
+
                   eventId,
                   quantity,
                 });
@@ -96,7 +93,7 @@ const ItemContent = ({
       </div>
 
       <div className="justify-self-center lg:text-[17] text-sm text-slate-50 font-semibold">
-        ${Number(specialPrice)}
+        ${Number(price).toFixed(2)}
       </div>
       <div className="justify-self-center">
         <SetQuantity
@@ -107,9 +104,7 @@ const ItemContent = ({
               image,
               title,
               description,
-              specialPrice,
-              price,
-              capacity,
+
               eventId,
               quantity,
             })
@@ -119,9 +114,7 @@ const ItemContent = ({
               image,
               title,
               description,
-              specialPrice,
-              price,
-              capacity,
+
               eventId,
               quantity,
             });
@@ -130,7 +123,7 @@ const ItemContent = ({
       </div>
       <div className="justify-self-center lg:text-[17] text-sm text-slate-50 font-semibold">
         <div className="justify-self-center lg:text-[17px] text-sm text-slate-50 font-semibold">
-          ${(Number(currentQuantity) * Number(specialPrice)).toFixed(2)}
+          ${(Number(currentQuantity) * Number(price)).toFixed(2)}
         </div>
       </div>
     </div>
