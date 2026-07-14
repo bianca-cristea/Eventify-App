@@ -211,10 +211,9 @@ public class EventServiceImpl implements EventService {
         Event newEvent = new Event();
         newEvent.setDescription(eventDTO.getDescription());
         newEvent.setEventDate(eventDTO.getEventDate());
-        newEvent.setCapacity(eventDTO.getCapacity());
+
         newEvent.setImage(eventDTO.getImage());
-        newEvent.setPrice(eventDTO.getPrice());
-        newEvent.setSpecialPrice(eventDTO.getSpecialPrice());
+
         newEvent.setEndDate(eventDTO.getEndDate());
         newEvent.setLocation(eventDTO.getLocation());
         newEvent.setTitle(eventDTO.getTitle());
@@ -260,17 +259,17 @@ public class EventServiceImpl implements EventService {
         if (eventDTO.getLocation() != null) {
             eventFromDB.setLocation(eventDTO.getLocation());
         }
-        if (eventDTO.getCapacity() != null) {
-            eventFromDB.setCapacity(eventDTO.getCapacity());
-        }
-        if (eventDTO.getPrice() != null) {
-            eventFromDB.setPrice(eventDTO.getPrice());
-        }
-        if (eventDTO.getSpecialPrice() != null) {
-            eventFromDB.setSpecialPrice(eventDTO.getSpecialPrice());
-        }
+
+
         if (eventDTO.getImage() != null && !eventDTO.getImage().isBlank()) {
-            eventFromDB.setImage(eventDTO.getImage());
+
+            String image = eventDTO.getImage();
+
+            if (image.startsWith("http")) {
+                image = image.substring(image.lastIndexOf("/") + 1);
+            }
+
+            eventFromDB.setImage(image);
         }
         if (eventDTO.getStatus() != null && !eventDTO.getStatus().isBlank()) {
             eventFromDB.setStatus(eventDTO.getStatus());

@@ -33,10 +33,6 @@ public class Event {
 
     private LocalDateTime eventDate;
     private LocalDateTime endDate;
-
-    private Integer capacity;
-    private Double price;
-    private Double specialPrice;
     private String status;
 
     @ManyToOne
