@@ -285,45 +285,30 @@ public class BookingServiceImpl implements BookingService {
          bookingRepository.save(booking);
          return modelMapper.map(booking,BookingDTO.class);
     }
-
     @Override
     public BookingResponse getAllOrganizerBookings(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
 
-            Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc") ?
-                    Sort.by(sortBy).ascending() :
-                    Sort.by(sortBy).descending();
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc") ?
+                Sort.by(sortBy).ascending() :
+                Sort.by(sortBy).descending();
 
-            Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
-            User organizer = authUtil.loggedInUser();
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+        User organizer = authUtil.loggedInUser();
 
+        Page<Booking> bookingsPage = bookingRepository.findBookingsByOrganizerId(organizer.getUserId(), pageDetails);
 
-            Page<Booking> bookingsPage = bookingRepository.findAll(pageDetails);
+        List<BookingDTO> bookingDTOS = bookingsPage.getContent().stream()
+                .map(this::mapBookingToDTO)
+                .toList();
 
-            List<Booking> organizerBookings = bookingsPage.getContent().stream()
-                    .filter(b -> b.getBookingItemList().stream()
-                            .anyMatch(bookingItem -> {
-                                var event = bookingItem.getEvent();
-                                if(event == null || event.getOrganizer()==null){
-                                    return  false;
-                                }
-                                return event.getOrganizer().getUserId().equals(
-                                        organizer.getUserId()
-                                );
-                            }))
-                    .toList();
+        BookingResponse bookingResponse = new BookingResponse();
+        bookingResponse.setContent(bookingDTOS);
+        bookingResponse.setPageSize(bookingsPage.getSize());
+        bookingResponse.setPageNumber(bookingsPage.getNumber());
+        bookingResponse.setTotalElements(bookingsPage.getTotalElements());
+        bookingResponse.setTotalPages(bookingsPage.getTotalPages());
+        bookingResponse.setIsLast(bookingsPage.isLast());
 
-            List<BookingDTO> bookingDTOS = organizerBookings.stream()
-                    .map(this::mapBookingToDTO)
-                    .toList();
-
-            BookingResponse bookingResponse = new BookingResponse();
-            bookingResponse.setContent(bookingDTOS);
-            bookingResponse.setPageSize(bookingsPage.getSize());
-            bookingResponse.setPageNumber(bookingsPage.getNumber());
-            bookingResponse.setTotalElements(bookingsPage.getTotalElements());
-            bookingResponse.setTotalPages(bookingsPage.getTotalPages());
-            bookingResponse.setIsLast(bookingsPage.isLast());
-
-            return bookingResponse;
+        return bookingResponse;
     }
-}
+   }

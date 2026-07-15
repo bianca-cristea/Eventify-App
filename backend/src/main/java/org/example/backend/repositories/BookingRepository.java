@@ -29,4 +29,14 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
 
     @Query("SELECT COALESCE(SUM(b.totalAmount), 0) FROM Booking b")
     Double getTotalRevenue();
-}
+
+    @Query("""
+SELECT DISTINCT b
+FROM Booking b
+JOIN b.bookingItemList bi
+JOIN bi.ticket t
+JOIN t.event e
+WHERE e.organizer.userId = :organizerId
+""")
+    Page<Booking> findBookingsByOrganizerId(@Param("organizerId") Long organizerId,
+                                            Pageable pageable);}

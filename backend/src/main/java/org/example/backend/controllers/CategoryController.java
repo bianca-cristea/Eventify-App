@@ -18,7 +18,15 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
-
+    @GetMapping("/categories")
+    public ResponseEntity<CategoryResponse> getAllCategoriesPublic(
+            @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(name = "orderBy", defaultValue = AppConstants.SORT_CATEGORIES_BY, required = false) String orderBy,
+            @RequestParam(name = "orderDir", defaultValue = AppConstants.SORT_DIR, required = false) String orderDir
+    ){
+        return new ResponseEntity<>(categoryService.getAllCategories(pageNumber, pageSize, orderBy, orderDir), HttpStatus.OK);
+    }
     @GetMapping("/admin/categories")
     public ResponseEntity<CategoryResponse> getAllCategories(
             @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER,required = false) Integer pageNumber,

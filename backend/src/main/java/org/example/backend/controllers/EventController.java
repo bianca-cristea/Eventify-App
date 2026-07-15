@@ -63,33 +63,45 @@ public class EventController {
     }
 
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
-    @PutMapping("/admin/events/{eventId}/image")
+    @PutMapping({
+            "/admin/events/{eventId}/image",
+            "/organizer/events/{eventId}/image"
+    })
     public ResponseEntity<EventDTO> updateImage(@PathVariable Long eventId, @RequestParam(name = "image")MultipartFile image) throws IOException {
         EventDTO updatedEvent = eventService.updateEventImage(eventId,image);
         return new ResponseEntity<>(updatedEvent,HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
-    @PostMapping("/admin/events")
+    @PostMapping({"/admin/events", "/organizer/events"})
     public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody EventDTO eventDTO) {
         return new ResponseEntity<>(eventService.createEvent(eventDTO),HttpStatus.CREATED);
     }
 
 
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
-    @PostMapping("/admin/events/{eventId}/publish")
+    @PostMapping({
+            "/admin/events/{eventId}/publish",
+            "/organizer/events/{eventId}/publish"
+    })
     public ResponseEntity<EventDTO> publishEvent(@PathVariable Long eventId){
         return new ResponseEntity<>(eventService.publishEvent(eventId), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('ORGANIZER')")
-    @PutMapping("/admin/events/{eventId}")
+    @PutMapping({
+            "/admin/events/{eventId}",
+            "/organizer/events/{eventId}"
+    })
     public ResponseEntity<EventDTO> updateEvent(@PathVariable Long eventId, @Valid @RequestBody EventDTO eventDTO) {
         return new ResponseEntity<>(eventService.updateEvent(eventId,eventDTO), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
-    @DeleteMapping("/admin/events/{eventId}")
+    @DeleteMapping({
+            "/admin/events/{eventId}",
+            "/organizer/events/{eventId}"
+    })
     public ResponseEntity<EventDTO> deleteEvent(@PathVariable Long eventId) {
         return new ResponseEntity<>(eventService.cancelEvent(eventId),HttpStatus.OK);
     }

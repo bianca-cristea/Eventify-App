@@ -87,7 +87,7 @@ public class WebSecurityConfig {
                                         .requestMatchers("/swagger-ui/**").permitAll()
                                         .requestMatchers("/h2-console/**").permitAll()
                                         .requestMatchers("/images/**").permitAll()
-
+                                        .requestMatchers(HttpMethod.GET, "/api/categories").permitAll()
                                         .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
                                         .requestMatchers(HttpMethod.GET, "/api/categories/*/events").permitAll()
                                         .requestMatchers("/api/public/**").permitAll()

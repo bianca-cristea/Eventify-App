@@ -24,7 +24,7 @@ export const fetchEvents = (queryString) => async (dispatch) => {
   }
 };
 
-export const fetchCategories = (queryString) => async (dispatch) => {
+export const fetchCategories = () => async (dispatch) => {
   try {
     dispatch({ type: "CATEGORY_LOADER" });
     const { data } = await api.get(`/admin/categories`);
@@ -39,10 +39,9 @@ export const fetchCategories = (queryString) => async (dispatch) => {
     });
     dispatch({ type: "CATEGORY_SUCCESS" });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: "IS_ERROR",
-      payload: error?.response?.data?.message || "Failed to fatch categories.",
+      payload: error?.response?.data?.message || "Failed to fetch categories.",
     });
   }
 };
@@ -323,76 +322,90 @@ export const analyticsAction = () => async (dispatch, getState) => {
     });
   }
 };
-export const getBookingsForDashboard = (queryString) => async (dispatch) => {
-  try {
-    dispatch({ type: "IS_FETCHING" });
-    const { data } = await api.get(`/admin/bookings?${queryString}`);
-    dispatch({
-      type: "GET_ADMIN_BOOKINGS",
-      payload: data.content,
-      pageNumber: data.pageNumber,
-      pageSize: data.pageSize,
-      totalElements: data.totalElements,
-      totalPages: data.totalPages,
-      lastPage: data.isLast,
-    });
-    dispatch({ type: "IS_SUCCESS" });
-  } catch (error) {
-    console.log(error);
-    dispatch({
-      type: "IS_ERROR",
-      payload: error?.response?.data?.message || "Failed to fatch events.",
-    });
-  }
-};
+export const getBookingsForDashboard =
+  (queryString, isAdmin) => async (dispatch) => {
+    try {
+      dispatch({ type: "IS_FETCHING" });
+      const endpoint = isAdmin ? "/admin/bookings" : "/organizer/bookings";
+      const { data } = await api.get(`${endpoint}?${queryString}`);
+      dispatch({
+        type: "GET_ADMIN_BOOKINGS",
+        payload: data.content,
+        pageNumber: data.pageNumber,
+        pageSize: data.pageSize,
+        totalElements: data.totalElements,
+        totalPages: data.totalPages,
+        lastPage: data.isLast,
+      });
+      dispatch({ type: "IS_SUCCESS" });
+    } catch (error) {
+      dispatch({
+        type: "IS_ERROR",
+        payload: error?.response?.data?.message || "Failed to fetch bookings.",
+      });
+    }
+  };
 
 export const updateBookingStatusFromDashboard =
-  (bookingId, bookingStatus, toast, setLoader) =>
-  async (dispatch, getState) => {
+  (bookingId, bookingStatus, toast, setLoader, isAdmin) => async (dispatch) => {
     try {
       setLoader(true);
-      const { data } = await api.put(`/admin/bookings/${bookingId}/status`, {
+      const endpoint = isAdmin ? "/admin/bookings" : "/organizer/bookings";
+      const { data } = await api.put(`${endpoint}/${bookingId}/status`, {
         status: bookingStatus,
       });
       toast.success(data.message || "Booking updated successfully");
-      await dispatch(getBookingsForDashboard());
+      await dispatch(getBookingsForDashboard(undefined, isAdmin));
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.message || "Internal server error.");
     } finally {
       setLoader(false);
     }
   };
 
-export const dashboardEventsAction = (queryString) => async (dispatch) => {
-  try {
-    dispatch({ type: "IS_FETCHING" });
-    const { data } = await api.get(`/admin/events?${queryString}`);
-    dispatch({
-      type: "FETCH_EVENTS",
-      payload: data.content,
-      pageNumber: data.pageNumber,
-      pageSize: data.pageSize,
-      totalElements: data.totalElements,
-      totalPages: data.totalPages,
-      lastPage: data.isLast,
-    });
-    dispatch({ type: "IS_SUCCESS" });
-  } catch (error) {
-    console.log(error);
-    dispatch({
-      type: "IS_ERROR",
-      payload:
-        error?.response?.data?.message || "Failed to fatch dashboard events.",
-    });
-  }
-};
+export const dashboardEventsAction =
+  (queryString) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: "IS_FETCHING" });
+
+      const { user } = getState().auth;
+
+      const isAdmin = user?.roles?.includes("ROLE_ADMIN");
+
+      const endpoint = isAdmin
+        ? `/admin/events?${queryString}`
+        : `/events/me/events?${queryString}`;
+
+      const { data } = await api.get(endpoint);
+
+      dispatch({
+        type: "FETCH_EVENTS",
+        payload: data.content,
+        pageNumber: data.pageNumber,
+        pageSize: data.pageSize,
+        totalElements: data.totalElements,
+        totalPages: data.totalPages,
+        lastPage: data.isLast,
+      });
+
+      dispatch({ type: "IS_SUCCESS" });
+    } catch (error) {
+      console.log(error);
+
+      dispatch({
+        type: "IS_ERROR",
+        payload:
+          error?.response?.data?.message || "Failed to fetch dashboard events.",
+      });
+    }
+  };
 
 export const updateEventsFromDashboard =
   (sendData, toast, reset, setLoader, setOpen) => async (dispatch) => {
     try {
       setLoader(true);
-      await api.put(`/admin/events/${sendData.id}`, sendData);
+      const endpoint = isAdmin ? "/admin/events/" : "/organizer/events/";
+      await api.put(`${endpoint}${sendData.id}`, sendData);
       toast.success("Event updated successfully.");
       reset();
       setLoader(false);
@@ -408,7 +421,9 @@ export const addNewEventFromDashboard =
   (sendData, toast, reset, setLoader, setOpen) => async (dispatch) => {
     try {
       setLoader(true);
-      await api.post(`/admin/events`, sendData);
+      const endpoint = isAdmin ? "/admin/events" : "/organizer/events";
+      await api.post(`${endpoint}/${sendData.id}`, sendData);
+
       toast.success("Event created successfully.");
       reset();
       setLoader(false);
@@ -428,7 +443,9 @@ export const deleteEvent =
   async (dispatch, getState) => {
     try {
       setLoader(true);
-      await api.delete(`/admin/events/${eventId}`);
+      const endpoint = isAdmin ? "/admin/events" : "/organizer/events";
+      await api.delete(`${endpoint}/${sendData.id}`, sendData);
+
       toast.success("Event deleted successfully");
       setLoader(false);
       setOpenDeleteModal(false);
