@@ -693,3 +693,30 @@ export const getAllOrganizersDashboard =
       });
     }
   };
+export const askAI = (question) => async (dispatch) => {
+  try {
+    dispatch({ type: "AI_REQUEST" });
+
+    const { data } = await api.post("/ai/chat", {
+      question,
+    });
+
+    dispatch({
+      type: "AI_SUCCESS",
+      payload: {
+        question,
+        answer: data.answer,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+
+    dispatch({
+      type: "AI_SUCCESS",
+      payload: {
+        question,
+        answer: "Sorry, I couldn't generate an answer.",
+      },
+    });
+  }
+};

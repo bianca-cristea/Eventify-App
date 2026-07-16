@@ -23,6 +23,7 @@ import Bookings from "./components/admin/bookings/Bookings";
 import AdminEvents from "./components/admin/events/AdminEvents";
 import Organizers from "./components/admin/organizers/Organizers";
 import StaffDashboard from "./components/staff/StaffDashboard";
+import AIChat from "./components/AI/AIChat";
 
 function App() {
   return (
@@ -59,6 +60,7 @@ function App() {
           </Route>
         </Route>
       </Routes>
+      <AIChat />
       <ToastContainer
         position="top-center"
         autoClose={1500}
