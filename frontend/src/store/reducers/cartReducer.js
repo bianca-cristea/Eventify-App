@@ -5,9 +5,13 @@ const initialState = {
 };
 
 export const cartReducer = (state = initialState, action) => {
+  const auth = JSON.parse(localStorage.getItem("auth"));
+  const email = auth?.email;
+
   switch (action.type) {
-    case "ADD_CART":
+    case "ADD_CART": {
       const eventToAdd = action.payload;
+
       const existingEvent = state.cart.find(
         (item) => item.eventId === eventToAdd.eventId,
       );
@@ -16,39 +20,93 @@ export const cartReducer = (state = initialState, action) => {
         const updatedCart = state.cart.map((item) =>
           item.eventId === eventToAdd.eventId ? eventToAdd : item,
         );
+
         const newTotalPrice = updatedCart.reduce(
           (sum, item) => sum + item.price * item.quantity,
           0,
         );
-        localStorage.setItem("totalPrice", JSON.stringify(newTotalPrice));
-        localStorage.setItem("cartItems", JSON.stringify(updatedCart));
-        return { ...state, cart: updatedCart, totalPrice: newTotalPrice };
-      } else {
-        const newCart = [...state.cart, eventToAdd];
-        const newTotalPrice = newCart.reduce(
-          (sum, item) => sum + item.price * item.quantity,
-          0,
-        );
-        localStorage.setItem("totalPrice", JSON.stringify(newTotalPrice));
-        localStorage.setItem("cartItems", JSON.stringify(newCart));
-        return { ...state, cart: newCart, totalPrice: newTotalPrice };
+
+        if (email) {
+          localStorage.setItem(`cart_${email}`, JSON.stringify(updatedCart));
+          localStorage.setItem(`total_${email}`, JSON.stringify(newTotalPrice));
+        }
+
+        return {
+          ...state,
+          cart: updatedCart,
+          totalPrice: newTotalPrice,
+        };
       }
-    case "REMOVE_CART":
+
+      const newCart = [...state.cart, eventToAdd];
+
+      const newTotalPrice = newCart.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      );
+
+      if (email) {
+        localStorage.setItem(`cart_${email}`, JSON.stringify(newCart));
+        localStorage.setItem(`total_${email}`, JSON.stringify(newTotalPrice));
+      }
+
       return {
         ...state,
-        cart: state.cart.filter(
-          (item) => item.eventId !== action.payload.eventId,
-        ),
+        cart: newCart,
+        totalPrice: newTotalPrice,
       };
-    case "GET_USER_CART_EVENT":
+    }
+
+    case "REMOVE_CART": {
+      const updatedCart = state.cart.filter(
+        (item) => item.eventId !== action.payload.eventId,
+      );
+
+      const updatedTotal = updatedCart.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      );
+
+      if (email) {
+        localStorage.setItem(`cart_${email}`, JSON.stringify(updatedCart));
+        localStorage.setItem(`total_${email}`, JSON.stringify(updatedTotal));
+      }
+
+      return {
+        ...state,
+        cart: updatedCart,
+        totalPrice: updatedTotal,
+      };
+    }
+
+    case "LOAD_CART":
+      return {
+        ...state,
+        cart: action.payload.cart,
+        totalPrice: action.payload.totalPrice,
+      };
+
+    case "GET_USER_CART_EVENT": {
+      const totalPrice = action.payload.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      );
+
       return {
         ...state,
         cart: action.payload,
-        totalPrice: action.payload.totalPrice,
+        totalPrice,
         cartId: action.cartId,
       };
+    }
+
     case "CLEAR_CART":
-      return { cart: [], totalPrice: 0, cartId: null };
+      return {
+        cart: [],
+        totalPrice: 0,
+        cartId: null,
+      };
+
     default:
       return state;
   }

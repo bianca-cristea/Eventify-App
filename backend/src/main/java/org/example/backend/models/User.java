@@ -60,9 +60,8 @@ public class User {
     private List<Event> events;
 
 
-    @OneToOne
-    @JoinColumn(name = "staff_id")
-    private Event event;
+    @OneToMany(mappedBy = "staff")
+    private List<Event> assignedEvents;
 
 
 }

@@ -39,7 +39,7 @@ const UserMenu = () => {
 
   const isAdmin = user?.roles.includes("ROLE_ADMIN");
   const isOrganizer = user?.roles.includes("ROLE_ORGANIZER");
-
+  const isStaff = user?.roles.includes("ROLE_STAFF");
   return (
     <div className="relative z-[100]">
       <Button
@@ -77,13 +77,15 @@ const UserMenu = () => {
           <span className="text-sm mt-1">{user?.username}</span>
         </MenuItem>
 
-        <MenuItem
-          className="flex gap-2"
-          onClick={() => handleNavigate("/my-tickets")}
-        >
-          <IoTicketOutline className="text-xl" />
-          <span className="text-sm mt-1">My Tickets</span>
-        </MenuItem>
+        {!isStaff && (
+          <MenuItem
+            className="flex gap-2"
+            onClick={() => handleNavigate("/my-tickets")}
+          >
+            <IoTicketOutline className="text-xl" />
+            <span className="text-sm mt-1">My Tickets</span>
+          </MenuItem>
+        )}
 
         {(isAdmin || isOrganizer) && (
           <MenuItem
@@ -98,7 +100,15 @@ const UserMenu = () => {
             </span>
           </MenuItem>
         )}
-
+        {isStaff && (
+          <MenuItem
+            className="flex gap-2"
+            onClick={() => handleNavigate("/staff")}
+          >
+            <FaUserShield className="text-sm" />
+            <span className="text-sm mt-1">Staff Dashboard</span>
+          </MenuItem>
+        )}
         <MenuItem className="flex gap-2" onClick={logoutHandler}>
           <div className="font-semibold w-full flex gap-2 items-center bg-blue-950 px-4 py-1 text-white rounded-sm">
             <CiLogout className="text-xl" />

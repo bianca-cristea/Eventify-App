@@ -116,7 +116,8 @@ public class BookingServiceImpl implements BookingService {
         BookingDTO dto = modelMapper.map(booking, BookingDTO.class);
 
         dto.setEmail(booking.getUser().getEmail());
-
+        dto.setCheckedIn(booking.getCheckedIn());
+        dto.setCheckInTime(booking.getCheckInTime());
         List<BookingItemDTO> itemDTOs = booking.getBookingItemList().stream()
                 .map(item -> {
                     BookingItemDTO itemDTO = new BookingItemDTO();

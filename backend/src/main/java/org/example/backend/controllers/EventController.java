@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -105,7 +106,11 @@ public class EventController {
     public ResponseEntity<EventDTO> deleteEvent(@PathVariable Long eventId) {
         return new ResponseEntity<>(eventService.cancelEvent(eventId),HttpStatus.OK);
     }
-
+    @GetMapping("/staff/events")
+    @PreAuthorize("hasRole('STAFF')")
+    public ResponseEntity<List<EventDTO>> getStaffEvents() {
+        return ResponseEntity.ok(eventService.getStaffEvents());
+    }
     @PreAuthorize("hasRole('ORGANIZER')")
     @GetMapping("/events/me/events")
     public ResponseEntity<EventResponse> getMyEvents(@RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,

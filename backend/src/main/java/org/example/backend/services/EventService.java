@@ -6,6 +6,7 @@ import org.example.backend.payload.EventResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface EventService {
     EventResponse getAllEvents(Integer pageNumber, Integer pageSize, String by, String order, String sortBy, String sortOrder);
@@ -23,7 +24,7 @@ public interface EventService {
     EventDTO cancelEvent(Long eventId);
 
     EventResponse getMyEvents(Integer pageNumber,Integer pageSize,String sortBy,String sortOrder);
-
+    List<EventDTO> getStaffEvents();
     EventDTO updateEventImage(Long eventId, MultipartFile image) throws IOException;
 
     EventResponse getEventsByKeyword(String keyword, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);

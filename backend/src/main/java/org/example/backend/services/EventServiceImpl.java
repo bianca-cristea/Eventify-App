@@ -314,6 +314,16 @@ public class EventServiceImpl implements EventService {
         return modelMapper.map(savedEvent, EventDTO.class);
     }
     @Override
+    public List<EventDTO> getStaffEvents() {
+
+        User staff = authUtil.loggedInUser();
+
+        return eventRepository.findByStaff(staff)
+                .stream()
+                .map(event -> modelMapper.map(event, EventDTO.class))
+                .toList();
+    }
+    @Override
     public EventDTO cancelEvent(Long eventId) {
         Event eventFromDB = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event", "eventId", eventId));

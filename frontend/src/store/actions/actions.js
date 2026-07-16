@@ -195,6 +195,19 @@ export const authenticateSignInUser =
       const { data } = await api.post("/auth/login", sendData);
       dispatch({ type: "LOGIN_USER", payload: data });
       localStorage.setItem("auth", JSON.stringify(data));
+      const cartKey = `cart_${data.email}`;
+      const totalKey = `total_${data.email}`;
+
+      const savedCart = JSON.parse(localStorage.getItem(cartKey)) || [];
+      const savedTotal = JSON.parse(localStorage.getItem(totalKey)) || 0;
+
+      dispatch({
+        type: "LOAD_CART",
+        payload: {
+          cart: savedCart,
+          totalPrice: savedTotal,
+        },
+      });
       reset();
       toast.success("Login Success");
       navigate("/");
@@ -229,7 +242,10 @@ export const registerNewUser =
 
 export const logOutUser = (navigate) => (dispatch) => {
   dispatch({ type: "LOG_OUT" });
-  localStorage.removeItem("auth/signout");
+  dispatch({ type: "CLEAR_CART" });
+
+  localStorage.removeItem("auth");
+
   navigate("/login");
 };
 
@@ -507,7 +523,32 @@ export const updateEventImageFromDashboard =
       );
     }
   };
+export const getMyStaffEvent = () => async (dispatch) => {
+  try {
+    const { data } = await api.get("/staff/event");
 
+    dispatch({
+      type: "STAFF_EVENT",
+      payload: data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const validateTicket = (qrCode, setResult) => async () => {
+  try {
+    const { data } = await api.post("/staff/validate-ticket", {
+      qrCode,
+    });
+
+    setResult(data);
+  } catch (error) {
+    setResult({
+      valid: false,
+      message: "Ticket not found.",
+    });
+  }
+};
 export const getAllCategoriesDashboard = (queryString) => async (dispatch) => {
   dispatch({ type: "CATEGORY_LOADER" });
   try {

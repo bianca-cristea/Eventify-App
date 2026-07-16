@@ -22,6 +22,7 @@ import Categories from "./components/admin/categories/Categories";
 import Bookings from "./components/admin/bookings/Bookings";
 import AdminEvents from "./components/admin/events/AdminEvents";
 import Organizers from "./components/admin/organizers/Organizers";
+import StaffDashboard from "./components/staff/StaffDashboard";
 
 function App() {
   return (
@@ -41,7 +42,7 @@ function App() {
             <Route path="/my-tickets" element={<MyTickets />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
-
+          <Route path="/staff" element={<StaffDashboard />} />
           <Route path="/" element={<PrivateRoute publicPage />}>
             <Route path="/login" element={<LogIn />} />
             <Route path="/register" element={<Register />} />

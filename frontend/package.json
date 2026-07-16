@@ -19,6 +19,7 @@
     "@stripe/react-stripe-js": "^6.6.0",
     "@stripe/stripe-js": "^9.8.0",
     "@tailwindcss/vite": "^4.3.0",
+    "@yudiel/react-qr-scanner": "^2.6.0",
     "axios": "^1.17.0",
     "classnames": "^2.5.1",
     "qrcode.react": "^4.2.0",

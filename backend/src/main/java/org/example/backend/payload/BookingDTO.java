@@ -24,6 +24,8 @@ public class BookingDTO {
     private String email;
     private String qrCode;
     private List<BookingItemDTO> bookingItems;
+    private Boolean checkedIn;
+    private LocalDateTime checkInTime;
     private Long userId;
     private RefundStatus refundStatus;
 }

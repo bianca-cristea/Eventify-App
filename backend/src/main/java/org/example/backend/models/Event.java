@@ -45,7 +45,8 @@ public class Event {
 
 
 
-    @OneToOne(mappedBy = "event")
+    @ManyToOne
+    @JoinColumn(name = "staff_id")
     private User staff;
 
 

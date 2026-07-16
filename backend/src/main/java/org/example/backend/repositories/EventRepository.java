@@ -2,6 +2,7 @@ package org.example.backend.repositories;
 
 import org.example.backend.models.Category;
 import org.example.backend.models.Event;
+import org.example.backend.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,6 +20,6 @@ public interface EventRepository extends JpaRepository<Event,Long> , JpaSpecific
     Page<Event> findByOrganizerUserId(Long userId, Pageable pageDetails);
 
     Page<Event> findByTitleLikeIgnoreCase(String s, Pageable pageDetails);
-
+    List<Event> findByStaff(User staff);
     Page<Event> findByStatusNot(String cancelled, Pageable pageDetails);
 }
