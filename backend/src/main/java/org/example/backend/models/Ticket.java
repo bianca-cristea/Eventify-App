@@ -22,7 +22,8 @@ public class Ticket {
     private Long ticketId;
 
 
-    private String ticketType;
+    @Enumerated(EnumType.STRING)
+    private TicketType ticketType;
 
     private Double price;
 

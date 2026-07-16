@@ -27,7 +27,7 @@ export const fetchEvents = (queryString) => async (dispatch) => {
 export const fetchCategories = () => async (dispatch) => {
   try {
     dispatch({ type: "CATEGORY_LOADER" });
-    const { data } = await api.get(`/admin/categories`);
+    const { data } = await api.get(`/categories`);
     dispatch({
       type: "FETCH_CATEGORIES",
       payload: data.content,
@@ -401,34 +401,62 @@ export const dashboardEventsAction =
   };
 
 export const updateEventsFromDashboard =
-  (sendData, toast, reset, setLoader, setOpen) => async (dispatch) => {
+  (sendData, toast, reset, setLoader, setOpen) =>
+  async (dispatch, getState) => {
     try {
       setLoader(true);
+
+      const { user } = getState().auth;
+      const isAdmin = user?.roles?.includes("ROLE_ADMIN");
+
       const endpoint = isAdmin ? "/admin/events/" : "/organizer/events/";
+
       await api.put(`${endpoint}${sendData.id}`, sendData);
+
       toast.success("Event updated successfully.");
       reset();
-      setLoader(false);
       setOpen(false);
-      // await dispatch(dashboardEventsAction());
+
+      await dispatch(
+        dashboardEventsAction(
+          "pageNumber=0&pageSize=5&sortBy=eventId&sortOrder=asc",
+        ),
+      );
     } catch (error) {
-      toast.error(error?.response?.data?.description || "Event update failed.");
+      console.log(error);
+      toast.error(
+        error?.response?.data?.description ||
+          error?.response?.data?.message ||
+          error.message ||
+          "Event update failed.",
+      );
     } finally {
       setLoader(false);
     }
   };
 export const addNewEventFromDashboard =
-  (sendData, toast, reset, setLoader, setOpen) => async (dispatch) => {
+  (sendData, toast, reset, setLoader, setOpen) =>
+  async (dispatch, getState) => {
     try {
       setLoader(true);
+
+      const { user } = getState().auth;
+      const isAdmin = user?.roles?.includes("ROLE_ADMIN");
+
       const endpoint = isAdmin ? "/admin/events" : "/organizer/events";
-      await api.post(`${endpoint}/${sendData.id}`, sendData);
+
+      await api.post(endpoint, sendData);
 
       toast.success("Event created successfully.");
+
       reset();
-      setLoader(false);
       setOpen(false);
-      await dispatch(dashboardEventsAction());
+
+      dispatch(
+        dashboardEventsAction(
+          "pageNumber=0&pageSize=5&sortBy=eventId&sortOrder=asc",
+        ),
+      );
     } catch (error) {
       toast.error(
         error?.response?.data?.description || "Event creation failed.",

@@ -124,7 +124,7 @@ public class BookingServiceImpl implements BookingService {
                     itemDTO.setTicketId(item.getTicket().getTicketId());
                     itemDTO.setQuantity(item.getQuantity());
                     itemDTO.setPriceAtBooking(item.getPriceAtBooking());
-                    itemDTO.setTicketType(item.getTicket().getTicketType());
+                    itemDTO.setTicketType(String.valueOf(item.getTicket().getTicketType()));
                     itemDTO.setEventTitle(item.getTicket().getEvent().getTitle());
                     itemDTO.setEventDate(item.getTicket().getEvent().getEventDate());
                     itemDTO.setEventLocation(item.getTicket().getEvent().getLocation());

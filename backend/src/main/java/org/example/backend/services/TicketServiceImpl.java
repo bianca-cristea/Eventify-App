@@ -4,6 +4,7 @@ import org.example.backend.exceptions.APIException;
 import org.example.backend.exceptions.ResourceNotFoundException;
 import org.example.backend.models.Event;
 import org.example.backend.models.Ticket;
+import org.example.backend.models.TicketType;
 import org.example.backend.payload.TicketDTO;
 import org.example.backend.repositories.EventRepository;
 import org.example.backend.repositories.TicketRepository;
@@ -42,7 +43,7 @@ public class TicketServiceImpl implements TicketService{
         Event eventFromDB = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event","eventId",eventId));
         Ticket newTicket = new Ticket();
-        newTicket.setTicketType(ticketDTO.getTicketType());
+        newTicket.setTicketType(TicketType.valueOf(ticketDTO.getTicketType()));
         newTicket.setEvent(eventFromDB);
         newTicket.setPrice(ticketDTO.getPrice());
         newTicket.setCapacity(ticketDTO.getCapacity());
@@ -64,7 +65,7 @@ public class TicketServiceImpl implements TicketService{
             throw new APIException("Ticket does not belong to this event");
         }
 
-        ticket.setTicketType(ticketDTO.getTicketType());
+        ticket.setTicketType(TicketType.valueOf(ticketDTO.getTicketType()));
         ticket.setEvent(eventFromDB);
         ticket.setPrice(ticketDTO.getPrice());
         ticket.setCapacity(ticketDTO.getCapacity());

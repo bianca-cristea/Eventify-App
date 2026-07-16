@@ -5,9 +5,11 @@ import org.example.backend.exceptions.ResourceNotFoundException;
 import org.example.backend.models.*;
 import org.example.backend.payload.EventDTO;
 import org.example.backend.payload.EventResponse;
+import org.example.backend.payload.TicketDTO;
 import org.example.backend.repositories.BookingItemRepository;
 import org.example.backend.repositories.CategoryRepository;
 import org.example.backend.repositories.EventRepository;
+import org.example.backend.repositories.TicketRepository;
 import org.example.backend.util.AuthUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,10 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+
+    @Autowired
+    private TicketRepository ticketRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -242,24 +248,29 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDTO updateEvent(Long eventId, EventDTO eventDTO) {
+
         Event eventFromDB = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event", "eventId", eventId));
+
         if (eventDTO.getTitle() != null) {
             eventFromDB.setTitle(eventDTO.getTitle());
         }
+
         if (eventDTO.getDescription() != null) {
             eventFromDB.setDescription(eventDTO.getDescription());
         }
+
         if (eventDTO.getEventDate() != null) {
             eventFromDB.setEventDate(eventDTO.getEventDate());
         }
+
         if (eventDTO.getEndDate() != null) {
             eventFromDB.setEndDate(eventDTO.getEndDate());
         }
+
         if (eventDTO.getLocation() != null) {
             eventFromDB.setLocation(eventDTO.getLocation());
         }
-
 
         if (eventDTO.getImage() != null && !eventDTO.getImage().isBlank()) {
 
@@ -271,13 +282,37 @@ public class EventServiceImpl implements EventService {
 
             eventFromDB.setImage(image);
         }
+
         if (eventDTO.getStatus() != null && !eventDTO.getStatus().isBlank()) {
             eventFromDB.setStatus(eventDTO.getStatus());
         }
+
+
+        if (eventDTO.getTickets() != null) {
+
+            for (TicketDTO ticketDTO : eventDTO.getTickets()) {
+
+                Ticket ticket = ticketRepository
+                        .findByEventAndTicketType(
+                                eventFromDB,
+                                TicketType.valueOf(ticketDTO.getTicketType())
+                        )
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Ticket",
+                                "ticketType",
+                                ticketDTO.getTicketType()));
+
+                ticket.setPrice(ticketDTO.getPrice());
+                ticket.setCapacity(ticketDTO.getCapacity());
+
+                ticketRepository.save(ticket);
+            }
+        }
+
         Event savedEvent = eventRepository.save(eventFromDB);
+
         return modelMapper.map(savedEvent, EventDTO.class);
     }
-
     @Override
     public EventDTO cancelEvent(Long eventId) {
         Event eventFromDB = eventRepository.findById(eventId)

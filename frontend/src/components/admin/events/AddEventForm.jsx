@@ -43,10 +43,36 @@ const AddEventForm = ({ setOpen, event, update = false }) => {
   };
 
   const saveEventHandler = (data) => {
+    const regular = event?.tickets?.find((t) => t.ticketType === "REGULAR");
+    const vip = event?.tickets?.find((t) => t.ticketType === "VIP");
+    const backstage = event?.tickets?.find((t) => t.ticketType === "BACKSTAGE");
+    const tickets = [
+      {
+        ticketId: regular?.ticketId,
+        ticketType: "REGULAR",
+        price: Number(data.regularPrice),
+        capacity: Number(data.regularCapacity),
+      },
+      {
+        ticketId: vip?.ticketId,
+        ticketType: "VIP",
+        price: Number(data.vipPrice),
+        capacity: Number(data.vipCapacity),
+      },
+      {
+        ticketId: backstage?.ticketId,
+        ticketType: "BACKSTAGE",
+        price: Number(data.backstagePrice),
+        capacity: Number(data.backstageCapacity),
+      },
+    ].filter((ticket) => ticket.price > 0 && ticket.capacity > 0);
+
     const sendData = {
       ...data,
       eventDate: data.date,
       endDate: data.endDate,
+      tickets,
+
       ...(update
         ? {
             id: event.id,
@@ -59,15 +85,21 @@ const AddEventForm = ({ setOpen, event, update = false }) => {
     };
 
     delete sendData.date;
+    delete sendData.regularPrice;
+    delete sendData.regularCapacity;
+    delete sendData.vipPrice;
+    delete sendData.vipCapacity;
+    delete sendData.backstagePrice;
+    delete sendData.backstageCapacity;
+
+    console.log("SEND DATA:", sendData);
 
     const action = update
       ? updateEventsFromDashboard
       : addNewEventFromDashboard;
-    console.log("EVENT:", event);
-    console.log("SEND DATA:", sendData);
+
     dispatch(action(sendData, toast, reset, setLoader, setOpen));
   };
-
   useEffect(() => {
     if (!update || !event) return;
 
@@ -76,8 +108,21 @@ const AddEventForm = ({ setOpen, event, update = false }) => {
     setValue("location", event.location || "");
 
     setValue("status", event.status || "");
+    const regular = event.tickets?.find((t) => t.ticketType === "REGULAR");
 
-    setValue("date", formatDateTimeLocal(event.date));
+    const vip = event.tickets?.find((t) => t.ticketType === "VIP");
+
+    const backstage = event.tickets?.find((t) => t.ticketType === "BACKSTAGE");
+
+    setValue("regularPrice", regular?.price || "");
+    setValue("regularCapacity", regular?.capacity || "");
+
+    setValue("vipPrice", vip?.price || "");
+    setValue("vipCapacity", vip?.capacity || "");
+
+    setValue("backstagePrice", backstage?.price || "");
+    setValue("backstageCapacity", backstage?.capacity || "");
+    setValue("date", formatDateTimeLocal(event.eventDate));
     setValue("endDate", formatDateTimeLocal(event.endDate));
   }, [update, event, setValue]);
 
@@ -96,6 +141,7 @@ const AddEventForm = ({ setOpen, event, update = false }) => {
   return (
     <div className="flex flex-col h-[80vh]">
       <form
+        id="event-form"
         onSubmit={handleSubmit(saveEventHandler)}
         className="flex flex-col gap-4 flex-1 overflow-y-auto py-5 px-1"
       >
@@ -162,7 +208,57 @@ const AddEventForm = ({ setOpen, event, update = false }) => {
           register={register}
           errors={errors}
         />
+        <h3 className="text-lg font-semibold mt-4">Tickets</h3>
 
+        <div className="grid grid-cols-2 gap-4">
+          <InputField
+            label="Regular price"
+            id="regularPrice"
+            type="number"
+            register={register}
+            errors={errors}
+          />
+
+          <InputField
+            label="Regular capacity"
+            id="regularCapacity"
+            type="number"
+            register={register}
+            errors={errors}
+          />
+
+          <InputField
+            label="VIP price"
+            id="vipPrice"
+            type="number"
+            register={register}
+            errors={errors}
+          />
+
+          <InputField
+            label="VIP capacity"
+            id="vipCapacity"
+            type="number"
+            register={register}
+            errors={errors}
+          />
+
+          <InputField
+            label="Backstage price"
+            id="backstagePrice"
+            type="number"
+            register={register}
+            errors={errors}
+          />
+
+          <InputField
+            label="Backstage capacity"
+            id="backstageCapacity"
+            type="number"
+            register={register}
+            errors={errors}
+          />
+        </div>
         <div className="h-20" />
       </form>
 
