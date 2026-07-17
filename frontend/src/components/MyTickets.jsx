@@ -6,6 +6,7 @@ import { FaBoxOpen } from "react-icons/fa";
 const MyTickets = () => {
   const dispatch = useDispatch();
   const { myBookings } = useSelector((state) => state.bookings);
+  console.log("My bookings ", myBookings);
   const { isLoading, errorMessage } = useSelector((state) => state.errors);
 
   useEffect(() => {
@@ -24,60 +25,60 @@ const MyTickets = () => {
           <h1 className="text-slate-400 text-xl font-medium">
             No tickets yet...
           </h1>
-          <p className="text-slate-300 text-sm">
-            You haven't made any tickets yet.
-          </p>
+          <p className="text-slate-300 text-sm">You have no tickets yet.</p>
         </div>
       )}
 
-      {myBookings?.map((booking) => (
-        <div
-          key={booking.bookingId}
-          className="w-full max-w-lg bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col gap-4"
-        >
-          <div className="flex justify-between items-center">
-            <span className="text-white font-semibold">
-              Booking #{booking.bookingId}
-            </span>
-            <span
-              className={`px-3 py-1 rounded-full text-xs font-medium ${
-                booking.status === "CONFIRMED"
-                  ? "bg-emerald-500/20 text-emerald-300"
-                  : "bg-yellow-500/20 text-yellow-300"
-              }`}
-            >
-              {booking.status}
-            </span>
+      {[...myBookings]
+        .sort((a, b) => new Date(b.bookingDate) - new Date(a.bookingDate))
+        .map((booking) => (
+          <div
+            key={booking.bookingId}
+            className="w-full max-w-lg bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col gap-4"
+          >
+            <div className="flex justify-between items-center">
+              <span className="text-white font-semibold">
+                Booking #{booking.bookingId}
+              </span>
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  booking.status === "CONFIRMED"
+                    ? "bg-emerald-500/20 text-emerald-300"
+                    : "bg-yellow-500/20 text-yellow-300"
+                }`}
+              >
+                {booking.status}
+              </span>
+            </div>
+
+            {booking.bookingItems?.map((item, idx) => (
+              <div key={idx} className="border-t border-white/10 pt-3">
+                <h3 className="text-white font-bold">{item.eventTitle}</h3>
+                <p className="text-white/60 text-sm">{item.ticketType}</p>
+                <p className="text-white/50 text-xs">
+                  {new Date(item.eventDate).toLocaleDateString("ro-RO", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </p>
+                <p className="text-white/50 text-xs">{item.eventLocation}</p>
+                <p className="text-indigo-300 font-bold mt-1">
+                  ${item.priceAtBooking} x{item.quantity}
+                </p>
+              </div>
+            ))}
+
+            {booking.status === "CONFIRMED" && (
+              <div className="flex flex-col items-center mt-4 bg-white p-4 rounded-xl">
+                <QRCodeSVG value={booking.qrCode} size={180} />
+                <p className="text-black/50 text-xs mt-2 break-all">
+                  {booking.qrCode}
+                </p>
+              </div>
+            )}
           </div>
-
-          {booking.bookingItems?.map((item, idx) => (
-            <div key={idx} className="border-t border-white/10 pt-3">
-              <h3 className="text-white font-bold">{item.eventTitle}</h3>
-              <p className="text-white/60 text-sm">{item.ticketType}</p>
-              <p className="text-white/50 text-xs">
-                {new Date(item.eventDate).toLocaleDateString("ro-RO", {
-                  day: "2-digit",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </p>
-              <p className="text-white/50 text-xs">{item.eventLocation}</p>
-              <p className="text-indigo-300 font-bold mt-1">
-                ${item.priceAtBooking} x{item.quantity}
-              </p>
-            </div>
-          ))}
-
-          {booking.status === "CONFIRMED" && (
-            <div className="flex flex-col items-center mt-4 bg-white p-4 rounded-xl">
-              <QRCodeSVG value={booking.qrCode} size={180} />
-              <p className="text-black/50 text-xs mt-2 break-all">
-                {booking.qrCode}
-              </p>
-            </div>
-          )}
-        </div>
-      ))}
+        ))}
     </div>
   );
 };

@@ -8,7 +8,7 @@ const OrderSummary = ({ handleNext }) => {
   const { cart } = useSelector((state) => state.carts);
   const [loading, setLoading] = useState(false);
   const total = cart?.reduce(
-    (acc, item) => acc + Number(item.specialPrice) * Number(item.quantity),
+    (acc, item) => acc + Number(item.price) * Number(item.quantity),
     0,
   );
 
@@ -27,11 +27,13 @@ const OrderSummary = ({ handleNext }) => {
       setLoading(false);
     }
   };
-
+  console.log("Cart items: ");
+  cart?.forEach((item) => {
+    console.log(item);
+  });
   return (
     <div className="mt-8 flex flex-col gap-4">
       <h2 className="text-white text-xl font-semibold mb-2">Your Tickets</h2>
-
       {cart?.map((item, i) => (
         <div
           key={i}
@@ -58,7 +60,7 @@ const OrderSummary = ({ handleNext }) => {
           <div className="text-right">
             <p className="text-white/50 text-xs">x{item.quantity}</p>
             <p className="text-indigo-300 font-bold">
-              ${(Number(item.specialPrice) * Number(item.quantity)).toFixed(2)}
+              ${(Number(item.price) * Number(item.quantity)).toFixed(2)}
             </p>
           </div>
         </div>
@@ -70,7 +72,6 @@ const OrderSummary = ({ handleNext }) => {
           ${total?.toFixed(2)}
         </span>
       </div>
-
       <div className="flex justify-end mt-4">
         <button
           onClick={handleContinue}

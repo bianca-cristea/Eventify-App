@@ -15,7 +15,7 @@ export const useEventFilter = () => {
       : 1;
 
     params.set("pageNumber", currentPage - 1);
-
+    params.set("pageSize", 8);
     const sortOrder = searchParams.get("sortOrder") || "asc";
     const categoryParams = searchParams.get("category") || null;
     const keyword = searchParams.get("keyword") || "";

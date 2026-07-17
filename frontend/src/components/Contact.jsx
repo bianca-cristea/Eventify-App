@@ -20,47 +20,97 @@ const Contact = () => {
 
           <p className="text-slate-400 text-lg mt-6 leading-relaxed">
             Have questions about upcoming concerts, ticket reservations,
-            partnerships, artists, or venues? Our team is ready to help you make
-            every event memorable.
+            partnerships, artists, or venues? Our team is ready to help you
+            create memorable experiences.
           </p>
 
           <div className="mt-12 space-y-6">
-            <div className="flex items-center gap-4">
-              <div className="bg-amber-400/10 p-4 rounded-full border border-amber-400/20">
+            <a
+              href="tel:+40712345678"
+              className="flex items-center gap-4 group"
+            >
+              <div
+                className="
+                bg-amber-400/10
+                p-4
+                rounded-full
+                border
+                border-amber-400/20
+                group-hover:bg-amber-400/20
+                transition
+              "
+              >
                 <FaPhone className="text-amber-400 text-xl" />
               </div>
 
               <div>
                 <p className="text-slate-500 text-sm">Phone</p>
-                <p className="text-white font-medium">+40 712 345 678</p>
-              </div>
-            </div>
 
-            <div className="flex items-center gap-4">
-              <div className="bg-amber-400/10 p-4 rounded-full border border-amber-400/20">
+                <p className="text-white font-medium group-hover:text-amber-400 transition">
+                  +40 712 345 678
+                </p>
+              </div>
+            </a>
+
+            <a
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=bbianca.ccristea@gmail.com"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-4 group"
+            >
+              <div
+                className="
+      bg-amber-400/10
+      p-4
+      rounded-full
+      border
+      border-amber-400/20
+      group-hover:bg-amber-400/20
+      transition
+    "
+              >
                 <FaEnvelope className="text-amber-400 text-xl" />
               </div>
 
               <div>
                 <p className="text-slate-500 text-sm">Email</p>
-                <p className="text-white font-medium">support@eventify.com</p>
-              </div>
-            </div>
 
-            <div className="flex items-center gap-4">
-              <div className="bg-amber-400/10 p-4 rounded-full border border-amber-400/20">
+                <p className="text-white font-medium group-hover:text-amber-400 transition">
+                  bbianca.ccristea@gmail.com
+                </p>
+              </div>
+            </a>
+
+            <a
+              href="https://maps.google.com"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-4 group"
+            >
+              <div
+                className="
+                bg-amber-400/10
+                p-4
+                rounded-full
+                border
+                border-amber-400/20
+                group-hover:bg-amber-400/20
+                transition
+              "
+              >
                 <FaMapMarkerAlt className="text-amber-400 text-xl" />
               </div>
 
               <div>
                 <p className="text-slate-500 text-sm">Location</p>
-                <p className="text-white font-medium">
+
+                <p className="text-white font-medium group-hover:text-amber-400 transition">
                   350 Market Street, Suite 2100
                   <br />
                   San Francisco, California
                 </p>
               </div>
-            </div>
+            </a>
           </div>
         </div>
 
@@ -75,112 +125,70 @@ const Contact = () => {
             shadow-2xl
           "
         >
-          <h2 className="text-white text-3xl font-bold mb-2">Contact Us</h2>
+          <h2 className="text-white text-3xl font-bold mb-4">Get in touch</h2>
 
-          <p className="text-slate-400 mb-8">
-            We'd love to hear from you. Send us a message and we'll get back to
-            you as soon as possible.
+          <p className="text-slate-400 leading-relaxed mb-8">
+            Have questions about events, tickets or partnerships? Reach out and
+            our team will answer as soon as possible.
           </p>
 
-          <form className="space-y-5">
-            <div>
-              <label className="block text-slate-300 mb-2 text-sm font-medium">
-                Full Name
-              </label>
-
-              <input
-                type="text"
-                placeholder="John Doe"
-                required
-                className="
-                  w-full
-                  bg-white/5
-                  border
-                  border-white/10
-                  rounded-xl
-                  px-4
-                  py-3
-                  text-white
-                  placeholder:text-slate-500
-                  focus:outline-none
-                  focus:border-amber-400
-                  transition-all
-                "
-              />
-            </div>
-
-            <div>
-              <label className="block text-slate-300 mb-2 text-sm font-medium">
-                Email Address
-              </label>
-
-              <input
-                type="email"
-                placeholder="john@example.com"
-                required
-                className="
-                  w-full
-                  bg-white/5
-                  border
-                  border-white/10
-                  rounded-xl
-                  px-4
-                  py-3
-                  text-white
-                  placeholder:text-slate-500
-                  focus:outline-none
-                  focus:border-amber-400
-                  transition-all
-                "
-              />
-            </div>
-
-            <div>
-              <label className="block text-slate-300 mb-2 text-sm font-medium">
-                Message
-              </label>
-
-              <textarea
-                rows="5"
-                placeholder="Tell us how we can help..."
-                required
-                className="
-                  w-full
-                  bg-white/5
-                  border
-                  border-white/10
-                  rounded-xl
-                  px-4
-                  py-3
-                  text-white
-                  placeholder:text-slate-500
-                  focus:outline-none
-                  focus:border-amber-400
-                  transition-all
-                  resize-none
-                "
-              />
-            </div>
-
-            <button
-              type="submit"
+          <div className="space-y-4">
+            <a
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=bbianca.ccristea@gmail.com"
+              target="_blank"
+              rel="noreferrer"
               className="
-                w-full
+                block
+                text-center
                 py-4
                 rounded-xl
                 bg-amber-400
                 text-slate-950
                 font-bold
-                cursor-pointer
                 hover:bg-amber-300
                 hover:scale-[1.02]
                 transition-all
-                duration-300
               "
             >
-              Send Message
-            </button>
-          </form>
+              Email Us
+            </a>
+
+            <a
+              href="tel:+40712345678"
+              className="
+                block
+                text-center
+                py-4
+                rounded-xl
+                border
+                border-white/10
+                text-white
+                font-bold
+                hover:border-amber-400
+                hover:text-amber-400
+                transition-all
+              "
+            >
+              Call Us
+            </a>
+          </div>
+
+          <div
+            className="
+            mt-10
+            p-5
+            rounded-2xl
+            bg-white/5
+            border
+            border-white/10
+          "
+          >
+            <p className="text-slate-400 text-sm">Opening Hours</p>
+
+            <p className="text-white font-medium mt-2">Monday - Friday</p>
+
+            <p className="text-amber-400">09:00 AM - 18:00 PM</p>
+          </div>
         </div>
       </div>
     </div>

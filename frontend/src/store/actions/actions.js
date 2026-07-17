@@ -125,7 +125,8 @@ export const increaseCartQuantity =
 export const fetchMyBookings = () => async (dispatch) => {
   try {
     dispatch({ type: "IS_FETCHING" });
-    const { data } = await api.get("/bookings/my");
+    const { data } = await api.get("/bookings/my-tickets");
+
     dispatch({ type: "FETCH_MY_BOOKINGS", payload: data });
     dispatch({ type: "IS_SUCCESS" });
   } catch (error) {
@@ -487,20 +488,25 @@ export const deleteEvent =
   async (dispatch, getState) => {
     try {
       setLoader(true);
+
+      const { user } = getState().auth;
+      const isAdmin = user?.roles?.includes("ROLE_ADMIN");
+
       const endpoint = isAdmin ? "/admin/events" : "/organizer/events";
-      await api.delete(`${endpoint}/${sendData.id}`, sendData);
+
+      await api.delete(`${endpoint}/${eventId}`);
 
       toast.success("Event deleted successfully");
-      setLoader(false);
       setOpenDeleteModal(false);
+
       dispatch(
         dashboardEventsAction(
-          "pageNumber=0&pageSize=5&sortBy=eventId&sortOrder=asc",
+          "pageNumber=0&pageSize=8&sortBy=eventId&sortOrder=asc",
         ),
       );
     } catch (error) {
       console.log(error);
-      toast.error(error?.response?.data?.message || "Some error occured.");
+      toast.error(error?.response?.data?.message || "Some error occurred.");
     } finally {
       setLoader(false);
     }

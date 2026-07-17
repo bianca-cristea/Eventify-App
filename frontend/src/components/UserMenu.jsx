@@ -90,9 +90,7 @@ const UserMenu = () => {
         {(isAdmin || isOrganizer) && (
           <MenuItem
             className="flex gap-2"
-            onClick={() =>
-              handleNavigate(isAdmin ? "/admin" : "/admin/bookings")
-            }
+            onClick={() => handleNavigate(isAdmin ? "/admin" : "/organizer")}
           >
             <FaUserShield className="text-sm" />
             <span className="text-sm mt-1">

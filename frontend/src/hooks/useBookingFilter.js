@@ -16,7 +16,7 @@ const useBookingFilter = () => {
       : 1;
 
     params.set("pageNumber", currentPage - 1);
-
+    params.set("pageSize", 8);
     const queryString = params.toString();
     console.log("Query string: ", queryString);
     dispatch(getBookingsForDashboard(queryString));

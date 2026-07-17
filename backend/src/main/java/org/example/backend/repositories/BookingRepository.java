@@ -39,4 +39,7 @@ JOIN t.event e
 WHERE e.organizer.userId = :organizerId
 """)
     Page<Booking> findBookingsByOrganizerId(@Param("organizerId") Long organizerId,
-                                            Pageable pageable);}
+                                            Pageable pageable);
+
+
+}

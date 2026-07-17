@@ -1,12 +1,15 @@
 package org.example.backend.controllers;
 
 import jakarta.validation.Valid;
+import org.example.backend.payload.BookingDTO;
 import org.example.backend.payload.TicketDTO;
+import org.example.backend.services.BookingService;
 import org.example.backend.services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +20,10 @@ public class TicketController {
 
     @Autowired
     private TicketService ticketService;
+
+    @Autowired
+    private BookingService bookingService;
+
 
     @GetMapping("/events/{eventId}/tickets")
     public ResponseEntity<List<TicketDTO>> typesOfTicketsPerEvent(@PathVariable Long eventId){

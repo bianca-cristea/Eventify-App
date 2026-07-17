@@ -38,6 +38,6 @@ export const adminNavigation = [
 ];
 
 export const organizerNavigation = [
-  { name: "Bookings", href: "/admin/bookings", icon: CiShoppingBasket },
-  { name: "Events", href: "/admin/events", icon: FaBoxOpen },
+  { name: "Bookings", href: "/organizer/bookings", icon: CiShoppingBasket },
+  { name: "Events", href: "/organizer/events", icon: FaBoxOpen },
 ];

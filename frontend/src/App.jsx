@@ -58,6 +58,13 @@ function App() {
               <Route path="organizers" element={<Organizers />} />
             </Route>
           </Route>
+          <Route path="/organizer" element={<PrivateRoute organizerOnly />}>
+            <Route element={<AdminLayout />}>
+              <Route index element={<Bookings />} />
+              <Route path="bookings" element={<Bookings />} />
+              <Route path="events" element={<AdminEvents />} />
+            </Route>
+          </Route>
         </Route>
       </Routes>
       <AIChat />

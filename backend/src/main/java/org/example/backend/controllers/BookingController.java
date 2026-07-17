@@ -10,6 +10,7 @@ import org.example.backend.security.services.UserDetailsImpl;
 import org.example.backend.services.BookingService;
 import org.example.backend.services.PaymentService;
 import org.example.backend.services.StripeService;
+import org.example.backend.util.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,9 @@ public class BookingController {
 
     @Autowired
     private StripeService stripeService;
+
+    @Autowired
+    private AuthUtil authUtil;
 
 
     @PostMapping("/bookings/stripe-client-secret")
@@ -55,10 +59,11 @@ public class BookingController {
 
 
 
-    @PreAuthorize("hasRole('PARTICIPANT') or hasRole('ADMIN')")
-    @GetMapping("/bookings/my")
+
+    @GetMapping("/bookings/my-tickets")
     public ResponseEntity<List<BookingDTO>> showMyBookings(){
-        return new ResponseEntity<>(bookingService.showMyBooking(), HttpStatus.OK);
+        String username = authUtil.loggedInUser().getUsername();
+        return new ResponseEntity<>(bookingService.getMyTickets(username), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('PARTICIPANT')")
@@ -70,6 +75,13 @@ public class BookingController {
     @PostMapping("/staff/validate-ticket")
     public ResponseEntity<TicketValidationResponseDTO> validateTicket(@RequestBody TicketValidationDTO validationDTO) {
         return new ResponseEntity<>(bookingService.validateTicket(validationDTO.getQrCode()), HttpStatus.OK);
+    }
+    @GetMapping("/my-tickets")
+    public ResponseEntity<List<BookingDTO>> getMyTickets(Authentication authentication) {
+
+        return ResponseEntity.ok(
+                bookingService.getMyTickets(authentication.getName())
+        );
     }
     @PreAuthorize("hasRole('PARTICIPANT')")
     @PutMapping("/bookings/{bookingId}")

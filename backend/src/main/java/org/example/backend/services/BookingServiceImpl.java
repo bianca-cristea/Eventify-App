@@ -8,10 +8,7 @@ import org.example.backend.payload.BookingDTO;
 import org.example.backend.payload.BookingItemDTO;
 import org.example.backend.payload.BookingResponse;
 import org.example.backend.payload.TicketValidationResponseDTO;
-import org.example.backend.repositories.BookingItemRepository;
-import org.example.backend.repositories.BookingRepository;
-import org.example.backend.repositories.EventRepository;
-import org.example.backend.repositories.TicketRepository;
+import org.example.backend.repositories.*;
 import org.example.backend.util.AuthUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +45,8 @@ public class BookingServiceImpl implements BookingService {
     private EventRepository eventRepository;
 
 
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Override
@@ -99,18 +98,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
 
-    @Override
-    public List<BookingDTO> showMyBooking() {
-        User loggedInUser = authUtil.loggedInUser();
 
-        List<Booking> bookings = bookingRepository.findByUserUserId(loggedInUser.getUserId());
-
-        if (bookings.isEmpty()) throw new APIException("You have no bookings yet.");
-
-        return bookings.stream()
-                .map(this::mapBookingToDTO)
-                .collect(Collectors.toList());
-    }
 
     private BookingDTO mapBookingToDTO(Booking booking) {
         BookingDTO dto = modelMapper.map(booking, BookingDTO.class);
@@ -184,7 +172,22 @@ public class BookingServiceImpl implements BookingService {
                 booking.getBookingId()
         );
     }
+    @Override
+    public List<BookingDTO> getMyTickets(String username) {
 
+        User loggedInUser = authUtil.loggedInUser();
+
+        System.out.println("LOGGED USER ID = " + loggedInUser.getUserId());
+        System.out.println("LOGGED USERNAME = " + loggedInUser.getUsername());
+
+        List<Booking> bookings = bookingRepository.findByUserUserId(loggedInUser.getUserId());
+
+        System.out.println("BOOKINGS FOUND = " + bookings.size());
+
+        return bookings.stream()
+                .map(this::mapBookingToDTO)
+                .toList();
+    }
     @Override
     public BookingDTO cancelBooking(Long bookingId) {
 

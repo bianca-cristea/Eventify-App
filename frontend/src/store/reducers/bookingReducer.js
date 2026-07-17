@@ -6,6 +6,12 @@ const initialState = {
 
 export const bookingReducer = (state = initialState, action) => {
   switch (action.type) {
+    case "FETCH_MY_BOOKINGS":
+      return {
+        ...state,
+        myBookings: action.payload,
+      };
+
     case "GET_ADMIN_BOOKINGS":
       return {
         ...state,
