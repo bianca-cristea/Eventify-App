@@ -292,15 +292,17 @@ public class EventServiceImpl implements EventService {
 
             for (TicketDTO ticketDTO : eventDTO.getTickets()) {
 
+                TicketType ticketType = TicketType.valueOf(ticketDTO.getTicketType());
+
                 Ticket ticket = ticketRepository
-                        .findByEventAndTicketType(
-                                eventFromDB,
-                                TicketType.valueOf(ticketDTO.getTicketType())
-                        )
-                        .orElseThrow(() -> new ResourceNotFoundException(
-                                "Ticket",
-                                "ticketType",
-                                ticketDTO.getTicketType()));
+                        .findByEventAndTicketType(eventFromDB, ticketType)
+                        .orElse(null);
+
+                if (ticket == null) {
+                    ticket = new Ticket();
+                    ticket.setEvent(eventFromDB);
+                    ticket.setTicketType(ticketType);
+                }
 
                 ticket.setPrice(ticketDTO.getPrice());
                 ticket.setCapacity(ticketDTO.getCapacity());
