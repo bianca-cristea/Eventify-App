@@ -119,7 +119,6 @@ const Profile = () => {
           </form>
         </section>
 
-        {/* Schimbare parola */}
         <section className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-6">
           <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
             <CiLock className="text-xl" /> Change password
@@ -177,7 +176,6 @@ const Profile = () => {
           </form>
         </section>
 
-        {/* Istoric comenzi/plati */}
         <section className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-6">
           <h2 className="text-lg font-semibold text-white mb-4">
             Order history

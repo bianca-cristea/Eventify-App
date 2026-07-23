@@ -1,10 +1,9 @@
 package org.example.backend.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.example.backend.config.AppConstants;
-import org.example.backend.models.Category;
-import org.example.backend.models.Event;
-import org.example.backend.models.User;
 import org.example.backend.payload.EventDTO;
 import org.example.backend.payload.EventResponse;
 import org.example.backend.services.EventService;
@@ -18,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-
+@Tag(name = "Events", description = "Event management")
 @RestController
 @RequestMapping("/api")
 public class EventController {
@@ -29,6 +28,7 @@ public class EventController {
     @Autowired
     private AuthUtil authUtils;
 
+    @Operation(summary = "Get all events")
     @GetMapping("/events")
     public ResponseEntity<EventResponse> getAllEvents(
             @RequestParam(name = "keyword", required = false) String keyword,
@@ -41,12 +41,13 @@ public class EventController {
         return new ResponseEntity<>(eventService.getAllEvents(pageNumber,pageSize,sortBy,sortOrder, keyword, category), HttpStatus.OK);
     }
 
-
+    @Operation(summary = "Get event by id")
     @GetMapping("/events/{eventId}")
     public ResponseEntity<EventDTO> getEventById(@PathVariable Long eventId) {
         return new ResponseEntity<>(eventService.getEventById(eventId),HttpStatus.OK);
     }
 
+    @Operation(summary = "Get events by category")
     @GetMapping("/categories/{categoryId}/events")
     public ResponseEntity<EventResponse> getEventsByCategory(@PathVariable Long categoryId,@RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
                                                              @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
@@ -55,6 +56,7 @@ public class EventController {
         return new ResponseEntity<>(eventService.getEventsByCategory(categoryId,pageNumber,pageSize,sortBy,sortOrder),HttpStatus.OK);
     }
 
+    @Operation(summary = "Get events by keyword")
     @GetMapping("/events/keyword/{keyword}")
     public ResponseEntity<EventResponse> getEventsByKeyword(@PathVariable String keyword,@RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
                                                              @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
@@ -63,6 +65,7 @@ public class EventController {
         return new ResponseEntity<>(eventService.getEventsByKeyword(keyword,pageNumber,pageSize,sortBy,sortOrder),HttpStatus.OK);
     }
 
+    @Operation(summary = "Update image")
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     @PutMapping({
             "/admin/events/{eventId}/image",
@@ -73,6 +76,7 @@ public class EventController {
         return new ResponseEntity<>(updatedEvent,HttpStatus.OK);
     }
 
+    @Operation(summary = "Create event")
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     @PostMapping({"/admin/events", "/organizer/events"})
     public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody EventDTO eventDTO) {
@@ -80,6 +84,7 @@ public class EventController {
     }
 
 
+    @Operation(summary = "Publish event")
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     @PostMapping({
             "/admin/events/{eventId}/publish",
@@ -89,6 +94,7 @@ public class EventController {
         return new ResponseEntity<>(eventService.publishEvent(eventId), HttpStatus.OK);
     }
 
+    @Operation(summary = "Update event")
     @PreAuthorize("hasRole('ADMIN') or hasRole('ORGANIZER')")
     @PutMapping({
             "/admin/events/{eventId}",
@@ -98,6 +104,7 @@ public class EventController {
         return new ResponseEntity<>(eventService.updateEvent(eventId,eventDTO), HttpStatus.OK);
     }
 
+    @Operation(summary = "Delete event")
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     @DeleteMapping({
             "/admin/events/{eventId}",
@@ -106,11 +113,14 @@ public class EventController {
     public ResponseEntity<EventDTO> deleteEvent(@PathVariable Long eventId) {
         return new ResponseEntity<>(eventService.cancelEvent(eventId),HttpStatus.OK);
     }
+    @Operation(summary = "Get staff events")
     @GetMapping("/staff/events")
     @PreAuthorize("hasRole('STAFF')")
     public ResponseEntity<List<EventDTO>> getStaffEvents() {
         return ResponseEntity.ok(eventService.getStaffEvents());
     }
+
+    @Operation(summary = "Get my events")
     @PreAuthorize("hasRole('ORGANIZER')")
     @GetMapping("/events/me/events")
     public ResponseEntity<EventResponse> getMyEvents(@RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
@@ -120,7 +130,7 @@ public class EventController {
         return new ResponseEntity<>(eventService.getMyEvents(pageNumber,pageSize,sortBy,sortOrder),HttpStatus.OK);
     }
 
-
+    @Operation(summary = "Get all events for Admin")
     @GetMapping("/admin/events")
     public ResponseEntity<EventResponse> getAllEventsForAdmin(
             @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,

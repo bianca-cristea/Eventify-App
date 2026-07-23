@@ -1,5 +1,7 @@
 package org.example.backend.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.example.backend.config.AppConstants;
 import org.example.backend.payload.AuthenticationResult;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Authentication", description = "User authentication")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -24,6 +27,7 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @Operation(summary = "Login user")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         AuthenticationResult result = authService.login(loginRequest);
@@ -31,11 +35,13 @@ public class AuthController {
                 result.getJwtCookie().toString()).body(result.getResponse());
     }
 
+    @Operation(summary = "Register user")
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest signupRequest) {
         return authService.register(signupRequest);
     }
 
+    @Operation(summary = "Get username")
     @GetMapping("/username")
     public String getUsername(Authentication authentication) {
         if (authentication != null) {
@@ -43,7 +49,7 @@ public class AuthController {
         } else
             return "";
     }
-
+    @Operation(summary = "Get user details")
     @GetMapping("/user")
     public ResponseEntity<?> getUserDetails(Authentication authentication) {
         if (authentication == null) {
@@ -52,6 +58,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.getUserDetails(authentication));
     }
 
+    @Operation(summary = "Sign out user")
     @PostMapping("/signout")
     public ResponseEntity<?> logout() {
         ResponseCookie cookie = authService.logout();
@@ -59,7 +66,7 @@ public class AuthController {
                 .body(new MessageResponse("You've been signed out."));
     }
 
-
+    @Operation(summary = "Get all organizers")
     @GetMapping("/organizers")
     public ResponseEntity<?> getAllOrganizers(@RequestParam(name="pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber){
 

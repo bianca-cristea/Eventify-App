@@ -3,8 +3,6 @@ package org.example.backend.repositories;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.example.backend.models.Category;
-import org.example.backend.payload.CategoryResponse;
-import org.example.backend.services.CategoryService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

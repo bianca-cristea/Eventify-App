@@ -16,7 +16,6 @@ export const fetchEvents = (queryString) => async (dispatch) => {
     });
     dispatch({ type: "IS_SUCCESS" });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: "IS_ERROR",
       payload: error?.response?.data?.message || "Failed to fatch events.",
@@ -213,7 +212,6 @@ export const authenticateSignInUser =
       toast.success("Login Success");
       navigate("/");
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.message || "Internal Server Error");
     } finally {
       setLoader(false);
@@ -230,7 +228,6 @@ export const registerNewUser =
       toast.success(data?.message || "User Registered Successfully");
       navigate("/login");
     } catch (error) {
-      console.log(error);
       toast.error(
         error?.response?.data?.message ||
           error?.response?.data?.password ||
@@ -288,7 +285,6 @@ export const createStripePaymentSecret =
       localStorage.setItem("client-secret", JSON.stringify(data));
       dispatch({ type: "IS_SUCCESS" });
     } catch (error) {
-      console.log(error);
       toast.error(
         error?.response?.data?.message || "Failed to create client secret.",
       );
@@ -315,7 +311,6 @@ export const stripePaymentConfirmation =
         setErrorMessage("Payment failed,please try again.");
       }
     } catch (error) {
-      console.log(error);
       setErrorMessage("Payment failed,please try again.");
     } finally {
       setLoading(false);
@@ -407,8 +402,6 @@ export const dashboardEventsAction =
 
       dispatch({ type: "IS_SUCCESS" });
     } catch (error) {
-      console.log(error);
-
       dispatch({
         type: "IS_ERROR",
         payload:
@@ -440,7 +433,6 @@ export const updateEventsFromDashboard =
         ),
       );
     } catch (error) {
-      console.log(error);
       toast.error(
         error?.response?.data?.description ||
           error?.response?.data?.message ||
@@ -505,7 +497,6 @@ export const deleteEvent =
         ),
       );
     } catch (error) {
-      console.log(error);
       toast.error(error?.response?.data?.message || "Some error occurred.");
     } finally {
       setLoader(false);
@@ -537,9 +528,7 @@ export const getMyStaffEvent = () => async (dispatch) => {
       type: "STAFF_EVENT",
       payload: data,
     });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 export const validateTicket = (qrCode, setResult) => async () => {
   try {
@@ -571,8 +560,6 @@ export const getAllCategoriesDashboard = (queryString) => async (dispatch) => {
 
     dispatch({ type: "CATEGORY_SUCCESS" });
   } catch (err) {
-    console.log(err);
-
     dispatch({
       type: "IS_ERROR",
       payload: err?.response?.data?.message || "Failed to fetch categories",
@@ -591,7 +578,6 @@ export const createCategoryDashboardAction =
       setOpen(false);
       await dispatch(fetchCategories());
     } catch (err) {
-      console.log(err);
       toast.error(
         err?.response?.data?.categoryName || "Failed to create new category",
       );
@@ -643,7 +629,6 @@ export const deleteCategoryDashboardAction =
       setOpen(false);
       await dispatch(fetchCategories());
     } catch (err) {
-      console.log(err);
       toast.error(err?.response?.data?.message || "Failed to delete category");
       dispatch({
         type: "IS_ERROR",
@@ -662,7 +647,6 @@ export const addNewDashboardOrganizer =
 
       await dispatch(getAllOrganizersDashboard());
     } catch (err) {
-      console.log(err);
       toast.error(
         err?.response?.data?.message ||
           err?.response?.data?.password ||
@@ -691,7 +675,6 @@ export const getAllOrganizersDashboard =
 
       dispatch({ type: "IS_SUCCESS" });
     } catch (err) {
-      console.log(err);
       dispatch({
         type: "IS_ERROR",
         payload:
@@ -715,8 +698,6 @@ export const askAI = (question) => async (dispatch) => {
       },
     });
   } catch (error) {
-    console.error(error);
-
     dispatch({
       type: "AI_SUCCESS",
       payload: {

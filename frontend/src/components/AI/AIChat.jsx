@@ -44,8 +44,6 @@ const AIChat = () => {
 
       {open && (
         <div className="fixed bottom-6 right-6 w-[420px] h-[620px] bg-slate-950 border border-slate-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50">
-          {/* HEADER */}
-
           <div className="bg-gradient-to-r from-indigo-900 via-blue-900 to-slate-900 p-5 text-white">
             <div className="flex justify-between items-start">
               <div>
@@ -70,28 +68,26 @@ const AIChat = () => {
             </div>
           </div>
 
-          {/* QUICK BUTTONS */}
-
           <div className="p-3 flex flex-wrap gap-2 border-b border-slate-800 bg-slate-900">
             <button
               onClick={() => quickQuestion("Recommend me a music event.")}
               className="px-3 py-1 rounded-full bg-slate-800 text-slate-200 text-sm hover:bg-indigo-700 transition"
             >
-              🎵 Music
+              Music
             </button>
 
             <button
               onClick={() => quickQuestion("Recommend me a theatre event.")}
               className="px-3 py-1 rounded-full bg-slate-800 text-slate-200 text-sm hover:bg-indigo-700 transition"
             >
-              🎭 Theatre
+              Theatre
             </button>
 
             <button
               onClick={() => quickQuestion("Recommend me a festival.")}
               className="px-3 py-1 rounded-full bg-slate-800 text-slate-200 text-sm hover:bg-indigo-700 transition"
             >
-              🎉 Festival
+              Festival
             </button>
 
             <button
@@ -104,8 +100,6 @@ const AIChat = () => {
               Surprise me
             </button>
           </div>
-
-          {/* CHAT */}
 
           <div className="flex-1 overflow-y-auto p-4 bg-slate-950">
             {messages.length === 0 && (
@@ -156,8 +150,6 @@ const AIChat = () => {
 
             <div ref={messagesEndRef}></div>
           </div>
-
-          {/* INPUT */}
 
           <div className="border-t border-slate-800 bg-slate-900 p-3 flex gap-2">
             <input

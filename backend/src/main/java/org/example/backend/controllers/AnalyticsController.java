@@ -1,5 +1,7 @@
 package org.example.backend.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.backend.payload.AnalyticsResponse;
 import org.example.backend.services.AnalyticsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Analytics", description = "Analytics details for admin.")
 @RestController
 @RequestMapping("/api")
 public class AnalyticsController {
@@ -16,6 +19,7 @@ public class AnalyticsController {
     @Autowired
     private AnalyticsService analyticsService;
 
+    @Operation(summary = "Get analytics")
     @GetMapping("/admin/app/analytics")
     public ResponseEntity<AnalyticsResponse> getAnalytics(){
         AnalyticsResponse response = analyticsService.getAnalyticsData();

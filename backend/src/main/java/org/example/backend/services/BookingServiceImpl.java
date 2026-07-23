@@ -1,6 +1,6 @@
 package org.example.backend.services;
 
-import jakarta.transaction.Transactional;
+
 import org.example.backend.exceptions.APIException;
 import org.example.backend.exceptions.ResourceNotFoundException;
 import org.example.backend.models.*;
@@ -18,13 +18,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
 
 @Service
 public class BookingServiceImpl implements BookingService {

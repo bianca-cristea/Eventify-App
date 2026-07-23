@@ -22,7 +22,6 @@ const Filter = ({ categories }) => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
 
-  // sync URL -> state
   useEffect(() => {
     const currentCategory = searchParams.get("category") || "all";
     const currentSortOrder = searchParams.get("sortOrder") || "asc";
@@ -33,7 +32,6 @@ const Filter = ({ categories }) => {
     setSearchTerm(currentKeyword);
   }, [searchParams]);
 
-  // search debounce
   useEffect(() => {
     const handler = setTimeout(() => {
       if (searchTerm) {

@@ -1,7 +1,6 @@
 package org.example.backend.util;
 
 import org.example.backend.models.User;
-import org.example.backend.payload.UserResponse;
 import org.example.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

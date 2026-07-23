@@ -29,9 +29,7 @@ const PrivateRoute = ({
   if (organizerOnly && !isOrganizer) {
     return <Navigate to="/" replace />;
   }
-  if (organizerOnly && !isOrganizer) {
-    return <Navigate to="/" replace />;
-  }
+
   return <Outlet />;
 };
 

@@ -24,7 +24,6 @@ const StaffDashboard = () => {
     <div className="border rounded-lg p-5 shadow">
       <h2 className="text-xl font-semibold mb-6">Validate Ticket</h2>
 
-      {/* QR Scanner */}
       <div className="mb-8">
         <h3 className="font-semibold mb-3">Scan QR Code</h3>
 
@@ -52,7 +51,6 @@ const StaffDashboard = () => {
         <div className="flex-1 border-t"></div>
       </div>
 
-      {/* Manual validation */}
       <div>
         <h3 className="font-semibold mb-3">Enter QR Code Manually</h3>
 

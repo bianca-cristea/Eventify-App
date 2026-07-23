@@ -7,7 +7,6 @@ import org.example.backend.models.BookingStatus;
 import org.example.backend.models.Event;
 import org.example.backend.models.User;
 import org.example.backend.payload.BookingDTO;
-import org.example.backend.payload.EventDTO;
 import org.example.backend.payload.UserDTO;
 import org.example.backend.repositories.BookingRepository;
 import org.example.backend.repositories.EventRepository;

@@ -1,6 +1,6 @@
 package org.example.backend.exceptions;
 
-import lombok.Data;
+
 
 
 public class ResourceNotFoundException extends RuntimeException{
