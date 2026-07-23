@@ -10,17 +10,8 @@ const Cart = () => {
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.carts);
 
-  const newCart = { ...cart };
-  newCart.totalPrice = cart?.reduce(
-    (acc, curr) =>
-      acc +
-      Number(
-        (newCart.totalPrice = cart?.reduce(
-          (acc, curr) => acc + Number(curr.price) * Number(curr.quantity),
-          0,
-        )),
-      ) *
-        Number(curr?.quantity),
+  const totalPrice = cart.reduce(
+    (acc, item) => acc + Number(item.price) * Number(item.quantity),
     0,
   );
 
@@ -59,7 +50,7 @@ const Cart = () => {
         <div className="flex text-sm gap-1 flex-col ">
           <div className="flex justify-between w-full md:text-lg text:sm font-semibold">
             <span>Subtotal</span>
-            <span>${Number(newCart?.totalPrice).toFixed(2)}</span>
+            <span>${totalPrice.toFixed(2)}</span>
           </div>
           <p className="text-slate-50">
             Tickets are digital and will be delivered after purchase

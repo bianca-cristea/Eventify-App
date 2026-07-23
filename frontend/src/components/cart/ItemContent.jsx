@@ -28,10 +28,14 @@ const ItemContent = ({
   const dispatch = useDispatch();
 
   const handleQtyIncrease = (cartItem) => {
-    const newQuantity = currentQuantity + 1;
-    setCurrentQuantity(newQuantity);
-
-    dispatch(increaseCartQuantity(cartItem, newQuantity));
+    dispatch(
+      increaseCartQuantity(
+        cartItem,
+        toast,
+        currentQuantity,
+        setCurrentQuantity,
+      ),
+    );
   };
 
   const handleQtyDecrease = (cartItem) => {

@@ -13,12 +13,16 @@ export const cartReducer = (state = initialState, action) => {
       const eventToAdd = action.payload;
 
       const existingEvent = state.cart.find(
-        (item) => item.eventId === eventToAdd.eventId,
+        (item) =>
+          item.eventId === eventToAdd.eventId &&
+          item.ticketId === eventToAdd.ticketId,
       );
-
       if (existingEvent) {
         const updatedCart = state.cart.map((item) =>
-          item.eventId === eventToAdd.eventId ? eventToAdd : item,
+          item.eventId === eventToAdd.eventId &&
+          item.ticketId === eventToAdd.ticketId
+            ? eventToAdd
+            : item,
         );
 
         const newTotalPrice = updatedCart.reduce(
