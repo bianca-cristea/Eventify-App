@@ -6,6 +6,7 @@ The application supports **four user roles**: **Participant, Organizer, Staff, a
 
 ---
 
+
 ## Features
 
 ### Authentication
@@ -26,6 +27,31 @@ The application supports **four user roles**: **Participant, Organizer, Staff, a
 - View profile
 - Change password
 - Contact support through the Contact page
+  
+
+<img width="1902" height="842" alt="image" src="https://github.com/user-attachments/assets/0f4aea11-ba9b-426e-9647-04b88354c1e9" />
+<img width="1920" height="841" alt="image" src="https://github.com/user-attachments/assets/3c4a0290-b9ba-4a00-a95c-98b53b138ea5" />
+
+<img width="1906" height="830" alt="image" src="https://github.com/user-attachments/assets/aefb2450-6e5d-42d9-b237-1663845e33c8" />
+
+
+<img width="649" height="750" alt="image" src="https://github.com/user-attachments/assets/1f7490ff-4871-4aac-b8e9-e0983abebac6" />
+
+
+<img width="1886" height="834" alt="image" src="https://github.com/user-attachments/assets/5e7f8d7e-7e40-4fe1-82bb-7f1859cf7f16" />
+
+<img width="1897" height="854" alt="image" src="https://github.com/user-attachments/assets/4f1f8cee-3a9b-44d2-be9b-6dacfcf909ce" />
+
+<img width="1881" height="848" alt="image" src="https://github.com/user-attachments/assets/3b6ae271-b0da-44bf-8006-0823edf2308c" />
+
+<img width="1882" height="856" alt="image" src="https://github.com/user-attachments/assets/90aa5bff-3fba-4c49-93b8-9d4a6fd4d178" />
+
+<img width="1887" height="847" alt="image" src="https://github.com/user-attachments/assets/fd0a5b5b-76a2-4c24-9ae2-f984f2c8dfd3" />
+
+<img width="1878" height="833" alt="image" src="https://github.com/user-attachments/assets/563275df-391d-4d18-9f21-eda4a1edd896" />
+
+
+
 
 ### Organizer
 
@@ -33,11 +59,18 @@ The application supports **four user roles**: **Participant, Organizer, Staff, a
 - Create, update and delete personal events
 - Manage bookings for owned events
 
+<img width="1891" height="843" alt="image" src="https://github.com/user-attachments/assets/9a514e89-ac93-4ea6-8c98-b19bc06f1708" />
+
+
+
 ### Staff
 
 - Staff dashboard
 - Validate tickets using QR codes
 - Manual ticket validation
+
+  <img width="1885" height="848" alt="image" src="https://github.com/user-attachments/assets/5459c2d8-a4c1-43ea-9483-0cf2a4fa82c4" />
+
 
 ### Admin
 
@@ -47,6 +80,9 @@ The application supports **four user roles**: **Participant, Organizer, Staff, a
 - Manage categories
 - Manage organizers
 - View analytics
+
+<img width="1871" height="841" alt="image" src="https://github.com/user-attachments/assets/c6d71796-1fff-468b-9324-c4aca312fcb1" />
+
 
 ---
 
