@@ -126,7 +126,11 @@ The application supports **four user roles**: **Participant, Organizer, Staff, a
 
 Swagger UI:
 
-<img width="1811" height="850" alt="image" src="https://github.com/user-attachments/assets/62064eb9-f9f2-4d7c-9580-81679cb7ac11" />
+<img width="1139" height="827" alt="image" src="https://github.com/user-attachments/assets/07fbcd08-8718-4381-bc47-95ff8bb19b7e" />
+<img width="1098" height="840" alt="image" src="https://github.com/user-attachments/assets/b0470942-f08d-40cd-a2a9-f480d6c1defa" />
+<img width="1095" height="849" alt="image" src="https://github.com/user-attachments/assets/258f8c35-868a-4307-8ba2-dae211fa2efa" />
+<img width="1106" height="794" alt="image" src="https://github.com/user-attachments/assets/83edcf65-b4d5-44f7-8b87-f68b8b9d0c4f" />
+
 
 ---
 
