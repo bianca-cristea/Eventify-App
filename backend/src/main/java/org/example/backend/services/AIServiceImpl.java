@@ -51,8 +51,7 @@ public class AIServiceImpl implements AIService {
                 Category: %s
                 Location: %s
                 Date: %s
-                Status: %s
-
+                Status: %s 
                 """
                     .formatted(
                             event.getTitle(),

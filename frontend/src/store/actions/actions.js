@@ -239,6 +239,7 @@ export const registerNewUser =
   };
 
 export const logOutUser = (navigate) => (dispatch) => {
+  dispatch({ type: "AI_CLEAR" });
   dispatch({ type: "LOG_OUT" });
   dispatch({ type: "CLEAR_CART" });
 
@@ -359,14 +360,22 @@ export const getBookingsForDashboard =
   };
 
 export const updateBookingStatusFromDashboard =
-  (bookingId, bookingStatus, toast, setLoader, isAdmin) => async (dispatch) => {
+  (bookingId, bookingStatus, toast, setLoader) =>
+  async (dispatch, getState) => {
     try {
       setLoader(true);
+
+      const { user } = getState().auth;
+      const isAdmin = user?.roles?.includes("ROLE_ADMIN");
+
       const endpoint = isAdmin ? "/admin/bookings" : "/organizer/bookings";
+
       const { data } = await api.put(`${endpoint}/${bookingId}/status`, {
         status: bookingStatus,
       });
+
       toast.success(data.message || "Booking updated successfully");
+
       await dispatch(getBookingsForDashboard(undefined, isAdmin));
     } catch (error) {
       toast.error(error?.response?.data?.message || "Internal server error.");
@@ -426,7 +435,8 @@ export const updateEventsFromDashboard =
       toast.success("Event updated successfully.");
       reset();
       setOpen(false);
-
+      console.log(user);
+      console.log(user.roles);
       await dispatch(
         dashboardEventsAction(
           "pageNumber=0&pageSize=5&sortBy=eventId&sortOrder=asc",

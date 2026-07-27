@@ -93,7 +93,7 @@ public class WebSecurityConfig {
                                         .requestMatchers(HttpMethod.GET, "/api/categories/*/events").permitAll()
                                         .requestMatchers("/api/public/**").permitAll()
                                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                                        .requestMatchers("/api/organizer/**").hasAnyRole("ADMIN", "ORGANIZER")
+                                        .requestMatchers("/api/organizer/**").hasAnyRole( "ORGANIZER")
                                         .requestMatchers("/api/staff/**").hasAnyRole("ADMIN", "STAFF")
                                         .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "STAFF", "ORGANIZER", "PARTICIPANT")
 

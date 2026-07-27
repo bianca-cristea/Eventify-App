@@ -12,14 +12,14 @@ import Status from "./Status";
 import { MdDone, MdClose } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 
-function EventViewModal({ open, setOpen, event, isAvailable }) {
+function EventViewModal({ open, setOpen, event }) {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const dispatch = useDispatch();
 
   if (!event) return null;
 
   const { title, image, description, tickets } = event;
-
+  const isAvailable = tickets?.some((ticket) => ticket.capacity > 0);
   const handleAddToCart = () => {
     if (tickets?.length > 0 && !selectedTicket) {
       toast.error("Please select a ticket type");
