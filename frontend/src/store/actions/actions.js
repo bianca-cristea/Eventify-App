@@ -85,7 +85,7 @@ export const addToCart =
 
     toast.success(`${event.title} added to cart`);
 
-    localStorage.setItem("cartItems", JSON.stringify(getState().carts.cart));
+    localStorage.setItem(`cart_${email}`, JSON.stringify(newCart));
   };
 
 export const increaseCartQuantity =
@@ -302,7 +302,14 @@ export const stripePaymentConfirmation =
         sendData,
       );
       if (data) {
-        localStorage.removeItem("cartItems");
+        const auth = JSON.parse(localStorage.getItem("auth"));
+        const email = auth?.email;
+
+        if (email) {
+          localStorage.removeItem(`cart_${email}`);
+          localStorage.removeItem(`total_${email}`);
+        }
+
         localStorage.removeItem("client-secret");
         localStorage.removeItem("bookingId");
         dispatch({ type: "REMOVE_CLIENT_SECRET" });
