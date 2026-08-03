@@ -21,5 +21,4 @@ public interface EventRepository extends JpaRepository<Event,Long> , JpaSpecific
 
     Page<Event> findByTitleLikeIgnoreCase(String s, Pageable pageDetails);
     List<Event> findByStaff(User staff);
-    Page<Event> findByStatusNot(String cancelled, Pageable pageDetails);
 }

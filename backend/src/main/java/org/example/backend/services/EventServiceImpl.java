@@ -34,6 +34,8 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     @Autowired
     private TicketRepository ticketRepository;
@@ -230,8 +232,28 @@ public class EventServiceImpl implements EventService {
         newEvent.setCategory(category);
 
         newEvent.setOrganizer(authUtil.loggedInUser());
+        newEvent.setStatus("CONFIRMED");
+
+
 
         Event savedEvent = eventRepository.save(newEvent);
+        if (eventDTO.getTickets() != null) {
+
+            for (TicketDTO ticketDTO : eventDTO.getTickets()) {
+
+                TicketType ticketType = TicketType.valueOf(ticketDTO.getTicketType());
+
+                Ticket ticket = new Ticket();
+
+                ticket.setEvent(savedEvent);
+                ticket.setTicketType(ticketType);
+                ticket.setPrice(ticketDTO.getPrice());
+                ticket.setCapacity(ticketDTO.getCapacity());
+
+                ticketRepository.save(ticket);
+            }
+        }
+
         return modelMapper.map(savedEvent, EventDTO.class);
 
     }
@@ -370,8 +392,8 @@ public class EventServiceImpl implements EventService {
         Event eventFromDB = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event", "eventId", eventId));
 
-        String fileName = fileService.uploadImage(path, image);
-        eventFromDB.setImage(fileName);
+        String imageUrl = cloudinaryService.uploadImage(image);
+        eventFromDB.setImage(imageUrl);
 
         Event savedEvent = eventRepository.save(eventFromDB);
         return modelMapper.map(savedEvent, EventDTO.class);

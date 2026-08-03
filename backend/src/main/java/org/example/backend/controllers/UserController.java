@@ -24,9 +24,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private AuthUtil authUtil;
-
 
     @Operation(summary = "Get all users")
     @GetMapping("/users")
@@ -48,7 +45,6 @@ public class UserController {
             @RequestParam(name = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortOrder) {
 
         return new ResponseEntity<>(userService.getAllOrganizers(pageNumber,pageSize,sortBy,sortOrder), HttpStatus.OK);
-
     }
 
 

@@ -1,9 +1,7 @@
 package org.example.backend.repositories;
 
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+
 import org.example.backend.models.AppRole;
 import org.example.backend.models.User;
 import org.springframework.data.domain.Page;
@@ -28,6 +26,4 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Page<User> findByRoleName(@Param("role") AppRole role, Pageable pageable);
 
 
-
-    Optional<User> findByEmail(String email);
 }
