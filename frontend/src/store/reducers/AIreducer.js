@@ -1,5 +1,5 @@
 const initialState = {
-  messages: [],
+  messages: JSON.parse(localStorage.getItem("aiMessages")) || [],
   loading: false,
 };
 
@@ -11,14 +11,25 @@ export const aiReducer = (state = initialState, action) => {
         loading: true,
       };
 
-    case "AI_SUCCESS":
+    case "AI_SUCCESS": {
+      const updatedMessages = [...state.messages, action.payload];
+
+      localStorage.setItem("aiMessages", JSON.stringify(updatedMessages));
+
       return {
         loading: false,
-        messages: [...state.messages, action.payload],
+        messages: updatedMessages,
       };
+    }
 
     case "AI_CLEAR":
-      return initialState;
+      localStorage.removeItem("aiMessages");
+
+      return {
+        ...state,
+        messages: [],
+        loading: false,
+      };
 
     default:
       return state;

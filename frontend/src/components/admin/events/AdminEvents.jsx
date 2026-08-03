@@ -192,7 +192,7 @@ const AdminEvents = () => {
           No events
         </div>
       ) : (
-        <div className="max-w-full">
+        <div className="max-w-full mb-10">
           <DataGrid
             rows={tableRecords}
             columns={columns}

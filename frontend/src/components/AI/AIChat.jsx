@@ -43,7 +43,8 @@ const AIChat = () => {
       )}
 
       {open && (
-        <div className="fixed bottom-6 right-6 w-[420px] h-[620px] bg-slate-950 border border-slate-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50">
+        <div className="fixed bottom-5 right-5 w-[360px] h-[520px] max-w-[95vw] max-h-[85vh] bg-slate-950 border border-slate-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50">
+          {" "}
           <div className="bg-gradient-to-r from-indigo-900 via-blue-900 to-slate-900 p-5 text-white">
             <div className="flex justify-between items-start">
               <div>
@@ -67,7 +68,6 @@ const AIChat = () => {
               </button>
             </div>
           </div>
-
           <div className="p-3 flex flex-wrap gap-2 border-b border-slate-800 bg-slate-900">
             <button
               onClick={() => quickQuestion("Recommend me a music event.")}
@@ -100,7 +100,6 @@ const AIChat = () => {
               Surprise me
             </button>
           </div>
-
           <div className="flex-1 overflow-y-auto p-4 bg-slate-950">
             {messages.length === 0 && (
               <div className="text-slate-400 text-sm mt-4">
@@ -150,7 +149,6 @@ const AIChat = () => {
 
             <div ref={messagesEndRef}></div>
           </div>
-
           <div className="border-t border-slate-800 bg-slate-900 p-3 flex gap-2">
             <input
               value={question}

@@ -133,7 +133,7 @@ const BookingTable = ({ adminBooking, pagination }) => {
   };
 
   return (
-    <div>
+    <div className="mb-10">
       <h1 className="text-slate-50 text-center text-3xl font-semibold pb-6 uppercase">
         All bookings
       </h1>
