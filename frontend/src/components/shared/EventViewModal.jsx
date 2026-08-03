@@ -44,8 +44,8 @@ function EventViewModal({ open, setOpen, event }) {
             className="
               relative
               w-full
-              max-w-4xl
-              max-h-[90vh]
+              max-w-3xl
+              max-h-[82vh]
               overflow-y-auto
               rounded-2xl
               bg-linear-to-br
@@ -62,25 +62,25 @@ function EventViewModal({ open, setOpen, event }) {
           >
             <button
               onClick={() => setOpen(false)}
-              className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/40 hover:bg-black/70 transition"
+              className="absolute top-4 right-4 z-20 p-1.5 rounded-full bg-black/40 hover:bg-black/70 transition"
             >
-              <IoClose className="text-2xl text-white" />
+              <IoClose className="text-xl text-white" />
             </button>
 
             {image && (
-              <div className="md:w-1/2 relative flex-shrink-0">
+              <div className="md:w-[42%] relative flex-shrink-0">
                 <img
                   src={image}
                   alt={title}
-                  className="w-full h-64 md:h-full object-cover"
+                  className="w-full h-56 md:h-full object-cover"
                 />
 
                 <div className="absolute inset-0 bg-black/30" />
               </div>
             )}
 
-            <div className="w-full p-6 md:p-8 text-white">
-              <DialogTitle className="text-2xl md:text-3xl font-bold pr-12">
+            <div className="w-full p-5 md:p-6 text-white">
+              <DialogTitle className="text-xl md:text-2xl font-bold pr-12">
                 {title}
               </DialogTitle>
 
@@ -102,12 +102,12 @@ function EventViewModal({ open, setOpen, event }) {
                 )}
               </div>
 
-              <div className="h-px bg-white/10 my-6" />
+              <div className="h-px bg-white/10 my-4" />
 
               <p className="text-white/70 leading-relaxed">{description}</p>
 
               {tickets?.length > 0 && (
-                <div className="mt-6 space-y-3">
+                <div className="mt-5 space-y-3">
                   <p className="text-white/60 font-medium">
                     Select ticket type
                   </p>
@@ -145,7 +145,7 @@ function EventViewModal({ open, setOpen, event }) {
                           </div>
                         </div>
 
-                        <div className="text-xl font-bold text-indigo-300">
+                        <div className="text-lg font-bold text-indigo-300">
                           ${Number(ticket.price).toFixed(2)}
                         </div>
                       </button>
@@ -154,10 +154,10 @@ function EventViewModal({ open, setOpen, event }) {
                 </div>
               )}
 
-              <div className="flex justify-end gap-3 mt-8">
+              <div className="flex justify-end gap-3 mt-6">
                 <button
                   onClick={() => setOpen(false)}
-                  className="px-5 py-2 rounded-full border border-white/10 bg-white/10 hover:bg-white/20 transition"
+                  className="px-4 py-2 text-sm rounded-full border border-white/10 bg-white/10 hover:bg-white/20 transition"
                 >
                   Close
                 </button>
@@ -165,7 +165,7 @@ function EventViewModal({ open, setOpen, event }) {
                 {isAvailable && (
                   <button
                     onClick={handleAddToCart}
-                    className="px-5 py-2 rounded-full bg-indigo-600 hover:bg-indigo-700 transition"
+                    className="px-4 py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-700 transition"
                   >
                     Add to Cart
                   </button>

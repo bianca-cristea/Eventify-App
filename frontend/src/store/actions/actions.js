@@ -385,20 +385,24 @@ export const updateBookingStatusFromDashboard =
   };
 
 export const dashboardEventsAction =
-  (queryString) => async (dispatch, getState) => {
+  (queryString = "") =>
+  async (dispatch, getState) => {
     try {
       dispatch({ type: "IS_FETCHING" });
 
       const { user } = getState().auth;
-
       const isAdmin = user?.roles?.includes("ROLE_ADMIN");
 
-      const endpoint = isAdmin
-        ? `/admin/events?${queryString}`
-        : `/events/me/events?${queryString}`;
+      let endpoint = isAdmin ? "/admin/events" : "/events/me/events";
+
+      if (queryString && queryString.trim() !== "") {
+        endpoint += `?${queryString}`;
+      }
 
       const { data } = await api.get(endpoint);
 
+      console.log("EVENTS RESPONSE:", data);
+      console.log(data.content);
       dispatch({
         type: "FETCH_EVENTS",
         payload: data.content,
@@ -411,6 +415,8 @@ export const dashboardEventsAction =
 
       dispatch({ type: "IS_SUCCESS" });
     } catch (error) {
+      console.error(error);
+
       dispatch({
         type: "IS_ERROR",
         payload:
