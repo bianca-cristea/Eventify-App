@@ -66,14 +66,32 @@ const Register = () => {
             register={register}
             errors={errors}
           />
-          <select
-            {...register("role")}
-            defaultValue="participant"
-            className="border rounded-lg p-3 bg-white"
-          >
-            <option value="participant">Participant</option>
-            <option value="organizer">Organizer</option>
-          </select>
+          <div className="flex flex-col gap-2">
+            <label className="text-slate-300 font-medium">Account Type</label>
+
+            <select
+              {...register("role")}
+              defaultValue="participant"
+              className="
+      w-full
+      rounded-xl
+      border
+      border-slate-600
+      bg-slate-900
+      text-slate-200
+      px-4
+      py-3
+      outline-none
+      transition
+      focus:border-amber-400
+      focus:ring-2
+      focus:ring-amber-400/20
+    "
+            >
+              <option value="participant"> Participant</option>
+              <option value="organizer"> Organizer</option>
+            </select>
+          </div>
           <InputField
             label="Password"
             required
