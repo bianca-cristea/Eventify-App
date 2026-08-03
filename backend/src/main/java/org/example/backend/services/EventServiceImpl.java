@@ -389,13 +389,21 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDTO updateEventImage(Long eventId, MultipartFile image) throws IOException {
+
         Event eventFromDB = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException("Event", "eventId", eventId));
 
+        System.out.println("BEFORE = " + eventFromDB.getImage());
+
         String imageUrl = cloudinaryService.uploadImage(image);
+        System.out.println("URL = " + imageUrl);
+
         eventFromDB.setImage(imageUrl);
+        System.out.println("AFTER SET = " + eventFromDB.getImage());
 
         Event savedEvent = eventRepository.save(eventFromDB);
+        System.out.println("AFTER SAVE = " + savedEvent.getImage());
+
         return modelMapper.map(savedEvent, EventDTO.class);
     }
 
