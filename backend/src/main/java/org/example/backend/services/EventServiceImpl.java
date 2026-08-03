@@ -150,8 +150,20 @@ public class EventServiceImpl implements EventService {
     }
 
 
-    private String constructImageUrl(String imageName){
-        return imageBaseUrl.endsWith("/") ? imageBaseUrl + imageName : imageBaseUrl + "/" + imageName;
+    private String constructImageUrl(String imageName) {
+
+        if (imageName == null || imageName.isBlank()) {
+            return null;
+        }
+
+
+        if (imageName.startsWith("http://") || imageName.startsWith("https://")) {
+            return imageName;
+        }
+
+        return imageBaseUrl.endsWith("/")
+                ? imageBaseUrl + imageName
+                : imageBaseUrl + "/" + imageName;
     }
 
     @Override
@@ -298,8 +310,8 @@ public class EventServiceImpl implements EventService {
 
             String image = eventDTO.getImage();
 
-            if (image.startsWith("http")) {
-                image = image.substring(image.lastIndexOf("/") + 1);
+            if (eventDTO.getImage() != null && !eventDTO.getImage().isBlank()) {
+                eventFromDB.setImage(eventDTO.getImage());
             }
 
             eventFromDB.setImage(image);
