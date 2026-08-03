@@ -51,6 +51,7 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private ModelMapper modelMapper;
 
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 

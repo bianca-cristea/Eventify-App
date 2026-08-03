@@ -24,7 +24,10 @@ const Register = () => {
   });
 
   const registerHandler = async (data) => {
-    console.log("Register Click");
+    data.role = [data.role];
+
+    console.log(data);
+
     dispatch(registerNewUser(data, toast, reset, navigate, setLoader));
   };
 
@@ -63,7 +66,14 @@ const Register = () => {
             register={register}
             errors={errors}
           />
-
+          <select
+            {...register("role")}
+            defaultValue="participant"
+            className="border rounded-lg p-3 bg-white"
+          >
+            <option value="participant">Participant</option>
+            <option value="organizer">Organizer</option>
+          </select>
           <InputField
             label="Password"
             required
