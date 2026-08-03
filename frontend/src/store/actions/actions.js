@@ -228,11 +228,11 @@ export const registerNewUser =
       toast.success(data?.message || "User Registered Successfully");
       navigate("/login");
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-          error?.response?.data?.password ||
-          "Internal Server Error",
-      );
+      const message = error?.response?.data?.message;
+
+      console.log("TOAST MESSAGE:", message);
+
+      toast.error(message || "Internal Server Error");
     } finally {
       setLoader(false);
     }
