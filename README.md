@@ -203,12 +203,58 @@ npm run dev
 ```
 
 ---
+## Deployment diagram
+<img width="663" height="739" alt="image" src="https://github.com/user-attachments/assets/afd3b54e-4fcd-4c37-9fe5-73a9dab8fb8a" />
+
+
+# Deployment
+
+The application is deployed and publicly accessible.
+
+- **Frontend:** https://link-netlify
+- **Backend:** https://link-render
+
+## Infrastructure
+
+The application components are hosted on dedicated cloud services:
+
+- **Frontend:** Netlify
+- **Backend:** Render
+- **Database:** MySQL hosted on Oracle Cloud Infrastructure (OCI)
+- **Image Storage:** Cloudinary
+
+## Test Accounts
+
+### Administrator
+
+- Username: `admin`
+- Password: `adminPass`
+
+### Staff
+
+- Username: `staff`
+- Password: `staffPass`
+
+These accounts were created manually. Participant and organizer accounts can be created through the application registration process.
+
+## Stripe Test Payment
+
+The application uses Stripe in **test mode**.
+
+Use the following test card:
+
+- **Card Number:** `4242 4242 4242 4242` 
+- **Verification Code:** `000000`
+ 
+
+## Notes
+
+- The backend is hosted on Render's free plan. After a period of inactivity, the service may take some time to wake up on the first request.
+
 
 # Future Improvements
 
- 
-- Mobile application
-- Docker Compose deployment
+
 - Kubernetes support
 - Advanced analytics
 - Event recommendation improvements
