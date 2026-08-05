@@ -28,19 +28,31 @@ const LogIn = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex justify-center items-center">
+    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center px-4 py-8">
       <form
         onSubmit={handleSubmit(loginHandler)}
-        className="w-1/3 p-8 sm:px-8 px-4 rounded-4xl border border-b-blue-950"
+        className="
+      w-full
+      max-w-md
+      rounded-3xl
+      border
+      border-blue-950
+      p-6
+      sm:p-8
+      bg-transparent
+    "
       >
-        <div className="flex flex-col items-center  justify-center space-y-4">
+        <div className="flex flex-col items-center justify-center space-y-4">
           <AiOutlineLogin className="text-slate-50 text-5xl" />
-          <h1 className="text-slate-50 my-4 text-center font-montserrat lg:text-3xl text-2xl">
+
+          <h1 className="text-slate-50 text-2xl sm:text-3xl font-montserrat text-center">
             Login Here
           </h1>
         </div>
-        <hr className="mt-2 mb-5 text-white" />
-        <div className="flex flex-col px-4 gap-4">
+
+        <hr className="mt-4 mb-6 text-white" />
+
+        <div className="flex flex-col gap-4">
           <InputField
             label="Username"
             required
@@ -66,44 +78,44 @@ const LogIn = () => {
 
         <button
           disabled={loader}
-          className="   w-1/3
-            mt-10
-            m-auto
-            h-12
-            rounded-xl
-            bg-amber-400
-            text-slate-950
-            font-bold
-            cursor-pointer
-            flex
-            items-center
-            justify-center
-            gap-2
-            hover:bg-amber-300
-            hover:scale-[1.02]
-            transition-all
-            duration-300
-            disabled:opacity-50
-            disabled:cursor-not-allowed
-            disabled:hover:scale-100"
           type="submit"
+          className="
+        mt-8
+        w-full
+        h-12
+        rounded-xl
+        bg-amber-400
+        text-slate-950
+        font-bold
+        flex
+        items-center
+        justify-center
+        gap-2
+        hover:bg-amber-300
+        hover:scale-[1.02]
+        transition-all
+        duration-300
+        disabled:opacity-50
+        disabled:cursor-not-allowed
+        disabled:hover:scale-100
+      "
         >
           {loader ? (
             <>
               <Spinners /> Loading...
             </>
           ) : (
-            <>Login</>
+            "Login"
           )}
         </button>
 
-        <p className="text-center text-sm text-slate-700 mt-6">
+        <p className="text-center text-sm text-slate-400 mt-6">
           Don't have an account?
           <Link
-            className="font-semibold underline hover:text-gray-400"
+            className="font-semibold underline hover:text-white ml-1"
             to="/register"
           >
-            <span> SignUp</span>
+            Sign Up
           </Link>
         </p>
       </form>
