@@ -1,5 +1,10 @@
 import React from "react";
 
+const DEFAULT_MIN_LENGTHS = {
+  username: 5,
+  password: 6,
+};
+
 const InputField = ({
   label,
   id,
@@ -12,6 +17,8 @@ const InputField = ({
   min,
   placeholder,
 }) => {
+  const effectiveMin = min ?? DEFAULT_MIN_LENGTHS[id];
+
   return (
     <div className="flex flex-col gap-1 w-full">
       <label htmlFor={id} className="font-semibold text-sm text-slate-700">
@@ -29,8 +36,11 @@ const InputField = ({
         } ${className || ""}`}
         {...register(id, {
           required: required ? message : false,
-          minLength: min
-            ? { value: min, message: `Minimum ${min} characters is required.` }
+          minLength: effectiveMin
+            ? {
+                value: effectiveMin,
+                message: `Minimum ${effectiveMin} characters is required.`,
+              }
             : undefined,
           pattern:
             type === "email"
