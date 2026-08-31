@@ -52,6 +52,7 @@ const Register = () => {
             id="username"
             type="text"
             message="*Username is required"
+            min={5}
             placeholder="Enter your username"
             register={register}
             errors={errors}
