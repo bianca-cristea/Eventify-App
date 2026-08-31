@@ -1,5 +1,5 @@
 import api from "../../api/api";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 export const fetchEvents = (queryString) => async (dispatch) => {
   try {

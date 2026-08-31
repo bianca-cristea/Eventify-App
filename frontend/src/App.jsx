@@ -1,6 +1,6 @@
 import "./App.css";
 
-import { ToastContainer } from "react-toastify";
+import { Toaster } from "react-hot-toast";
 import Home from "./components/home/Home";
 import Events from "./components/events/Events";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -68,14 +68,15 @@ function App() {
         </Route>
       </Routes>
       <AIChat />
-      <ToastContainer
+      <Toaster
         position="top-center"
-        autoClose={1500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        pauseOnHover
-        theme="dark"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: "#1e293b",
+            color: "#fff",
+          },
+        }}
       />
     </Router>
   );

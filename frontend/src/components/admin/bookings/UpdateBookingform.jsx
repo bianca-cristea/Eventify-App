@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import Spinners from "../../shared/Spinners";
 import { useDispatch } from "react-redux";
 import { updateBookingStatusFromDashboard } from "../../../store/actions/actions";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 const BOOKING_STATUSES = ["PENDING", "CONFIRMED", "CANCELLED"];
 
 const UpdateBookingform = ({

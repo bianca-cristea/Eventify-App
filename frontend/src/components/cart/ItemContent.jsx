@@ -7,7 +7,7 @@ import {
   increaseCartQuantity,
   removeFromCart,
 } from "../../store/actions/actions";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 const ItemContent = ({
   eventId,

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import InputField from "../../shared/InputField";
 import Spinners from "../../shared/Spinners";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import {
   addNewEventFromDashboard,
   fetchCategories,
