@@ -207,12 +207,9 @@ npm run dev
 <img width="663" height="739" alt="image" src="https://github.com/user-attachments/assets/afd3b54e-4fcd-4c37-9fe5-73a9dab8fb8a" />
 
 
-# Deployment
 
-The application is deployed and publicly accessible.
 
-- **Frontend:** https://link-netlify
-- **Backend:** https://link-render
+
 
 ## Infrastructure
 
