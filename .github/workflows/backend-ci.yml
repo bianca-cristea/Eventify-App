@@ -14,6 +14,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
           MYSQL_DATABASE: event_platform
+          MYSQL_USER: appuser
+          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
         ports:
           - 3306:3306
         options: >-
@@ -38,11 +40,14 @@ jobs:
         run: mvn -B clean verify
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
           DB_URL: jdbc:mysql://localhost:3306/event_platform
           DB_USERNAME: appuser
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          CLOUDINARY_CLOUD_NAME: ${{secrets.CLOUDINARY_CLOUD_NAME}}
-          CLOUDINARY_API_KEY: ${{secrets.CLOUDINARY_API_KEY}}
-          CLOUDINARY_API_SECRET: ${{secrets.CLOUDINARY_API_SECRET}}
-          OPENROUTER_API_KEY: ${{secrets.OPENROUTER_API_KEY}}
-          STRIPE_SECRET_KEY: ${{secrets.STRIPE_SECRET_KEY}}
+
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
