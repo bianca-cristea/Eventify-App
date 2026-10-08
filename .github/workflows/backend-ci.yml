@@ -38,12 +38,11 @@ jobs:
         run: mvn -B clean verify
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          DB_URL: jdbc:mysql://localhost:3306/event_platform?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-          DB_USERNAME: root
+          DB_URL: jdbc:mysql://localhost:3306/event_platform
+          DB_USERNAME: appuser
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          CLOUDINARY_CLOUD_NAME: test
-          CLOUDINARY_API_KEY: test
-          CLOUDINARY_API_SECRET: test
-          OPENROUTER_API_KEY: test
-          STRIPE_SECRET_KEY: test
-          STRIPE_WEBHOOK_SECRET: test
+          CLOUDINARY_CLOUD_NAME: ${{secrets.CLOUDINARY_CLOUD_NAME}}
+          CLOUDINARY_API_KEY: ${{secrets.CLOUDINARY_API_KEY}}
+          CLOUDINARY_API_SECRET: ${{secrets.CLOUDINARY_API_SECRET}}
+          OPENROUTER_API_KEY: ${{secrets.OPENROUTER_API_KEY}}
+          STRIPE_SECRET_KEY: ${{secrets.STRIPE_SECRET_KEY}}
